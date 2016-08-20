@@ -2,10 +2,10 @@
 
 module.exports = {
   rules: {
-    "fat-cow": function(context) {
+    "show-errors": function(context) {
 	    return {
         "VariableDeclaration": function(node) {
-          if (node.kind === "let") {
+          if (node.kind === "const") {
             console.log(node);
             context.report(node, "Unexpected let, use const.");
           }
