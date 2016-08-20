@@ -1,0 +1,23 @@
+{
+  "name": "eslint-plugin-moo",
+  "version": "1.0.0",
+  "description": "ESLint plugin to disable all mutation in JavaScript.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhusain/eslint-plugin-immutable.git"
+  },
+  "keywords": [
+    "eslint",
+    "immutability"
+  ],
+  "author": "Jafar Husain",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jhusain/eslint-plugin-immutable/issues"
+  },
+  "homepage": "https://github.com/jhusain/eslint-plugin-immutable#readme"
+}
