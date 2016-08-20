@@ -1,206 +1,41 @@
-const fs = require('fs');
-const path = require('path');
-const flowBin = require('flow-bin');
-const childProcess = require('child_process');
+const Collect = require('./collect')
+const collected = Collect()
 
-/**
- * Flow check initialises a server per folder when run,
- * we can store these paths and kill them later if need be.
- */
-const servers = [];
-const passed = true;
 
-/**
- * Wrap critical Flow exception into default Error json format
- */
-function fatalError(stderr) {
-  return {
-    errors: [{
-      message: [{
-        path: '',
-        code: 0,
-        line: 0,
-        start: 0,
-        descr: stderr
-      }]
-    }]
-  };
-}
+module.exports = {
+  rules: {
+    "show-errors": function(context) {
 
-function optsToArgs(opts) {
-  const args = [];
+      function collectFlowErrors(node) {
+        return collected.catch(res => {
+          const found = res.find(res => res.start === node.loc.start.line);
 
-  if (opts.all) {
-    args.push('--all');
-  }
-  if (opts.weak) {
-    args.push('--weak');
-  }
-  if (opts.declarations) {
-    args.push('--lib', opts.declarations);
-  }
+          if (found) {
+            // console.log(found);
+            return context.report(node, found.message);
+          }
 
-  return args;
-}
-
-function getFlowBin() {
-  return process.env.FLOW_BIN || flowBin;
-}
-
-function executeFlow(_path, options) {
-  const deferred = Q.defer();
-
-  const opts = optsToArgs(options);
-
-  const command = opts.length || options.killFlow ? (() => {
-    servers.push(path.dirname(_path));
-    return 'check';
-  })() : 'status';
-
-  const args = [
-    command,
-    ...opts,
-    '/' + path.relative('/', _path),
-    '--json'
-  ];
-
-  const stream = childProcess.spawn(getFlowBin(), args);
-
-  const dat = '';
-  stream.stdout.on('data', data => {
-    dat += data.toString();
-  });
-
-  stream.stdout.on('end', () => {
-    let parsed;
-    try {
-      parsed = JSON.parse(dat);
-    } catch (e) {
-      parsed = fatalError(dat);
-    }
-    const result = {};
-
-    // loop through errors in file
-    result.errors = parsed.errors.filter(function (error) {
-      const isCurrentFile = error.message[0].path === _path;
-      const generalError = (/(Fatal)/.test(error.message[0].descr));
-
-      return isCurrentFile || generalError;
-    });
-
-    if (result.errors.length) {
-      let passed = false;
-
-      const report = typeof options.reporter === 'undefined' ?
-        reporter : options.reporter;
-      report(result.errors);
-
-      if (options.abort) {
-        console.log('Flow failed');
-      } else {
-        deferred.resolve();
-      }
-    } else {
-      deferred.resolve();
-    }
-  });
-
-  return deferred.promise;
-}
-
-function checkFlowConfigExist() {
-  const deferred = Q.defer();
-  const config = path.join(process.cwd(), '.flowconfig');
-  fs.exists(config, function(exists) {
-    if (exists) {
-      deferred.resolve();
-    }
-    else {
-      deferred.reject('Missing .flowconfig in the current working directory.');
-    }
-  });
-  return deferred.promise;
-}
-
-function hasJsxPragma(contents) {
-  return /@flow\b/ig
-    .test(contents);
-}
-
-function isFileSuitable(file) {
-  const deferred = Q.defer();
-  if (file.isNull()) {
-    deferred.reject();
-  }
-  else if (file.isStream()) {
-    deferred.reject(new Error('Stream content is not supported'));
-  }
-  else if (file.isBuffer()) {
-    deferred.resolve();
-  }
-  else {
-    deferred.reject();
-  }
-  return deferred.promise;
-}
-
-function killServers() {
-  const defers = servers.map(function(_path) {
-    const deferred = Q.defer();
-    childProcess.execFile(getFlowBin(), ['stop'], {
-      cwd: _path
-    }, deferred.resolve);
-    return deferred;
-  });
-  return Q.all(defers);
-}
-
-module.exports = function (options = {}) {
-  options.beep = typeof options.beep !== 'undefined' ? options.beep : true;
-
-  function Flow(file, enc, callback) {
-    const _continue = () => {
-      this.push(file);
-      callback();
-    };
-
-    isFileSuitable(file).then(() => {
-      const hasPragma = hasJsxPragma(file.contents.toString());
-      if (options.all || hasPragma) {
-        checkFlowConfigExist().then(() => {
-          executeFlow(file.path, options).then(_continue, err => {
-            this.emit('error', err);
-            callback();
-          });
-        }, msg => {
-          console.log(logSymbols.warning + ' ' + msg);
-          _continue();
+          return context.report(node, found.message);
         });
-      } else {
-        _continue();
       }
-    }, err => {
-      if (err) {
-        this.emit('error', err);
-      }
-      callback();
-    });
-  }
 
-  return through.obj(Flow, function () {
-    const end = () => {
-      this.emit('end');
-      passed = true;
-    };
-
-    if (options.killFlow) {
-      if (servers.length) {
-        killServers().done(end);
-      } else {
-        end();
-      }
-    } else {
-      end();
-    }
-  });
+      return {
+        Program: collectFlowErrors,
+        ClassBody: collectFlowErrors,
+        BlockStatement: collectFlowErrors,
+        WhileStatement: collectFlowErrors,
+        ForStatement: collectFlowErrors,
+        ForInStatement: collectFlowErrors,
+        ForOfStatement: collectFlowErrors,
+        DoWhileStatement: collectFlowErrors,
+        IfStatement: collectFlowErrors,
+        VariableDeclaration: collectFlowErrors,
+        ObjectExpression: collectFlowErrors,
+        ArrayExpression: collectFlowErrors,
+        MemberExpression: collectFlowErrors,
+        SwitchStatement: collectFlowErrors,
+        SwitchCase: collectFlowErrors
+      };
+	  }
+  },
 };

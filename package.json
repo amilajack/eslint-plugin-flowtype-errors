@@ -22,5 +22,11 @@
   "homepage": "https://github.com/jhusain/eslint-plugin-immutable#readme",
   "peerDependencies": {
     "flow-bin": "^0.30.0"
+  },
+  "dependencies": {
+    "q": "^1.4.1"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.30.0"
   }
 }
