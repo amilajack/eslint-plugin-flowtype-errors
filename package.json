@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/jhusain/eslint-plugin-immutable/issues"
   },
-  "homepage": "https://github.com/jhusain/eslint-plugin-immutable#readme"
+  "homepage": "https://github.com/jhusain/eslint-plugin-immutable#readme",
+  "peerDependencies": {
+    "flow-bin": "^0.30.0"
+  }
 }

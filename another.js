@@ -1,14 +1,14 @@
-const fs = require('fs');
-const path = require('path');
-const flowBin = require('flow-bin');
-const childProcess = require('child_process');
+var fs = require('fs');
+var path = require('path');
+var flowBin = require('flow-bin');
+var childProcess = require('child_process');
 
 /**
  * Flow check initialises a server per folder when run,
  * we can store these paths and kill them later if need be.
  */
-const servers = [];
-const passed = true;
+var servers = [];
+var passed = true;
 
 /**
  * Wrap critical Flow exception into default Error json format
@@ -28,7 +28,7 @@ function fatalError(stderr) {
 }
 
 function optsToArgs(opts) {
-  const args = [];
+  var args = [];
 
   if (opts.all) {
     args.push('--all');
@@ -44,73 +44,76 @@ function optsToArgs(opts) {
 }
 
 function getFlowBin() {
-  return process.env.FLOW_BIN || flowBin;
+    return process.env.FLOW_BIN || flowBin;
 }
 
 function executeFlow(_path, options) {
-  const deferred = Q.defer();
+  var deferred = Q.defer();
 
-  const opts = optsToArgs(options);
+  var opts = optsToArgs(options);
 
-  const command = opts.length || options.killFlow ? (() => {
+  var command = opts.length || options.killFlow ? (() => {
     servers.push(path.dirname(_path));
     return 'check';
   })() : 'status';
 
-  const args = [
+  var args = [
     command,
     ...opts,
     '/' + path.relative('/', _path),
     '--json'
   ];
 
-  const stream = childProcess.spawn(getFlowBin(), args);
+  var stream = childProcess.spawn(getFlowBin(), args);
 
-  const dat = '';
+  var dat = "";
   stream.stdout.on('data', data => {
     dat += data.toString();
   });
 
-  stream.stdout.on('end', () => {
-    let parsed;
+  stream.stdout.on('end', () =>{
+    var parsed;
     try {
       parsed = JSON.parse(dat);
-    } catch (e) {
+    }
+    catch(e) {
       parsed = fatalError(dat);
     }
-    const result = {};
+    var result = {};
 
     // loop through errors in file
     result.errors = parsed.errors.filter(function (error) {
-      const isCurrentFile = error.message[0].path === _path;
-      const generalError = (/(Fatal)/.test(error.message[0].descr));
+      let isCurrentFile = error.message[0].path === _path;
+      let generalError = (/(Fatal)/.test(error.message[0].descr));
 
       return isCurrentFile || generalError;
     });
 
     if (result.errors.length) {
-      let passed = false;
+      passed = false;
 
-      const report = typeof options.reporter === 'undefined' ?
+      var report = typeof options.reporter === 'undefined' ?
         reporter : options.reporter;
       report(result.errors);
 
       if (options.abort) {
-        console.log('Flow failed');
-      } else {
+        deferred.reject(new gutil.PluginError('gulp-flow', 'Flow failed'));
+      }
+      else {
         deferred.resolve();
       }
-    } else {
+    }
+    else {
       deferred.resolve();
     }
-  });
+  })
 
   return deferred.promise;
 }
 
 function checkFlowConfigExist() {
-  const deferred = Q.defer();
-  const config = path.join(process.cwd(), '.flowconfig');
+  var deferred = Q.defer();
+  var config = path.join(process.cwd(), '.flowconfig');
   fs.exists(config, function(exists) {
     if (exists) {
       deferred.resolve();
@@ -128,12 +131,12 @@ function hasJsxPragma(contents) {
 }
 
 function isFileSuitable(file) {
-  const deferred = Q.defer();
+  var deferred = Q.defer();
   if (file.isNull()) {
     deferred.reject();
   }
   else if (file.isStream()) {
-    deferred.reject(new Error('Stream content is not supported'));
+    deferred.reject(new gutil.PluginError('gulp-flow', 'Stream content is not supported'));
   }
   else if (file.isBuffer()) {
     deferred.resolve();
@@ -145,8 +148,8 @@ function isFileSuitable(file) {
 }
 
 function killServers() {
-  const defers = servers.map(function(_path) {
-    const deferred = Q.defer();
+  var defers = servers.map(function(_path) {
+    var deferred = Q.defer();
     childProcess.execFile(getFlowBin(), ['stop'], {
       cwd: _path
     }, deferred.resolve);
@@ -155,17 +158,18 @@ function killServers() {
   return Q.all(defers);
 }
 
-module.exports = function (options = {}) {
+module.exports = function (options={}) {
   options.beep = typeof options.beep !== 'undefined' ? options.beep : true;
 
   function Flow(file, enc, callback) {
-    const _continue = () => {
+
+    var _continue = () => {
       this.push(file);
       callback();
     };
 
     isFileSuitable(file).then(() => {
-      const hasPragma = hasJsxPragma(file.contents.toString());
+      var hasPragma = hasJsxPragma(file.contents.toString());
       if (options.all || hasPragma) {
         checkFlowConfigExist().then(() => {
           executeFlow(file.path, options).then(_continue, err => {
@@ -188,15 +192,22 @@ module.exports = function (options = {}) {
   }
 
   return through.obj(Flow, function () {
-    const end = () => {
+    var end = () => {
       this.emit('end');
       passed = true;
     };
 
+    if (passed) {
+      console.log(logSymbols.success + ' Flow has found 0 errors');
+    } else if (options.beep) {
+      gutil.beep();
+    }
+
     if (options.killFlow) {
       if (servers.length) {
         killServers().done(end);
-      } else {
+      }
+      else {
         end();
       }
     } else {
