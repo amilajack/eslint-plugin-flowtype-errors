@@ -1,5 +1,5 @@
 {
-  "name": "eslint-plugin-moo",
+  "name": "eslint-plugin-flowtype-errors",
   "version": "1.0.0",
   "description": "ESLint plugin to disable all mutation in JavaScript.",
   "main": "index.js",
