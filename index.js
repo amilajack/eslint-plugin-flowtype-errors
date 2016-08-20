@@ -1,7 +1,5 @@
 "use strict";
 
-console.log(node);
-
 module.exports = {
   rules: {
     "fat-cow": function(context) {
