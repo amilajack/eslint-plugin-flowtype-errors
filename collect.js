@@ -97,8 +97,10 @@ function executeFlow(_path, options) {
       return false
     }
 
+    const he = whole.find(_ => _.type === 'Comment')
+
     const typeMessage =
-      `${whole.find(_ => _.type === 'Comment').descr} ${_res.descr}`;
+      `${he ? he.descr : ''} ${_res.descr}`;
 
     return {
       message: typeMessage,
