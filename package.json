@@ -20,13 +20,10 @@
     "url": "https://github.com/jhusain/eslint-plugin-immutable/issues"
   },
   "homepage": "https://github.com/jhusain/eslint-plugin-immutable#readme",
-  "peerDependencies": {
+  "dependencies": {
     "flow-bin": "^0.30.0"
   },
   "dependencies": {
     "q": "^1.4.1"
-  },
-  "devDependencies": {
-    "flow-bin": "^0.30.0"
   }
 }
