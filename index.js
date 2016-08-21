@@ -1,5 +1,5 @@
 const execSync = require('child_process').execSync;
-const { type } from 'os';
+const { type } = require('os');
 const osType = type();
 
 // @NOTE: "show-errors" runs on each file. collectFlowErrors runs on each AST node
@@ -40,7 +40,6 @@ module.exports = {
         const loo = collected.toString();
         const lee = JSON.parse(collected);
       }
-
 
       function collectFlowErrors(node) {
 
