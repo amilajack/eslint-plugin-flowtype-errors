@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-flowtype-errors",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "ESLint plugin to disable all mutation in JavaScript.",
   "main": "index.js",
   "scripts": {
