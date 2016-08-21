@@ -1,22 +1,32 @@
-const Collect = require('./collect')
-const collected = Collect()
+const execSync = require('child_process').execSync;
 
 
 module.exports = {
   rules: {
     "show-errors": function(context) {
 
+      const collected = execSync('node ./node_modules/eslint-plugin-flowtype-errors/collect.js');
+
+      // Buffer to string
+      const loo = collected.toString();
+      const lee = JSON.parse(collected);
+
       function collectFlowErrors(node) {
-        return collected.catch(res => {
-          const found = res.find(res => res.start === node.loc.start.line);
+
+        try {
+          const found = lee.find(each => {
+            return (
+              each.start === node.loc.start.line &&
+              each.path === context.getFilename()
+            )
+          });
 
           if (found) {
-            // console.log(found);
             return context.report(node, found.message);
           }
-
-          return context.report(node, found.message);
-        });
+        } catch (err) {
+          console.log(err);
+        }
       }
 
       return {
