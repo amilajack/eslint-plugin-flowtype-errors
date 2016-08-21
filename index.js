@@ -1,14 +1,41 @@
 const execSync = require('child_process').execSync;
+const { type } from 'os';
 
-// @TODO: Currently, flow runs all its checks for each file. That means that
-//        O(n) = n^2, where a is the number of files flow has to check. A
-//        possible optimization is watching the source files to check if
-//        any file has changed. If a file did change, run flow and cache
-
+// @NOTE: "show-errors" runs on each file. collectFlowErrors runs on each AST node
+//
+// @TODO: With the current implementation, flow checks every file each time
+//        "show-errors" runs. That means that the entire cost of running this
+//        plugin is O(n) = n^2, where a is the number of files flow has to
+//        check. A possible optimization is watching the source files to check
+//        if any file has changed. If a file did change, run flow and cache
+//
+//        This could be reduced to O(n) = 1 by running watching the source files
+//        and only re-running any time a file has changed
+//
+// @NOTE: Concept
+//
+// const collected = (() => {
+//   switch (hasChanged()) {
+//     case true:
+//       const collected = execSync('node ./node_modules/eslint-plugin-flowtype-errors/collect.js');
+//       const loo = collected.toString();
+//       const lee = JSON.parse(collected);
+//       lru.set('cache', lee);
+//       return lee;
+//     default:
+//       return lru('cache')
+//   }
+// })();
 
 module.exports = {
   rules: {
     "show-errors": function(context) {
+
+      // Windows isnt supported yet
+      if (type() === 'Windows_NT') {
+        console.log('Windows is not supported');
+        return {};
+      }
 
       const collected = execSync('node ./node_modules/eslint-plugin-flowtype-errors/collect.js');
 
@@ -36,8 +63,6 @@ module.exports = {
           }
         }
       }
-
-      // @TODO: Get all the AST node types of the flow errors and only check those
 
       return {
         Program: collectFlowErrors,
