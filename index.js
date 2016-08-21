@@ -22,12 +22,6 @@ module.exports = {
         if (Array.isArray(lee)) {
           try {
             const found = lee.find(each => {
-
-              if (each.path === context.getFilename()) {
-                console.log(each.path === context.getFilename());
-                console.log(each.start, node.loc.start.line);
-                console.log(context.getFilename());
-              }
               return (
                 each.start === node.loc.start.line &&
                 each.path === context.getFilename()
