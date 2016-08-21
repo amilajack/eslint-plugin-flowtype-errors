@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-flowtype-errors",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "ESLint plugin to disable all mutation in JavaScript.",
   "main": "index.js",
   "scripts": {
@@ -20,9 +20,6 @@
     "url": "https://github.com/jhusain/eslint-plugin-immutable/issues"
   },
   "homepage": "https://github.com/jhusain/eslint-plugin-immutable#readme",
-  "dependencies": {
-    "flow-bin": "^0.30.0"
-  },
   "dependencies": {
     "q": "^1.4.1"
   }
