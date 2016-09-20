@@ -1,6 +1,6 @@
 eslint-plugin-flowtype-errors
 =============================
-**Highly experimental! DO NOT USE!**
+**Highly experimental!**
 **Windows is not supported at the moment!**
 
 ## Purpose
