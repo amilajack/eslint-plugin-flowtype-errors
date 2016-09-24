@@ -32,7 +32,7 @@ const osType = type();
 module.exports = {
   rules: {
     'show-errors': function showErrors(context) {
-      const collected = execSync('node ./node_modules/eslint-plugin-flowtype-errors/collect.js');
+      const collected = execSync('node ./node_modules/eslint-plugin-flowtype-errors/src/collect.js');
       const parsedJSON = JSON.parse(collected);
 
       function collectFlowErrors(node) {

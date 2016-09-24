@@ -9,7 +9,8 @@
   "homepage": "https://github.com/amilajack/eslint-plugin-flowtype-errors#readme",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run lint",
+    "lint": "eslint --format=node_modules/eslint-formatter-pretty src test *.js"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "eslint": "^3.6.0",
     "eslint-config-airbnb": "^11.2.0",
+    "eslint-formatter-pretty": "^1.0.0",
     "eslint-nibble-ignore": "^3.0.0",
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
