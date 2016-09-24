@@ -39,6 +39,20 @@ Add the `@flow` pragma to files that you want to lint
 
 Run `eslint` and and you're all set!
 
+## Editor Configuration
+### Atom
+```bash
+apm install linter linter-eslint language-babel
+```
+
+### Sublime
+* https://github.com/SublimeLinter/SublimeLinter3
+* https://github.com/roadhump/SublimeLinter-eslint
+* https://github.com/babel/babel-sublime
+
+### Others
+http://eslint.org/docs/user-guide/integrations#editors
+
 ## Planned Implementations
 * Add Tests
 * Add Windows support
