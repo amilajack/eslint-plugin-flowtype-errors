@@ -5,10 +5,14 @@ Get Flowtype errors as ESLint errors!
 ## Demo
 ![ESLint Flow Demo](https://github.com/amilajack/eslint-plugin-flowtype-errors/blob/master/flow-demo.gif?raw=true)
 
-## Purpose
-Get Flow errors in ESLint
+## Why?
+* Less editor configuration: All you need is an eslint reporter plugin. No need to install flow specific tools!
+* Simple: Its literally just an ESLint rule! Just install the dependency, add a flowconfig, and you're good to go!
 
-## Toso
+## Planned Implementations
+* Add Tests
+* Add Windows support
+* Run flow minimal amount of times
 
 ## Caution
 **Highly experimental!**
