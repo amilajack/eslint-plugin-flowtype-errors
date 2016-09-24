@@ -10,7 +10,7 @@ Get Flowtype errors as ESLint errors!
 * Simple: Its literally just an ESLint rule! Just install the dependency, add a flowconfig, and you're good to go!
 
 ## Getting Started
-This guide assumes that you have installed eslint, babel, babel-plugin-transform-flow-strip-types and configured flow. The from-scratch guide is [here](https://github.com/amilajack/eslint-plugin-flowtype-errors/wiki/Getting-Started)
+This guide assumes that you have installed eslint, babel, babel-plugin-transform-flow-strip-types and configured flow. Check out the [from-scratch guide](https://github.com/amilajack/eslint-plugin-flowtype-errors/wiki/Getting-Started) for the full guide on getting started.
 
 **Step 1. Install**
 
@@ -21,17 +21,17 @@ npm install --save-dev eslint-plugin-flowtype-errors
 **Step 2. Configure**
 
 Add this line to the 'rules' section of your `.eslintrc`
-```
+```js
 "flowtype-errors/show-errors": 2,
 ```
 
 Add this line to the 'plugins' section of your `.eslintrc`
-```
+```js
 "flowtype-errors"
 ```
 
 Add the `@flow` pragma to files that you want to lint
-```
+```js
 /**
  * @flow
  */
