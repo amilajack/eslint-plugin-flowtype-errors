@@ -22,7 +22,7 @@ npm install --save-dev eslint-plugin-flowtype-errors
 
 Add this line to the 'rules' section of your `.eslintrc`
 ```js
-"flowtype-errors/show-errors": 2,
+"flowtype-errors/show-errors": 2
 ```
 
 Add this line to the 'plugins' section of your `.eslintrc`
