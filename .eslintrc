@@ -5,6 +5,7 @@
     "es6": true
   },
   "rules": {
+    "arrow-parens": 0,
     "comma-dangle": ["error", "never"],
     "consistent-return": 0,
     "func-names": 2,
