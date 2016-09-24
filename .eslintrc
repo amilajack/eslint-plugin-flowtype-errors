@@ -6,10 +6,10 @@
   },
   "rules": {
     "comma-dangle": ["error", "never"],
-    "consistent-return": 2,
+    "consistent-return": 0,
     "func-names": 2,
     "no-implicit-coercion": "error",
-    "flowtype-errors/show-errors": 2,
+    "import/newline-after-import": 0,
     "generator-star-spacing": [0], # HACK: https://github.com/airbnb/javascript/issues/948
     "jsx-filename-extension": 0,
     "new-cap": 0,
