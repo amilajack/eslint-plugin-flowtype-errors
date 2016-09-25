@@ -1,9 +1,11 @@
 /**
+ * Run Flow and collect errors in JSON format
  * Reference https://github.com/facebook/nuclide/blob/master/pkg/nuclide-flow-rpc/lib/FlowRoot.js
  */
-const flowBin = require('flow-bin');
-const path = require('path');
-const childProcess = require('child_process');
+import flowBin from 'flow-bin';
+import path from 'path';
+import childProcess from 'child_process';
+
 
 /**
  * Wrap critical Flow exception into default Error json format
@@ -45,10 +47,10 @@ function executeFlow() {
     }
 
     const comments = whole.find(_ => _.type === 'Comment');
-    const messageType = `${comments ? comments.descr : ''} ${message.descr}`;
+    const messageDescr = `${comments ? comments.descr : ''} ${message.descr}`;
 
     return {
-      message: messageType,
+      message: messageDescr,
       path: message.path,
       start: message.loc.start.line,
       end: message.loc.end.line
