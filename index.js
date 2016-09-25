@@ -41,13 +41,18 @@ module.exports = {
       function collectFlowErrors(node) {
         if (Array.isArray(parsedJSONArray)) {
           try {
-            const foundASTNodeError = parsedJSONArray.find(each => (
-              each.start === node.loc.start.line &&
-              each.path === context.getFilename()
-            ));
+            const foundASTNodeError = parsedJSONArray
+              .filter(each => each.path === context.getFilename())
+              .find(each => each.start === node.loc.start.line);
 
             if (foundASTNodeError) {
-              return context.report(node, foundASTNodeError.message);
+              const { message, loc } = foundASTNodeError;
+
+              return context.report({
+                node,
+                message,
+                loc
+              });
             }
           } catch (err) {
             console.log(err);
@@ -59,24 +64,84 @@ module.exports = {
        * HACK: We need to find a proper way of running ESLint on every line
        */
       return {
-        Program: collectFlowErrors,
-        ClassBody: collectFlowErrors,
+        ArrayExpression: collectFlowErrors,
+        ArrayPattern: collectFlowErrors,
+        ArrowFunctionExpression: collectFlowErrors,
+        AssignmentExpression: collectFlowErrors,
+        AssignmentPattern: collectFlowErrors,
+        BinaryExpression: collectFlowErrors,
         BlockStatement: collectFlowErrors,
-        WhileStatement: collectFlowErrors,
-        ForStatement: collectFlowErrors,
+        BreakStatement: collectFlowErrors,
+        CallExpression: collectFlowErrors,
+        CatchClause: collectFlowErrors,
+        Class: collectFlowErrors,
+        ClassBody: collectFlowErrors,
+        ClassDeclaration: collectFlowErrors,
+        ClassExpression: collectFlowErrors,
+        ConditionalStatement: collectFlowErrors,
+        ContinueStatement: collectFlowErrors,
+        DebuggerStatement: collectFlowErrors,
+        Declaration: collectFlowErrors,
+        DoWhileStatement: collectFlowErrors,
+        EmptyExpression: collectFlowErrors,
+        EmptyStatement: collectFlowErrors,
+        ExportAllDeclaration: collectFlowErrors,
+        ExportDeclaration: collectFlowErrors,
+        ExportDefaultDeclaration: collectFlowErrors,
+        ExportNamedDeclaration: collectFlowErrors,
+        ExportSpecifier: collectFlowErrors,
+        Expression: collectFlowErrors,
         ExpressionStatement: collectFlowErrors,
         ForInStatement: collectFlowErrors,
         ForOfStatement: collectFlowErrors,
-        DoWhileStatement: collectFlowErrors,
-        IfStatement: collectFlowErrors,
-        Identifier: collectFlowErrors,
+        ForStatement: collectFlowErrors,
+        Function: collectFlowErrors,
         FunctionDeclaration: collectFlowErrors,
-        VariableDeclaration: collectFlowErrors,
-        ObjectExpression: collectFlowErrors,
-        ArrayExpression: collectFlowErrors,
+        FunctionExpression: collectFlowErrors,
+        Identifier: collectFlowErrors,
+        IfStatement: collectFlowErrors,
+        ImportDeclaration: collectFlowErrors,
+        ImportDefaultSpecifier: collectFlowErrors,
+        ImportNamespaceSpecifier: collectFlowErrors,
+        ImportSpecifier: collectFlowErrors,
+        LabeledStatement: collectFlowErrors,
+        Literal: collectFlowErrors,
+        LogicalExpression: collectFlowErrors,
         MemberExpression: collectFlowErrors,
+        MetaProperty: collectFlowErrors,
+        MethodDefinition: collectFlowErrors,
+        NewExpression: collectFlowErrors,
+        Node: collectFlowErrors,
+        ObjectExpression: collectFlowErrors,
+        ObjectPattern: collectFlowErrors,
+        Pattern: collectFlowErrors,
+        Position: collectFlowErrors,
+        Program: collectFlowErrors,
+        Property: collectFlowErrors,
+        Regex: collectFlowErrors,
+        RestElement: collectFlowErrors,
+        ReturnStatement: collectFlowErrors,
+        SequenceExpression: collectFlowErrors,
+        SourceLocation: collectFlowErrors,
+        SpreadElement: collectFlowErrors,
+        Statement: collectFlowErrors,
+        Super: collectFlowErrors,
+        SwitchCase: collectFlowErrors,
         SwitchStatement: collectFlowErrors,
-        SwitchCase: collectFlowErrors
+        TaggedTemplateExpression: collectFlowErrors,
+        TemplateElement: collectFlowErrors,
+        TemplateLiteral: collectFlowErrors,
+        ThisExpression: collectFlowErrors,
+        ThrowStatement: collectFlowErrors,
+        Tools: collectFlowErrors,
+        TryStatement: collectFlowErrors,
+        UnaryExpression: collectFlowErrors,
+        UpdateExpression: collectFlowErrors,
+        VariableDeclaration: collectFlowErrors,
+        VariableDeclarator: collectFlowErrors,
+        WhileStatement: collectFlowErrors,
+        WithStatement: collectFlowErrors,
+        YieldExpression: collectFlowErrors
       };
     }
   }

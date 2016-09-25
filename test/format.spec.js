@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
 import { expect } from 'chai';
 import path from 'path';
+import exactFormat from './exactFormat';
 
 
 describe('Format', () => {
@@ -14,52 +15,10 @@ describe('Format', () => {
     expect(parsedJSONArray.map(e => ({
       end: e.end,
       type: e.type,
+      loc: { start: e.loc.start, end: e.loc.end },
       message: e.message,
       start: e.start
-    }))).to.eql([
-      {
-        message: 'This type is incompatible with the expected return type of string',
-        start: 6,
-        end: 6,
-        type: 'default'
-      },
-      {
-        message: 'This type is incompatible with the expected return type of boolean',
-        start: 5,
-        end: 5,
-        type: 'default'
-      },
-      {
-        message: 'Could not resolve name identifier `x`',
-        start: 9,
-        end: 9,
-        type: 'default'
-      },
-      {
-        message: 'This type is incompatible with string',
-        start: 16,
-        end: 16,
-        type: 'default'
-      },
-      {
-        message: 'This type is incompatible with number',
-        start: 16,
-        end: 16,
-        type: 'default'
-      },
-      {
-        end: 9,
-        message: 'Missing annotation parameter `x`',
-        start: 9,
-        type: 'missing-annotation'
-      },
-      {
-        end: 13,
-        message: 'Could not resolve name identifier `x`',
-        start: 13,
-        type: 'default'
-      }
-    ]);
+    }))).to.eql(exactFormat);
 
     for (const e of parsedJSONArray) {
       if (e !== false) {
