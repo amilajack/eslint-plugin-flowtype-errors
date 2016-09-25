@@ -5,6 +5,7 @@
 import flowBin from 'flow-bin';
 import path from 'path';
 import childProcess from 'child_process';
+import filter from './filter';
 
 
 /**
@@ -32,22 +33,32 @@ function executeFlow() {
   const args = ['--json'];
   const { stdout } = childProcess.spawnSync(getFlowBin(), args);
   const stringifiedStdout = stdout.toString();
-  let parsed;
+  let parsedJSONArray;
 
   try {
-    parsed = JSON.parse(stringifiedStdout);
+    parsedJSONArray = JSON.parse(stringifiedStdout);
   } catch (e) {
-    parsed = fatalError(stringifiedStdout);
+    parsedJSONArray = fatalError(stringifiedStdout);
   }
 
   // Loop through errors in the file
-  const output = parsed.errors.map(error => error.message.map((message, i, whole) => {
+  const output = parsedJSONArray.errors.map(error => error.message.map((message, i, whole) => {
     if (message.type === 'Comment' || !message.loc) {
       return false;
     }
 
     const comments = whole.find(_ => _.type === 'Comment');
     const messageDescr = `${comments ? comments.descr : ''} ${message.descr}`;
+
+    if (process.env.DEBUG_FLOWTYPE_ERRRORS === 'true') {
+      return {
+        message: messageDescr,
+        path: message.path,
+        start: message.loc.start.line,
+        end: message.loc.end.line,
+        parsedJSONArray
+      };
+    }
 
     return {
       message: messageDescr,
@@ -56,11 +67,10 @@ function executeFlow() {
       end: message.loc.end.line
     };
   }))
-  .filter(error => error !== false)
   .reduce((p, c) => p.concat(c), []);
 
   return output.length
-    ? output
+    ? filter(output)
     : true;
 }
 

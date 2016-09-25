@@ -18,11 +18,13 @@ const path = require('path');
 // const collected = (() => {
 //   switch (hasChanged()) {
 //     case true:
-//       const collected = execSync('node ./node_modules/eslint-plugin-flowtype-errors/collect.js');
-//       const loo = collected.toString();
-//       const parsedJSON = JSON.parse(collected);
-//       lru.set('cache', parsedJSON);
-//       return parsedJSON;
+//       const collectedErrors = execSync(
+//        'node ./node_modules/eslint-plugin-flowtype-errors/collect.js'
+//       );
+//       const stringifiedStdout = collectedErrors.toString();
+//       const parsedJSONArray = JSON.parse(collectedErrors);
+//       lru.set('cache', parsedJSONArray);
+//       return parsedJSONArray;
 //     default:
 //       return lru('cache')
 //   }
@@ -34,18 +36,18 @@ module.exports = {
       const collected = execSync(
         `node ${path.normalize('./node_modules/eslint-plugin-flowtype-errors/dist/collect.js')}`
       );
-      const parsedJSON = JSON.parse(collected);
+      const parsedJSONArray = JSON.parse(collected);
 
       function collectFlowErrors(node) {
-        if (Array.isArray(parsedJSON)) {
+        if (Array.isArray(parsedJSONArray)) {
           try {
-            const found = parsedJSON.find(each => (
+            const foundASTNodeError = parsedJSONArray.find(each => (
               each.start === node.loc.start.line &&
               each.path === context.getFilename()
             ));
 
-            if (found) {
-              return context.report(node, found.message);
+            if (foundASTNodeError) {
+              return context.report(node, foundASTNodeError.message);
             }
           } catch (err) {
             console.log(err);
@@ -53,6 +55,9 @@ module.exports = {
         }
       }
 
+      /**
+       * HACK: We need to find a proper way of running ESLint on every line
+       */
       return {
         Program: collectFlowErrors,
         ClassBody: collectFlowErrors,
