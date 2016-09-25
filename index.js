@@ -1,7 +1,5 @@
 const { execSync } = require('child_process');
-const { type } = require('os');
 const path = require('path');
-const osType = type();
 
 
 // @NOTE: "show-errors" runs on each file. collectFlowErrors runs on each AST node
