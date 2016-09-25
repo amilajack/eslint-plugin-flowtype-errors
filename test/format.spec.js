@@ -8,7 +8,7 @@ describe('Format', () => {
   const parsedJSONArray = JSON.parse(collected);
 
   it('should have expected properties', done => {
-    expect(parsedJSONArray.to.be.an('array'));
+    expect(parsedJSONArray).to.be.an('array');
 
     // Filter out the 'path' property because this changes between environments
     expect(parsedJSONArray.map(e => ({
