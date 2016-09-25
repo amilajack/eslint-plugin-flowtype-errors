@@ -1,9 +1,10 @@
 import { execSync } from 'child_process';
 import { expect } from 'chai';
+import path from 'path';
 
 
 describe('Format', () => {
-  const collected = execSync('node ./dist/collect.js');
+  const collected = execSync(`node ${path.normalize('./dist/collect.js')}`);
   const parsedJSONArray = JSON.parse(collected);
 
   it('should have expected properties', done => {
