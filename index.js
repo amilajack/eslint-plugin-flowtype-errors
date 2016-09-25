@@ -39,7 +39,7 @@ module.exports = {
       const parsedJSON = JSON.parse(collected);
 
       function collectFlowErrors(node) {
-        if (Array.isArray(parsedJSON) && osType !== 'Windows_NT') {
+        if (Array.isArray(parsedJSON)) {
           try {
             const found = parsedJSON.find(each => (
               each.start === node.loc.start.line &&
