@@ -38,12 +38,26 @@ module.exports = {
       );
       const parsedJSONArray = JSON.parse(collected);
 
+      console.log('-------------------------------------_');
+      console.log('-------------------------------------_');
+      console.log('-------------------------------------_');
+      console.log('-------------------------------------_');
+      console.log('-------------------------------------_');
+      console.log('-------------------------------------_');
+      console.log(parsedJSONArray);
+
       function collectFlowErrors(node) {
         if (Array.isArray(parsedJSONArray)) {
           try {
             const foundASTNodeError = parsedJSONArray
               .filter(each => each.path === context.getFilename())
-              .find(each => each.start === node.loc.start.line);
+
+              // ESLint uses a 'zero-based' column mechanisim. That means that they count columns
+              // starting from 0. Weird... Flow's columns start at 1. Ughh
+              .find(each =>
+                each.start === node.loc.start.line &&
+                each.loc.start.column === node.loc.start.column + 1
+              );
 
             if (foundASTNodeError) {
               const { message, loc } = foundASTNodeError;
