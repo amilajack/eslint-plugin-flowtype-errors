@@ -1,6 +1,5 @@
 const { execSync } = require('child_process');
-const { type } = require('os');
-const osType = type();
+const path = require('path');
 
 
 // @NOTE: "show-errors" runs on each file. collectFlowErrors runs on each AST node
@@ -32,11 +31,13 @@ const osType = type();
 module.exports = {
   rules: {
     'show-errors': function showErrors(context) {
-      const collected = execSync('node ./node_modules/eslint-plugin-flowtype-errors/src/collect.js');
+      const collected = execSync(
+        `node ${path.normalize('./node_modules/eslint-plugin-flowtype-errors/dist/collect.js')}`
+      );
       const parsedJSON = JSON.parse(collected);
 
       function collectFlowErrors(node) {
-        if (Array.isArray(parsedJSON) && osType !== 'Windows_NT') {
+        if (Array.isArray(parsedJSON)) {
           try {
             const found = parsedJSON.find(each => (
               each.start === node.loc.start.line &&

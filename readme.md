@@ -62,9 +62,4 @@ http://eslint.org/docs/user-guide/integrations#editors
 
 ## Planned Implementations
 * Add Tests
-* Add Windows support
 * Run flow minimal amount of times
-
-## Caution
-**Highly experimental!**
-**Windows is not supported at the moment!**
