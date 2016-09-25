@@ -12,8 +12,8 @@
     "build": "cross-env NODE_ENV=production babel src --out-dir dist",
     "lint": "eslint --format=node_modules/eslint-formatter-pretty src test *.js",
     "preversion": "npm run build",
-    "spec": "cross-env NODE_ENV=test mocha --bail --inline-diffs --async-only --growl --compilers js:babel-register --recursive test/*.spec.js",
-    "test": "npm run lint && npm run build && npm run spec"
+    "spec": "npm run build && cross-env NODE_ENV=test mocha --bail --inline-diffs --async-only --growl --compilers js:babel-register --recursive test/*.spec.js",
+    "test": "npm run lint && npm run spec"
   },
   "repository": {
     "type": "git",
