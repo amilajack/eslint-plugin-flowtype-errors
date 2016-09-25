@@ -38,14 +38,6 @@ module.exports = {
       );
       const parsedJSONArray = JSON.parse(collected);
 
-      console.log('-------------------------------------_');
-      console.log('-------------------------------------_');
-      console.log('-------------------------------------_');
-      console.log('-------------------------------------_');
-      console.log('-------------------------------------_');
-      console.log('-------------------------------------_');
-      console.log(parsedJSONArray);
-
       function collectFlowErrors(node) {
         if (Array.isArray(parsedJSONArray)) {
           try {
