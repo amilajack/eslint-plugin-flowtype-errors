@@ -62,4 +62,6 @@ http://eslint.org/docs/user-guide/integrations#editors
 
 ## Planned Implementations
 * Add more extensive tests
-* Run flow minimal amount of times
+* Run flow minimal amount of times for faster linting
+* Custom formatting of flow error messages
+* Enable rules to allow and disallow specific flow errors
