@@ -61,5 +61,5 @@ apm install linter linter-eslint language-babel
 http://eslint.org/docs/user-guide/integrations#editors
 
 ## Planned Implementations
-* Add Tests
+* Add more extensive tests
 * Run flow minimal amount of times
