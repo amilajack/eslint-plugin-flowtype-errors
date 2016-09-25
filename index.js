@@ -1,5 +1,6 @@
 const { execSync } = require('child_process');
 const { type } = require('os');
+const path = require('path');
 const osType = type();
 
 
@@ -32,7 +33,9 @@ const osType = type();
 module.exports = {
   rules: {
     'show-errors': function showErrors(context) {
-      const collected = execSync('node ./node_modules/eslint-plugin-flowtype-errors/src/collect.js');
+      const collected = execSync(
+        `node ${path.normalize('./node_modules/eslint-plugin-flowtype-errors/dist/collect.js')}`
+      );
       const parsedJSON = JSON.parse(collected);
 
       function collectFlowErrors(node) {

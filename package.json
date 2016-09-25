@@ -9,7 +9,9 @@
   "homepage": "https://github.com/amilajack/eslint-plugin-flowtype-errors#readme",
   "main": "index.js",
   "scripts": {
-    "test": "npm run lint",
+    "test": "npm run lint && npm run spec && npm run build",
+    "build": "cross-env NODE_ENV=production babel src --out-dir dist",
+    "spec": "cross-env NODE_ENV=test mocha --bail --inline-diffs --async-only --growl --compilers js:babel-register --recursive test/*.spec.js",
     "lint": "eslint --format=node_modules/eslint-formatter-pretty src test *.js"
   },
   "repository": {
@@ -27,12 +29,21 @@
     "q": "^1.4.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-eslint": "^6.1.2",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-flow-strip-types": "^6.14.0",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "cross-env": "^3.0.0",
     "eslint": "^3.6.0",
     "eslint-config-airbnb": "^11.2.0",
     "eslint-formatter-pretty": "^1.0.0",
     "eslint-nibble-ignore": "^3.0.0",
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
+    "eslint-plugin-mocha": "^4.5.1",
     "eslint-plugin-react": "^6.3.0"
   }
 }

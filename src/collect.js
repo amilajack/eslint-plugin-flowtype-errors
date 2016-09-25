@@ -1,5 +1,3 @@
-/* eslint no-var: 0, brace-style: 0 */
-
 // Reference https://github.com/facebook/nuclide/blob/master/pkg/nuclide-flow-rpc/lib/FlowRoot.js
 
 const flowBin = require('flow-bin');
@@ -27,7 +25,7 @@ function getFlowBin() {
 }
 
 function executeFlow() {
-  var args = [
+  const args = [
     // command,
     // ...opts,
     // '/' + path.relative('/', _path),
@@ -41,14 +39,14 @@ function executeFlow() {
     return true;
   }
 
-  const dat = stdout.toString();
+  const stringifiedStdout = stdout.toString();
 
   let parsed;
 
   try {
-    parsed = JSON.parse(dat);
+    parsed = JSON.parse(stringifiedStdout);
   } catch (e) {
-    parsed = fatalError(dat);
+    parsed = fatalError(stringifiedStdout);
   }
 
   // loop through errors in file
@@ -57,10 +55,8 @@ function executeFlow() {
       return false;
     }
 
-    const he = whole.find(_ => _.type === 'Comment');
-
-    const typeMessage =
-      `${he ? he.descr : ''} ${_res.descr}`;
+    const comments = whole.find(_ => _.type === 'Comment');
+    const typeMessage = `${comments ? comments.descr : ''} ${_res.descr}`;
 
     return {
       message: typeMessage,
