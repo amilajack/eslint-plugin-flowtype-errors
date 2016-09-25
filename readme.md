@@ -12,9 +12,12 @@ Get Flowtype errors as ESLint errors!
 ## Demo
 ![ESLint Flow Demo](https://github.com/amilajack/eslint-plugin-flowtype-errors/blob/master/flow-demo.gif?raw=true)
 
+*NOTE:* This demo is using Atom and the packages `linter`, `linter-eslint`, `language-babel`
+
 ## Why?
-* Less editor configuration: All you need is an eslint reporter plugin. No need to install flow specific tools!
-* Simple: Its literally just an ESLint rule! Just install the dependency, add a flowconfig, and you're good to go!
+* **Lower barrier:** Any editor that has ESLint support now supports Flow 🎉
+* **Less editor configuration:** No need to change your entire workflow to incoroprate flow. No multiple-linters-per-file nonsense.
+* **Simple:** Its literally just an ESLint rule! Just install the dependency, add a flowconfig, and you're good to go!
 
 ## Getting Started
 This guide assumes that you have installed eslint, babel, babel-plugin-transform-flow-strip-types and configured flow. Check out the [from-scratch guide](https://github.com/amilajack/eslint-plugin-flowtype-errors/wiki/Getting-Started) for the full guide on getting started.

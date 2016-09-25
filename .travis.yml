@@ -22,3 +22,6 @@ script:
   - node --version
   - npm --version
   - npm run test
+
+notifications:
+  email: false
