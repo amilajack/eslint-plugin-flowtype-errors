@@ -32,6 +32,19 @@ function getFlowBin() {
 function executeFlow() {
   const args = ['--json'];
   const { stdout } = childProcess.spawnSync(getFlowBin(), args);
+
+  //
+  // This serves as a temporary HACK to prevent 32 bit OS's from failing. Flow does not
+  // support 32 bit OS's at the moment.
+  // This pretends as if there are now flow errors
+  //
+  // Ideally, there would be a preinstall npm event to check if the user is on a 32 bit OS
+  //
+
+  if (!stdout) {
+    return true;
+  }
+
   const stringifiedStdout = stdout.toString();
   let parsedJSONArray;
 
