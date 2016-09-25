@@ -1,6 +1,7 @@
 // Reference https://github.com/facebook/nuclide/blob/master/pkg/nuclide-flow-rpc/lib/FlowRoot.js
 
 const flowBin = require('flow-bin');
+const path = require('path');
 const childProcess = require('child_process');
 
 /**
@@ -25,12 +26,7 @@ function getFlowBin() {
 }
 
 function executeFlow() {
-  const args = [
-    // command,
-    // ...opts,
-    // '/' + path.relative('/', _path),
-    '--json'
-  ];
+  const args = ['--json'];
 
   const { stdout } = childProcess.spawnSync(getFlowBin(), args);
 
@@ -75,7 +71,7 @@ function executeFlow() {
   return true;
 }
 
-function Flow(filepath = './') {
+function Flow(filepath = path.normalize('./')) {
   return executeFlow(filepath, {});
 }
 
