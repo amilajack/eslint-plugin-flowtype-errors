@@ -61,5 +61,12 @@ apm install linter linter-eslint language-babel
 http://eslint.org/docs/user-guide/integrations#editors
 
 ## Planned Implementations
+<<<<<<< HEAD
 * Add Tests
 * Run flow minimal amount of times
+=======
+* Add more extensive tests
+* Run flow minimal amount of times for faster linting
+* Custom formatting of flow error messages
+* Enable rules to allow and disallow specific flow errors
+>>>>>>> master
