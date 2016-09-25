@@ -1,5 +1,6 @@
-// Reference https://github.com/facebook/nuclide/blob/master/pkg/nuclide-flow-rpc/lib/FlowRoot.js
-
+/**
+ * Reference https://github.com/facebook/nuclide/blob/master/pkg/nuclide-flow-rpc/lib/FlowRoot.js
+ */
 const flowBin = require('flow-bin');
 const path = require('path');
 const childProcess = require('child_process');
@@ -27,16 +28,8 @@ function getFlowBin() {
 
 function executeFlow() {
   const args = ['--json'];
-
   const { stdout } = childProcess.spawnSync(getFlowBin(), args);
-
-  // Windows fails at this step. Temporarily pass
-  if (!stdout) {
-    return true;
-  }
-
   const stringifiedStdout = stdout.toString();
-
   let parsed;
 
   try {
@@ -45,34 +38,32 @@ function executeFlow() {
     parsed = fatalError(stringifiedStdout);
   }
 
-  // loop through errors in file
-  const output = parsed.errors.map(res => res.message.map((_res, i, whole) => {
-    if (_res.type === 'Comment' || !_res.loc) {
+  // Loop through errors in the file
+  const output = parsed.errors.map(error => error.message.map((message, i, whole) => {
+    if (message.type === 'Comment' || !message.loc) {
       return false;
     }
 
     const comments = whole.find(_ => _.type === 'Comment');
-    const typeMessage = `${comments ? comments.descr : ''} ${_res.descr}`;
+    const messageType = `${comments ? comments.descr : ''} ${message.descr}`;
 
     return {
-      message: typeMessage,
-      path: _res.path,
-      start: _res.loc.start.line,
-      end: _res.loc.end.line
+      message: messageType,
+      path: message.path,
+      start: message.loc.start.line,
+      end: message.loc.end.line
     };
   }))
-  .filter(res => res !== false)
+  .filter(error => error !== false)
   .reduce((p, c) => p.concat(c), []);
 
-  if (output.length) {
-    return output;
-  }
-
-  return true;
+  return output.length
+    ? output
+    : true;
 }
 
-function Flow(filepath = path.normalize('./')) {
-  return executeFlow(filepath, {});
+function Flow(filepath = './') {
+  return executeFlow(path.normalize(filepath), {});
 }
 
 process.stdout.write(JSON.stringify(Flow()));

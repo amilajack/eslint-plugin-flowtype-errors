@@ -9,12 +9,12 @@ describe('Format', () => {
 
   it('should have expected properties', done => {
     expect(parsedJSONArray.map(e => (e === false
-        ? false
-        : {
-          end: e.end,
-          message: e.message,
-          start: e.start
-        }
+      ? false
+      : {
+        end: e.end,
+        message: e.message,
+        start: e.start
+      }
     ))).to.eql([
       {
         message: 'This type is incompatible with the expected return type of string',
