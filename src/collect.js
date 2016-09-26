@@ -1,6 +1,9 @@
 /**
  * Run Flow and collect errors in JSON format
- * Reference https://github.com/facebook/nuclide/blob/master/pkg/nuclide-flow-rpc/lib/FlowRoot.js
+ *
+ * Reference the following links for possible bug fixes and optimizations
+ * https://github.com/facebook/nuclide/blob/master/pkg/nuclide-flow-rpc/lib/FlowRoot.js
+ * https://github.com/ptmt/tryflow/blob/gh-pages/js/worker.js
  */
 import flowBin from 'flow-bin';
 import path from 'path';
@@ -55,32 +58,33 @@ function executeFlow() {
   }
 
   // Loop through errors in the file
-  const output = parsedJSONArray.errors.map(error => error.message.map((message, i, whole) => {
-    if (message.type === 'Comment' || !message.loc) {
-      return false;
-    }
+  const output = parsedJSONArray.errors.map(({ message }) => {
+    const [firstMessage] = message;
 
-    const comments = whole.find(_ => _.type === 'Comment');
-    const messageDescr = `${comments ? comments.descr : ''} ${message.descr}`;
+    const entireMessage = message
+      .reduce((previous, current) => (
+        previous + (current.type === 'Blame' ? ` '${current.descr}' ` : current.descr)
+      ), '');
 
     if (process.env.DEBUG_FLOWTYPE_ERRRORS === 'true') {
       return {
-        message: messageDescr,
-        path: message.path,
-        start: message.loc.start.line,
-        end: message.loc.end.line,
+        message: entireMessage,
+        path: firstMessage.path,
+        start: firstMessage.loc.start.line,
+        end: firstMessage.loc.end.line,
+        loc: firstMessage.loc,
         parsedJSONArray
       };
     }
 
     return {
-      message: messageDescr,
-      path: message.path,
-      start: message.loc.start.line,
-      end: message.loc.end.line
+      message: entireMessage,
+      path: firstMessage.path,
+      start: firstMessage.loc.start.line,
+      end: firstMessage.loc.end.line,
+      loc: firstMessage.loc
     };
-  }))
-  .reduce((p, c) => p.concat(c), []);
+  });
 
   return output.length
     ? filter(output)
