@@ -36,7 +36,6 @@ module.exports = {
       // We need to use exec sync here because ESLint doesn't support async plugins at the
       // moment 😭 That means we have to block the main thread every time we run collect errors
       // from Flow
-      console.log(__dirname)
       const collected = execSync(
         `node ${path.join(__dirname, './dist/collect.js')}`
       );
