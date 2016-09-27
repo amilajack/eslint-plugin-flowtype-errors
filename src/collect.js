@@ -66,18 +66,8 @@ function executeFlow() {
         previous + (current.type === 'Blame' ? ` '${current.descr}' ` : current.descr)
       ), '');
 
-    if (process.env.DEBUG_FLOWTYPE_ERRRORS === 'true') {
-      return {
-        message: entireMessage,
-        path: firstMessage.path,
-        start: firstMessage.loc.start.line,
-        end: firstMessage.loc.end.line,
-        loc: firstMessage.loc,
-        parsedJSONArray
-      };
-    }
-
     return {
+      ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? parsedJSONArray : {}),
       message: entireMessage,
       path: firstMessage.path,
       start: firstMessage.loc.start.line,
