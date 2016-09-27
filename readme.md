@@ -66,6 +66,8 @@ http://eslint.org/docs/user-guide/integrations#editors
 ## Planned Implementations
 * Add more extensive tests
 * Allow Flow to be installed as peerDependency (currently uses latest Flow version)
+* Allow passing arguments to flow binary
+* Fix column number inconsistencies between ESLint and Flow
 * Run flow minimal amount of times for faster linting
 * Custom formatting of flow error messages
 * Enable rules to allow and disallow specific flow errors

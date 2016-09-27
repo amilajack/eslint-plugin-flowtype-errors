@@ -33,8 +33,12 @@ const path = require('path');
 module.exports = {
   rules: {
     'show-errors': function showErrors(context) {
+      // We need to use exec sync here because ESLint doesn't support async plugins at the
+      // moment 😭 That means we have to block the main thread every time we run collect errors
+      // from Flow
+      console.log(__dirname)
       const collected = execSync(
-        `node ${path.normalize('./node_modules/eslint-plugin-flowtype-errors/dist/collect.js')}`
+        `node ${path.join(__dirname, './dist/collect.js')}`
       );
       const parsedJSONArray = JSON.parse(collected);
 
@@ -44,7 +48,7 @@ module.exports = {
             const foundASTNodeError = parsedJSONArray
               .filter(each => each.path === context.getFilename())
 
-              // ESLint uses a 'zero-based' column mechanisim. That means that they count columns
+              // ESLint uses a 'zero-based' column system. That means that they count columns
               // starting from 0. Weird... Flow's columns start at 1. Ughh
               .find(each =>
                 each.start === node.loc.start.line &&
