@@ -1,7 +1,8 @@
-const { execSync } = require('child_process');
-const path = require('path');
+import { execSync } from 'child_process';
+import path from 'path';
 
 
+//
 // @NOTE: "show-errors" runs on each file. collectFlowErrors runs on each AST node
 //
 // @TODO: With the current implementation, flow checks every file each time
@@ -29,6 +30,7 @@ const path = require('path');
 //       return lru('cache')
 //   }
 // })();
+//
 
 module.exports = {
   rules: {
