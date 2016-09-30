@@ -39,6 +39,7 @@ Add this line to the 'plugins' section of your `.eslintrc`
 ```
 
 Add the `@flow` pragma to files that you want to lint
+Also make sure that your `.flowconfig` is in the root of your project directory
 ```js
 /**
  * @flow
