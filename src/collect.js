@@ -59,12 +59,13 @@ function executeFlow() {
 
   // Loop through errors in the file
   const output = parsedJSONArray.errors.map(({ message }) => {
-    const [firstMessage] = message;
+    const [firstMessage, ...remainingMessages] = message;
 
-    const entireMessage = message
-      .reduce((previous, current) => (
+    const entireMessage = `${firstMessage.descr}: ${
+      remainingMessages.reduce((previous, current) => (
         previous + (current.type === 'Blame' ? ` '${current.descr}' ` : current.descr)
-      ), '');
+      ), '')
+    }`;
 
     return {
       ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? parsedJSONArray : {}),
@@ -82,9 +83,8 @@ function executeFlow() {
 }
 
 function Flow(filepath = './') {
-  return executeFlow(path.normalize(filepath), {});
+  const result = executeFlow(path.normalize(filepath), {});
+  process.stdout.write(JSON.stringify(result));
 }
 
-process.stdout.write(JSON.stringify(Flow()));
-
-module.exports = Flow;
+Flow();
