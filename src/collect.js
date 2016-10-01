@@ -61,7 +61,7 @@ function executeFlow() {
   const output = parsedJSONArray.errors.map(({ message }) => {
     const [firstMessage, ...remainingMessages] = message;
 
-    const entireMessage = `${firstMessage.descr} ${
+    const entireMessage = `${firstMessage.descr}: ${
       remainingMessages.reduce((previous, current) => (
         previous + (current.type === 'Blame' ? ` '${current.descr}' ` : current.descr)
       ), '')
