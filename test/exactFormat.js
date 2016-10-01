@@ -14,7 +14,7 @@ export default [{
       "offset": 83
     },
   },
-  "message": " 'string' This type is incompatible with the expected return type of 'boolean' ",
+  "message": "string This type is incompatible with the expected return type of 'boolean' ",
   "start": 6,
   "type": "default"
 }, {
@@ -31,7 +31,7 @@ export default [{
       "offset": 101
     },
   },
-  "message": " 'identifier `x`' Could not resolve name",
+  "message": "identifier `x` Could not resolve name",
   "start": 9,
   "type": "default"
 }, {
@@ -48,7 +48,7 @@ export default [{
       "offset": 205
     },
   },
-  "message": " 'string' This type is incompatible with 'number' ",
+  "message": "string This type is incompatible with 'number' ",
   "start": 16,
   "type": "default"
 }, {
@@ -65,7 +65,7 @@ export default [{
       "offset": 95
     },
   },
-  "message": " 'parameter `x`' Missing annotation",
+  "message": "parameter `x` Missing annotation",
   "start": 9,
   "type": "missing-annotation"
 }, {
@@ -82,7 +82,7 @@ export default [{
       "offset": 120
     },
   },
-  "message": " 'identifier `x`' Could not resolve name",
+  "message": "identifier `x` Could not resolve name",
   "start": 13,
   "type": "default"
 }, {
@@ -99,7 +99,7 @@ export default [{
       "offset": 134
     },
   },
-  "message": " 'string' This type is incompatible with the expected return type of 'number' ",
+  "message": "string This type is incompatible with the expected return type of 'number' ",
   "start": 10,
   "type": "default"
 }, {
@@ -116,7 +116,7 @@ export default [{
       "offset": 201
     },
   },
-  "message": " 'string' This type is incompatible with the expected return type of 'number' ",
+  "message": "string This type is incompatible with the expected return type of 'number' ",
   "start": 14,
   "type": "default"
 }, {
@@ -133,7 +133,7 @@ export default [{
       "offset": 228
     },
   },
-  "message": " 'string' This type is incompatible with 'number' ",
+  "message": "string This type is incompatible with 'number' ",
   "start": 17,
   "type": "default"
 }, {
@@ -150,7 +150,7 @@ export default [{
       "offset": 251
     },
   },
-  "message": " 'who' name is already bound 'function who' ",
+  "message": "who name is already bound 'function who' ",
   "start": 19,
   "type": "default"
 }, {
@@ -167,7 +167,7 @@ export default [{
       "offset": 266
     },
   },
-  "message": " 'number' This type cannot be added to 'string' ",
+  "message": "number This type cannot be added to 'string' ",
   "start": 21,
   "type": "default"
 }, {
@@ -184,7 +184,7 @@ export default [{
       "offset": 272
     },
   },
-  "message": " 'function' This type cannot be added to 'string' ",
+  "message": "function This type cannot be added to 'string' ",
   "start": 21,
   "type": "default"
 }]
