@@ -1,6 +1,9 @@
 import path from 'path';
+import fs from 'fs';
 import collect from './collect';
 
+
+let runOnAllFiles;
 
 export default {
   rules: {
@@ -13,6 +16,24 @@ export default {
           if (onTheFly) {
             const stdin = context.getSourceCode().getText();
             const root = path.join(process.cwd());
+
+            // Check to see if we should run on every file
+            if (runOnAllFiles === undefined) {
+              runOnAllFiles = fs
+                .readFileSync(path.join(root, '.flowconfig'))
+                .toString()
+                .includes('all=true');
+            }
+
+            if (stdin) {
+              if (runOnAllFiles === false) {
+                // `String.prototype.includes` is an O(n) operation :(
+                if (!stdin.includes('@flow')) {
+                  return true;
+                }
+              }
+            }
+
             collected = collect(stdin, root, context.getFilename());
           } else {
             collected = collect();
