@@ -1,37 +1,53 @@
-import { execSync } from 'child_process';
 import path from 'path';
+import fs from 'fs';
+import collect from './collect';
 
+
+let runOnAllFiles;
 
 export default {
   rules: {
     'show-errors': function showErrors(context) {
       return {
         Program() {
-          const collected = execSync(
-            `node ${path.join(__dirname, './collect.js')}`
-          );
-          const parsedJSONArray = JSON.parse(collected);
+          const onTheFly = true;
+          let collected;
 
-          function collectFlowErrors() {
-            try {
-              return parsedJSONArray.filter(
-                each => each.path === context.getFilename()
-              );
-            } catch (err) {
-              console.log(err);
-              return [];
+          if (onTheFly) {
+            const stdin = context.getSourceCode().getText();
+            const root = process.cwd();
+
+            // Check to see if we should run on every file
+            if (runOnAllFiles === undefined) {
+              runOnAllFiles = fs
+                .readFileSync(path.join(root, '.flowconfig'))
+                .toString()
+                .includes('all=true');
             }
+
+            if (stdin) {
+              if (runOnAllFiles === false) {
+                // `String.prototype.includes` is an O(n) operation :(
+                if (!stdin.includes('@flow')) {
+                  return true;
+                }
+              }
+            }
+
+            collected = collect(stdin, root, context.getFilename());
+          } else {
+            collected = collect();
           }
 
-          const pluginErrors = collectFlowErrors();
+          const pluginErrors = Array.isArray(collected)
+            ? (onTheFly ? collected : collected.filter(
+                each => each.path === context.getFilename()
+              ))
+            : [];
 
           pluginErrors.forEach(({ loc, message }) => {
             context.report({
-              loc: {
-                start: {
-                  line: loc.start.line
-                }
-              },
+              loc,
               message
             });
           });
