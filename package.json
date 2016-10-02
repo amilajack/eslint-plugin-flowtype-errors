@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-flowtype-errors",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Retrieve Flow errors as ESLint errors.",
   "author": "Amila Welihinda",
   "bugs": {
@@ -41,7 +41,7 @@
     "babel-register": "^6.16.3",
     "chai": "^3.5.0",
     "cross-env": "^3.0.0",
-    "eslint": "^3.6.1",
+    "eslint": "^3.7.0",
     "eslint-config-airbnb": "^12.0.0",
     "eslint-formatter-pretty": "^1.0.0",
     "eslint-nibble-ignore": "^3.0.0",
@@ -49,6 +49,7 @@
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-mocha": "^4.5.1",
     "eslint-plugin-react": "^6.3.0",
-    "mocha": "^3.1.0"
+    "mocha": "^3.1.0",
+    "shelljs": "^0.7.4"
   }
 }
