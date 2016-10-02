@@ -15,7 +15,7 @@ export default {
 
           if (onTheFly) {
             const stdin = context.getSourceCode().getText();
-            const root = path.join(process.cwd());
+            const root = process.cwd();
 
             // Check to see if we should run on every file
             if (runOnAllFiles === undefined) {

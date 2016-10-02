@@ -6,6 +6,7 @@
  * https://github.com/ptmt/tryflow/blob/gh-pages/js/worker.js
  */
 import flowBin from 'flow-bin';
+import fs from 'fs';
 import childProcess from 'child_process';
 import filter from './filter';
 require('shelljs/global');
@@ -37,12 +38,20 @@ function executeFlow(stdin, root, filepath) {
 
   switch (stdin && root && filepath && stdin !== '') {
     case true:
-      stdout = echo(stdin).exec([ // eslint-disable-line
-        `${getFlowBin()}`,
+      fs.writeFileSync('tmp.js', stdin);
+      stdout = exec([ // eslint-disable-line
+        `cat tmp.js | ${getFlowBin()}`,
         'check-contents --json --root',
         `${root} ${filepath}`
       ].join(' '), { silent: true });
+      fs.unlinkSync('tmp.js');
       break;
+      // stdout = echo(stdin).exec([ // eslint-disable-line
+      //   `${getFlowBin()}`,
+      //   'check-contents --json --root',
+      //   `${root} ${filepath}`
+      // ].join(' '), { silent: true });
+      // break;
     default:
       stdout = childProcess.spawnSync(getFlowBin(), ['--json']).stdout;
   }
