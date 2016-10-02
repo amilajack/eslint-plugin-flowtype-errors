@@ -27,11 +27,7 @@ export default {
 
           pluginErrors.forEach(({ loc, message }) => {
             context.report({
-              loc: {
-                start: {
-                  line: loc.start.line
-                }
-              },
+              loc,
               message
             });
           });
