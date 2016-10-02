@@ -87,6 +87,20 @@ function executeFlow(stdin, root, filepath) {
       ), '')
     }`;
 
+    if (firstMessage.descr === 'inconsistent use of library definitions') {
+      return {
+        ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? parsedJSONArray : {}),
+        message: entireMessage,
+        path: firstMessage.path,
+        start: 0,
+        loc: {
+          start: {
+            line: 0
+          }
+        }
+      };
+    }
+
     return {
       ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? parsedJSONArray : {}),
       message: entireMessage,

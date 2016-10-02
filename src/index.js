@@ -19,10 +19,14 @@ export default {
 
             // Check to see if we should run on every file
             if (runOnAllFiles === undefined) {
-              runOnAllFiles = fs
-                .readFileSync(path.join(root, '.flowconfig'))
-                .toString()
-                .includes('all=true');
+              try {
+                runOnAllFiles = fs
+                  .readFileSync(path.join(root, '.flowconfig'))
+                  .toString()
+                  .includes('all=true');
+              } catch (err) {
+                runOnAllFiles = false;
+              }
             }
 
             if (stdin) {
