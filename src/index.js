@@ -7,7 +7,6 @@ export default {
     'show-errors': function showErrors(context) {
       return {
         Program() {
-          // const onTheFly = false;
           const onTheFly = true;
           let collected;
 
