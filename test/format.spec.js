@@ -1,12 +1,11 @@
-import { execSync } from 'child_process';
 import { expect } from 'chai';
 import path from 'path';
 import exactFormat from './exactFormat';
+import collect from '../src/collect';
 
 
 describe('Format', () => {
-  const collected = execSync(`node ${path.normalize('./dist/collect.js')}`);
-  const parsedJSONArray = JSON.parse(collected);
+  const parsedJSONArray = collect();
 
   it('should have expected properties', done => {
     expect(parsedJSONArray).to.be.an('array');

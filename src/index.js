@@ -1,5 +1,5 @@
-import { execSync } from 'child_process';
 import path from 'path';
+import collect from './collect';
 
 
 export default {
@@ -7,31 +7,27 @@ export default {
     'show-errors': function showErrors(context) {
       return {
         Program() {
-          const collected = execSync(
-            `node ${path.join(__dirname, './collect.js')}`
-          );
-          const parsedJSONArray = JSON.parse(collected);
+          // const onTheFly = false;
+          const onTheFly = true;
+          let collected;
 
-          function collectFlowErrors() {
-            try {
-              return parsedJSONArray.filter(
-                each => each.path === context.getFilename()
-              );
-            } catch (err) {
-              console.log(err);
-              return [];
-            }
+          if (onTheFly) {
+            const stdin = context.getSourceCode().getText();
+            const root = path.join(process.cwd());
+            collected = collect(stdin, root, context.getFilename());
+          } else {
+            collected = collect();
           }
 
-          const pluginErrors = collectFlowErrors();
+          const pluginErrors = Array.isArray(collected)
+            ? (onTheFly ? collected : collected.filter(
+                each => each.path === context.getFilename()
+              ))
+            : [];
 
           pluginErrors.forEach(({ loc, message }) => {
             context.report({
-              loc: {
-                start: {
-                  line: loc.start.line
-                }
-              },
+              loc,
               message
             });
           });

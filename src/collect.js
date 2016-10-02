@@ -6,9 +6,10 @@
  * https://github.com/ptmt/tryflow/blob/gh-pages/js/worker.js
  */
 import flowBin from 'flow-bin';
-import path from 'path';
+import fs from 'fs';
 import childProcess from 'child_process';
 import filter from './filter';
+require('shelljs/global');
 
 
 /**
@@ -32,9 +33,27 @@ function getFlowBin() {
   return process.env.FLOW_BIN || flowBin;
 }
 
-function executeFlow() {
-  const args = ['--json'];
-  const { stdout } = childProcess.spawnSync(getFlowBin(), args);
+function executeFlow(stdin, root, filepath) {
+  let stdout;
+
+  switch (stdin && root && filepath && stdin !== '') {
+    case true:
+      // HACK: The current implementation works by writing to a temporary file
+      //       each time the plugin runs 😩 A better method of doing this would
+      //       be to use print a stdout and pass that to flow. I haven't found
+      //       a way to do that without the syntax of JS throwing syntax errors
+      //       in bash when outputted through stdout
+      fs.writeFileSync('tmp.js', stdin);
+      stdout = exec([ // eslint-disable-line
+        `cat tmp.js | ${getFlowBin()}`,
+        'check-contents --json --root',
+        `${root} ${filepath}`
+      ].join(' '), { silent: true });
+      fs.unlinkSync('tmp.js');
+      break;
+    default:
+      stdout = childProcess.spawnSync(getFlowBin(), ['--json']).stdout;
+  }
 
   //
   // This serves as a temporary HACK to prevent 32 bit OS's from failing. Flow does not
@@ -82,9 +101,6 @@ function executeFlow() {
     : true;
 }
 
-function Flow(filepath = './') {
-  const result = executeFlow(path.normalize(filepath), {});
-  process.stdout.write(JSON.stringify(result));
+export default function Collect(stdin, root, filepath) {
+  return executeFlow(stdin, root, filepath, {});
 }
-
-Flow();
