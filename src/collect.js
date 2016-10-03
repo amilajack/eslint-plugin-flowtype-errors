@@ -6,7 +6,6 @@
  * https://github.com/ptmt/tryflow/blob/gh-pages/js/worker.js
  */
 import flowBin from 'flow-bin';
-// import fs from 'fs';
 import childProcess from 'child_process';
 import filter from './filter';
 require('shelljs/global');
@@ -72,7 +71,7 @@ function executeFlow(stdin, root, filepath) {
   // Loop through errors in the file
   const output = parsedJSONArray.errors
     // Temporarily hide the 'inconsistent use of library definitions' issue
-    .filter(error => error.message[0].descr.includes('inconsistent use of'))
+    .filter(error => !error.message[0].descr.includes('inconsistent use of'))
     .map(({ message }) => {
       const [firstMessage, ...remainingMessages] = message;
 
