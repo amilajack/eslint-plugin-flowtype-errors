@@ -7,8 +7,8 @@
  */
 import flowBin from 'flow-bin';
 import childProcess from 'child_process';
+import shell from 'shelljs';
 import filter from './filter';
-require('shelljs/global');
 
 
 /**
@@ -37,11 +37,11 @@ function executeFlow(stdin, root, filepath) {
 
   switch (stdin && root && filepath && stdin !== '') {
     case true:
-      stdout = (new shell.ShellString(stdin)).exec([ // eslint-disable-line
+      stdout = (new shell.ShellString(stdin)).exec([
         `${getFlowBin()}`,
         'check-contents --json --root',
         `${root} ${filepath}`
-      ].join(' '));
+      ].join(' '), { silent: true });
       break;
     default:
       stdout = childProcess.spawnSync(getFlowBin(), ['--json']).stdout;
