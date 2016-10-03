@@ -6,7 +6,7 @@
  * https://github.com/ptmt/tryflow/blob/gh-pages/js/worker.js
  */
 import flowBin from 'flow-bin';
-import fs from 'fs';
+// import fs from 'fs';
 import childProcess from 'child_process';
 import filter from './filter';
 require('shelljs/global');
@@ -38,20 +38,12 @@ function executeFlow(stdin, root, filepath) {
 
   switch (stdin && root && filepath && stdin !== '') {
     case true:
-      fs.writeFileSync('tmp.js', stdin);
-      stdout = exec([ // eslint-disable-line
-        `cat tmp.js | ${getFlowBin()}`,
+      stdout = (new shell.ShellString(stdin)).exec([ // eslint-disable-line
+        `${getFlowBin()}`,
         'check-contents --json --root',
         `${root} ${filepath}`
-      ].join(' '), { silent: true });
-      fs.unlinkSync('tmp.js');
+      ].join(' '));
       break;
-      // stdout = echo(stdin).exec([ // eslint-disable-line
-      //   `${getFlowBin()}`,
-      //   'check-contents --json --root',
-      //   `${root} ${filepath}`
-      // ].join(' '), { silent: true });
-      // break;
     default:
       stdout = childProcess.spawnSync(getFlowBin(), ['--json']).stdout;
   }
@@ -78,38 +70,27 @@ function executeFlow(stdin, root, filepath) {
   }
 
   // Loop through errors in the file
-  const output = parsedJSONArray.errors.map(({ message }) => {
-    const [firstMessage, ...remainingMessages] = message;
+  const output = parsedJSONArray.errors
+    // Temporarily hide the 'inconsistent use of library definitions' issue
+    .filter(error => error.message[0].descr.includes('inconsistent use of'))
+    .map(({ message }) => {
+      const [firstMessage, ...remainingMessages] = message;
 
-    const entireMessage = `${firstMessage.descr}: ${
-      remainingMessages.reduce((previous, current) => (
-        previous + (current.type === 'Blame' ? ` '${current.descr}' ` : current.descr)
-      ), '')
-    }`;
+      const entireMessage = `${firstMessage.descr}: ${
+        remainingMessages.reduce((previous, current) => (
+          previous + (current.type === 'Blame' ? ` '${current.descr}' ` : current.descr)
+        ), '')
+      }`;
 
-    if (firstMessage.descr === 'inconsistent use of library definitions') {
       return {
         ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? parsedJSONArray : {}),
         message: entireMessage,
         path: firstMessage.path,
-        start: 0,
-        loc: {
-          start: {
-            line: 0
-          }
-        }
+        start: firstMessage.loc.start.line,
+        end: firstMessage.loc.end.line,
+        loc: firstMessage.loc
       };
-    }
-
-    return {
-      ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? parsedJSONArray : {}),
-      message: entireMessage,
-      path: firstMessage.path,
-      start: firstMessage.loc.start.line,
-      end: firstMessage.loc.end.line,
-      loc: firstMessage.loc
-    };
-  });
+    });
 
   return output.length
     ? filter(output)
