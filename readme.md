@@ -48,6 +48,9 @@ Also make sure that your `.flowconfig` is in the root of your project directory
 
 Run `eslint` and and you're all set!
 
+## CI Configuration
+**Flow is supported on all OS's except Windows 32bit. Add [this line](https://github.com/amilajack/eslint-plugin-flowtype-errors/blob/master/appveyor.yml#L18) to appveyor to make tests run properly.**
+
 ## Editor Configuration
 ### Atom
 ```bash
