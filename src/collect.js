@@ -71,10 +71,13 @@ function executeFlow(stdin, root, filepath) {
   // Loop through errors in the file
   const output = parsedJSONArray.errors
     // Temporarily hide the 'inconsistent use of library definitions' issue
-    .filter(error => !error.message[0].descr.includes('inconsistent use of'))
+    .filter(({ message }) => (
+      !message[0].descr.includes('inconsistent use of') &&
+      message[0].descr &&
+      message[0].descr !== ''
+    ))
     .map(({ message }) => {
       const [firstMessage, ...remainingMessages] = message;
-
       const entireMessage = `${firstMessage.descr}: ${
         remainingMessages.reduce((previous, current) => (
           previous + (current.type === 'Blame' ? ` '${current.descr}' ` : current.descr)
