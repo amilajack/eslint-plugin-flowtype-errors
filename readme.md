@@ -73,3 +73,7 @@ http://eslint.org/docs/user-guide/integrations#editors
 * Run flow minimal amount of times for faster linting
 * Custom formatting of flow error messages
 * Enable rules to allow and disallow specific flow errors
+
+## Also See:
+* [babel-plugin-tcomb](https://github.com/gcanti/babel-plugin-tcomb)
+* [eslint-plugin-flowtype](https://github.com/gajus/eslint-plugin-flowtype)
