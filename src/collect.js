@@ -73,6 +73,7 @@ function executeFlow(stdin, root, filepath) {
     // Temporarily hide the 'inconsistent use of library definitions' issue
     .filter(({ message }) => (
       !message[0].descr.includes('inconsistent use of') &&
+      message[0].path === filepath &&
       message[0].descr &&
       message[0].descr !== ''
     ))

@@ -1,32 +1,46 @@
+/* eslint-disable */
 import { expect } from 'chai';
 import path from 'path';
-import exactFormat from './exactFormat';
+import { readFileSync } from 'fs';
 import collect from '../src/collect';
 
 
+const testFilenames = ['1.example.js', '2.example.js', '3.example.js', '4.example.js'];
+
+const testResults = testFilenames.map((filename, index) => {
+  const root = process.cwd();
+  const filepath = path.join(root, `./test/${filename}`);
+  const stdin = readFileSync(filepath).toString();
+  const parsedJSONArray = collect(stdin, root, filepath);
+
+  return { parsedJSONArray, filename, index };
+});
+
 describe('Format', () => {
-  const parsedJSONArray = collect();
+  for (const { parsedJSONArray, filename, index } of testResults) {
+    it(`${index}: ${filename} - should have expected properties`, done => {
+      const exactFormat = require(`./${filename}`.replace('example', 'expect'));
 
-  it('should have expected properties', done => {
-    expect(parsedJSONArray).to.be.an('array');
+      expect(parsedJSONArray).to.be.an('array');
 
-    // Filter out the 'path' property because this changes between environments
-    expect(parsedJSONArray.map(e => ({
-      end: e.end,
-      type: e.type,
-      loc: { start: e.loc.start, end: e.loc.end },
-      message: e.message,
-      start: e.start
-    }))).to.eql(exactFormat);
+      // Filter out the 'path' property because this changes between environments
+      expect(parsedJSONArray.map(e => ({
+        end: e.end,
+        type: e.type,
+        loc: { start: e.loc.start, end: e.loc.end },
+        message: e.message,
+        start: e.start
+      }))).to.eql(exactFormat);
 
-    for (const e of parsedJSONArray) {
-      if (e !== false) {
-        expect(e.type).to.be.a('string');
-        expect(e.path).to.be.a('string').that.includes(path.join(process.cwd(), 'test'));
-        expect(e.path).to.be.a('string').that.includes('.example.js');
+      for (const e of parsedJSONArray) {
+        if (e !== false) {
+          expect(e.type).to.be.a('string');
+          expect(e.path).to.be.a('string').that.includes(path.join(process.cwd(), 'test'));
+          expect(e.path).to.be.a('string').that.includes('.example.js');
+        }
       }
-    }
 
-    done();
-  });
+      done();
+    });
+  }
 });
