@@ -12,15 +12,11 @@ node_js:
 
 cache:
   directories:
-    - $HOME/.npm
-    - $HOME/.yarn-cache
     - node_modules
 
-before_install:
-  - time npm i -g yarn --cache-min 999999999
-
 install:
-  - time yarn
+  - npm i -g npm@latest
+  - npm install
 
 script:
   - node --version
