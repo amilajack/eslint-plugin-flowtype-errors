@@ -7,6 +7,7 @@
  */
 import flowBin from 'flow-bin';
 import childProcess from 'child_process';
+import slash from 'slash';
 import shell from 'shelljs';
 import filter from './filter';
 
@@ -28,10 +29,6 @@ function fatalError(stderr) {
   };
 }
 
-function replaceAll(string, search, replacement) {
-  return string.split(search).join(replacement);
-}
-
 function _formatMessage(message, messages, root) {
   switch (message.type) {
     case 'Comment':
@@ -39,7 +36,7 @@ function _formatMessage(message, messages, root) {
     case 'Blame': {
       const see = message.path !== ''
                     ? ` See .${
-                        replaceAll(message.path.replace(root, ''), '\\', '').replace('..', '.')
+                        slash(message.path.replace(root, ''))
                       }:${message.line}`
                     : '';
       return `'${message.descr}'.${see}`;

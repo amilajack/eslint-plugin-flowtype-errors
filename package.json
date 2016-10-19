@@ -34,7 +34,8 @@
     "flow-bin": "^0.33.0",
     "q": "^1.4.1",
     "ramda": "^0.22.1",
-    "shelljs": "^0.7.4"
+    "shelljs": "^0.7.4",
+    "slash": "^1.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.16.0",
