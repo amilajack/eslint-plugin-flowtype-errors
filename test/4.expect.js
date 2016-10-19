@@ -13,7 +13,7 @@ export default [
         offset: 120
       }
     },
-    message: "property `lastName`:  Property not found in 'props of React element `Foo`'. See ./test/4.example.js:25",
+    message: "property `lastName`:  Property not found in 'props of React element `Foo`'. See line 25",
     start: 9,
     type: 'default'
   }

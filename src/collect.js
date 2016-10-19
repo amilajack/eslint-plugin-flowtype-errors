@@ -29,15 +29,17 @@ function fatalError(stderr) {
   };
 }
 
-function _formatMessage(message, messages, root) {
+function _formatMessage(message, messages, root, path) {
   switch (message.type) {
     case 'Comment':
       return `${message.descr}`;
     case 'Blame': {
       const see = message.path !== ''
-                    ? ` See .${
-                        slash(message.path.replace(root, ''))
-                      }:${message.line}`
+                    ? ` See ${
+                      path.includes(message.path)
+                        ? `line ${message.line}`
+                        : `.${slash(message.path.replace(root, ''))}:${message.line}`
+                      }`
                     : '';
       return `'${message.descr}'.${see}`;
     }
@@ -102,7 +104,13 @@ function executeFlow(stdin, root, filepath) {
           (previousMessage,
             currentMessage,
             index,
-            messages) => `${previousMessage} ${_formatMessage(currentMessage, messages, root)}`,
+            messages) =>
+            `${previousMessage} ${_formatMessage(
+              currentMessage,
+              messages,
+              root,
+              firstMessage.path
+            )}`,
           ''
         )
       }`;

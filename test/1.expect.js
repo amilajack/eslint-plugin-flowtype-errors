@@ -13,7 +13,7 @@ export default [
         offset: 83
       }
     },
-    message: "string:  This type is incompatible with the expected return type of 'boolean'. See ./test/1.example.js:5",
+    message: "string:  This type is incompatible with the expected return type of 'boolean'. See line 5",
     start: 6,
     type: 'default'
   },
@@ -49,7 +49,7 @@ export default [
         offset: 205
       }
     },
-    message: "string:  This type is incompatible with 'number'. See ./test/1.example.js:16",
+    message: "string:  This type is incompatible with 'number'. See line 16",
     start: 16,
     type: 'default'
   }

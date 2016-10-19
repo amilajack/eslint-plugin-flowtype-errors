@@ -13,7 +13,7 @@ export default [
         offset: 107
       }
     },
-    message: "number:  This type is incompatible with 'object type'. See ./test/6.example.js:5",
+    message: "number:  This type is incompatible with 'object type'. See line 5",
     start: 9,
     type: 'default'
   },
@@ -31,7 +31,7 @@ export default [
         offset: 63
       }
     },
-    message: "property `baz`:  Property not found in 'object literal'. See ./test/6.example.js:11",
+    message: "property `baz`:  Property not found in 'object literal'. See line 11",
     start: 5,
     type: 'default'
   }
