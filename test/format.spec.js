@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint global-require: 0, import/no-dynamic-require: 0 */
 import { expect } from 'chai';
 import path from 'path';
 import { readFileSync } from 'fs';
@@ -24,7 +24,7 @@ const testResults = testFilenames.map((filename, index) => {
 });
 
 describe('Format', () => {
-  for (const { parsedJSONArray, filename, index } of testResults) {
+  for (const { parsedJSONArray, filename } of testResults) {
     it(`${filename} - should have expected properties`, done => {
       const exactFormat = require(`./${filename}`.replace('example', 'expect'));
 

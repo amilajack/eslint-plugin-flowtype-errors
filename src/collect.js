@@ -28,13 +28,19 @@ function fatalError(stderr) {
   };
 }
 
+function replaceAll(string, search, replacement) {
+  return string.split(search).join(replacement);
+}
+
 function _formatMessage(message, messages, root) {
   switch (message.type) {
     case 'Comment':
       return `${message.descr}`;
     case 'Blame': {
       const see = message.path !== ''
-                    ? ` See .${message.path.replace(root, '')}:${message.line}`
+                    ? ` See .${
+                        replaceAll(message.path.replace(root, ''), '\\', '').replace('..', '.')
+                      }:${message.line}`
                     : '';
       return `'${message.descr}'.${see}`;
     }
