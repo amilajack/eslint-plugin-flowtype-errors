@@ -28,6 +28,21 @@ function fatalError(stderr) {
   };
 }
 
+function _formatMessage(message, messages, root) {
+  switch (message.type) {
+    case 'Comment':
+      return `${message.descr}`;
+    case 'Blame': {
+      const see = message.path !== ''
+                    ? ` See .${message.path.replace(root, '')}:${message.line}`
+                    : '';
+      return `'${message.descr}'.${see}`;
+    }
+    default:
+      return `'${message.descr}'.`;
+  }
+}
+
 function getFlowBin() {
   return process.env.FLOW_BIN || flowBin;
 }
@@ -80,9 +95,13 @@ function executeFlow(stdin, root, filepath) {
     .map(({ message }) => {
       const [firstMessage, ...remainingMessages] = message;
       const entireMessage = `${firstMessage.descr}: ${
-        remainingMessages.reduce((previous, current) => (
-          previous + (current.type === 'Blame' ? ` '${current.descr}' ` : current.descr)
-        ), '')
+        remainingMessages.reduce(
+          (previousMessage,
+            currentMessage,
+            index,
+            messages) => `${previousMessage} ${_formatMessage(currentMessage, messages, root)}`,
+          ''
+        )
       }`;
 
       return {

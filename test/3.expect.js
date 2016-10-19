@@ -13,7 +13,7 @@ export default [
         offset: 134
       }
     },
-    message: "string: This type is incompatible with the expected return type of 'number' ",
+    message: "string:  This type is incompatible with the expected return type of 'number'. See ./test/3.example.js:9",
     start: 10,
     type: 'default'
   },
@@ -31,7 +31,7 @@ export default [
         offset: 201
       }
     },
-    message: "string: This type is incompatible with the expected return type of 'number' ",
+    message: "string:  This type is incompatible with the expected return type of 'number'. See ./test/3.example.js:13",
     start: 14,
     type: 'default'
   },
@@ -49,7 +49,7 @@ export default [
         offset: 228
       }
     },
-    message: "string: This type is incompatible with 'number' ",
+    message: "string:  This type is incompatible with 'number'. See ./test/3.example.js:17",
     start: 17,
     type: 'default'
   },
@@ -67,7 +67,7 @@ export default [
         offset: 251
       }
     },
-    message: "who: name is already bound 'function who' ",
+    message: "who:  name is already bound 'function who'. See ./test/3.example.js:13",
     start: 19,
     type: 'default'
   },
@@ -85,7 +85,7 @@ export default [
         offset: 266
       }
     },
-    message: "number: This type cannot be added to 'string' ",
+    message: "number:  This type cannot be added to 'string'. See ./test/3.example.js:21",
     start: 21,
     type: 'default'
   },
@@ -103,7 +103,7 @@ export default [
         offset: 272
       }
     },
-    message: "function: This type cannot be added to 'string' ",
+    message: "function:  This type cannot be added to 'string'. See ./test/3.example.js:21",
     start: 21,
     type: 'default'
   }

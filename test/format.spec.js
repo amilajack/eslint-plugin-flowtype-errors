@@ -5,7 +5,14 @@ import { readFileSync } from 'fs';
 import collect from '../src/collect';
 
 
-const testFilenames = ['1.example.js', '2.example.js', '3.example.js', '4.example.js'];
+const testFilenames = [
+  '1.example.js',
+  '2.example.js',
+  '3.example.js',
+  '4.example.js',
+  '5.example.js',
+  '6.example.js'
+];
 
 const testResults = testFilenames.map((filename, index) => {
   const root = process.cwd();
@@ -18,7 +25,7 @@ const testResults = testFilenames.map((filename, index) => {
 
 describe('Format', () => {
   for (const { parsedJSONArray, filename, index } of testResults) {
-    it(`${index}: ${filename} - should have expected properties`, done => {
+    it(`${filename} - should have expected properties`, done => {
       const exactFormat = require(`./${filename}`.replace('example', 'expect'));
 
       expect(parsedJSONArray).to.be.an('array');
