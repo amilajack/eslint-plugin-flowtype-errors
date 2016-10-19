@@ -7,6 +7,7 @@
  */
 import flowBin from 'flow-bin';
 import childProcess from 'child_process';
+import slash from 'slash';
 import shell from 'shelljs';
 import filter from './filter';
 
@@ -26,6 +27,23 @@ function fatalError(stderr) {
       }]
     }]
   };
+}
+
+function _formatMessage(message, messages, root) {
+  switch (message.type) {
+    case 'Comment':
+      return `${message.descr}`;
+    case 'Blame': {
+      const see = message.path !== ''
+                    ? ` See .${
+                        slash(message.path.replace(root, ''))
+                      }:${message.line}`
+                    : '';
+      return `'${message.descr}'.${see}`;
+    }
+    default:
+      return `'${message.descr}'.`;
+  }
 }
 
 function getFlowBin() {
@@ -80,9 +98,13 @@ function executeFlow(stdin, root, filepath) {
     .map(({ message }) => {
       const [firstMessage, ...remainingMessages] = message;
       const entireMessage = `${firstMessage.descr}: ${
-        remainingMessages.reduce((previous, current) => (
-          previous + (current.type === 'Blame' ? ` '${current.descr}' ` : current.descr)
-        ), '')
+        remainingMessages.reduce(
+          (previousMessage,
+            currentMessage,
+            index,
+            messages) => `${previousMessage} ${_formatMessage(currentMessage, messages, root)}`,
+          ''
+        )
       }`;
 
       return {

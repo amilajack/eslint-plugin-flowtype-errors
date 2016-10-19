@@ -13,7 +13,7 @@ export default [
         offset: 95
       }
     },
-    message: 'parameter `x`: Missing annotation',
+    message: 'parameter `x`:  Missing annotation',
     start: 9,
     type: 'missing-annotation'
   },
@@ -31,7 +31,7 @@ export default [
         offset: 120
       }
     },
-    message: 'identifier `x`: Could not resolve name',
+    message: 'identifier `x`:  Could not resolve name',
     start: 13,
     type: 'default'
   }

@@ -13,7 +13,7 @@ export default [
         offset: 83
       }
     },
-    message: "string: This type is incompatible with the expected return type of 'boolean' ",
+    message: "string:  This type is incompatible with the expected return type of 'boolean'. See ./test/1.example.js:5",
     start: 6,
     type: 'default'
   },
@@ -31,7 +31,7 @@ export default [
         offset: 101
       }
     },
-    message: 'identifier `x`: Could not resolve name',
+    message: 'identifier `x`:  Could not resolve name',
     start: 9,
     type: 'default'
   },
@@ -49,7 +49,7 @@ export default [
         offset: 205
       }
     },
-    message: "string: This type is incompatible with 'number' ",
+    message: "string:  This type is incompatible with 'number'. See ./test/1.example.js:16",
     start: 16,
     type: 'default'
   }
