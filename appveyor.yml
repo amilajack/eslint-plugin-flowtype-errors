@@ -7,6 +7,9 @@ environment:
 matrix:
   fast_finish: true
 
+cache:
+  - 'node_modules'
+
 build: off
 
 version: '{build}'
