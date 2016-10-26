@@ -31,7 +31,6 @@
   ],
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.15.0",
-    "flow-bin": "^0.33.0",
     "q": "^1.4.1",
     "ramda": "^0.22.1",
     "shelljs": "^0.7.4",
@@ -55,6 +54,7 @@
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-mocha": "^4.7.0",
     "eslint-plugin-react": "^6.4.1",
+    "flow-bin": "^0.33.0",
     "mocha": "^3.1.2"
   },
   "engines": {
@@ -62,6 +62,7 @@
     "npm": "3.x"
   },
   "peerDependencies": {
+    "flow-bin": ">=0.30.0",
     "eslint": ">=3.0.0"
   }
 }
