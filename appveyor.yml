@@ -29,6 +29,3 @@ test_script:
   - node --version
   - npm --version
   - npm run test
-
-cache:
-  - 'node_modules'
