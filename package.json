@@ -59,7 +59,7 @@
   },
   "engines": {
     "node": ">= 4.x",
-    "npm": "3.x"
+    "npm": ">= 3.x"
   },
   "peerDependencies": {
     "flow-bin": ">=0.30.0",
