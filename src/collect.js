@@ -5,11 +5,32 @@
  * https://github.com/facebook/nuclide/blob/master/pkg/nuclide-flow-rpc/lib/FlowRoot.js
  * https://github.com/ptmt/tryflow/blob/gh-pages/js/worker.js
  */
-import flowBin from 'flow-bin';
 import childProcess from 'child_process';
 import slash from 'slash';
 import shell from 'shelljs';
 import filter from './filter';
+
+/* eslint-disable */
+let flowBin;
+try {
+  if (!process.env.FLOW_BIN) {
+    flowBin = require('flow-bin');
+  }
+} catch (e) {
+  console.log();
+  console.log('Oops! Something went wrong! :(');
+  console.log();
+  console.log('eslint-plugin-flowtype-errors could not find the package "flow-bin". This can happen for a couple different reasons.');
+  console.log();
+  console.log('1. If ESLint is installed globally, then make sure "flow-bin" is also installed globally.');
+  console.log();
+  console.log('2. If ESLint is installed locally, then it\'s likely that "flow-bin" is not installed correctly. Try reinstalling by running the following:');
+  console.log();
+  console.log('  npm i -D flow-bin@latest');
+  console.log();
+  process.exit(1);
+}
+/* eslint-enable */
 
 
 /**
