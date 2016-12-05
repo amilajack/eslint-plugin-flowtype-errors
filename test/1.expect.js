@@ -49,7 +49,7 @@ export default [
         offset: 205
       }
     },
-    message: "string:  This type is incompatible with 'number'. See line 16",
+    message: 'string:  The operand of an arithmetic operation must be a number.',
     start: 16,
     type: 'default'
   }

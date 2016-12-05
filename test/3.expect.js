@@ -75,24 +75,6 @@ export default [
     end: 21,
     loc: {
       end: {
-        column: 7,
-        line: 21,
-        offset: 269
-      },
-      start: {
-        column: 5,
-        line: 21,
-        offset: 266
-      }
-    },
-    message: "number:  This type cannot be added to 'string'. See line 21",
-    start: 21,
-    type: 'default'
-  },
-  {
-    end: 21,
-    loc: {
-      end: {
         column: 13,
         line: 21,
         offset: 275
@@ -103,7 +85,7 @@ export default [
         offset: 272
       }
     },
-    message: "function:  This type cannot be added to 'string'. See line 21",
+    message: "function:  This type cannot be added to 'number'. See line 21",
     start: 21,
     type: 'default'
   }

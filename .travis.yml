@@ -11,18 +11,12 @@ node_js:
   - 6
   - 4
 
-cache:
-  directories:
-    - node_modules
-
-install:
-  - npm i -g npm@latest
-  - npm install
+cache: yarn
 
 script:
   - node --version
   - npm --version
-  - npm run test
+  - npm test
 
 notifications:
   email: false
