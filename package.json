@@ -58,11 +58,11 @@
     "mocha": "^3.2.0"
   },
   "engines": {
-    "node": ">= 4.x",
+    "node": ">= 6.x",
     "npm": ">= 3.x"
   },
   "peerDependencies": {
-    "flow-bin": ">=0.30.0",
+    "flow-bin": ">=0.36.0",
     "eslint": ">=3.0.0"
   }
 }
