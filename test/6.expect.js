@@ -13,7 +13,7 @@ export default [
         offset: 107
       }
     },
-    message: "number:  This type is incompatible with 'object type'. See line 5",
+    message: "number:  This type is incompatible with the expected param type of 'object type'. See line 5",
     start: 9,
     type: 'default'
   },

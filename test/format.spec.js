@@ -1,4 +1,8 @@
-/* eslint global-require: 0, import/no-dynamic-require: 0 */
+/*
+  eslint global-require: 0,
+  import/no-dynamic-require: 0,
+  no-restricted-syntax: 0
+*/
 import { expect } from 'chai';
 import path from 'path';
 import { readFileSync } from 'fs';
