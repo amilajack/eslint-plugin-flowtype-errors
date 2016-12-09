@@ -1,13 +1,19 @@
-/* eslint-disable */
+/*
+  eslint
+  react/prefer-stateless-function: 0,
+  react/no-multi-comp: 0,
+  react/jsx-filename-extension: 0
+*/
+
 /**
  * @flow
  */
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 class Foo extends Component {
 
   props: {
-    firstName: string,
+    firstName: Object,
     lastName: string,
   }
 
@@ -16,12 +22,12 @@ class Foo extends Component {
       <div>
         <h1>Hello {this.props.firstName} {this.props.lastName}</h1>
       </div>
-    )
+    );
   }
 }
 
-class Bar extends Component {
+export default class Bar extends Component {
   render() {
-    return <Foo firstName="John" />
+    return <Foo firstName="John" />;
   }
 }

@@ -55,7 +55,8 @@
     "eslint-plugin-mocha": "^4.7.0",
     "eslint-plugin-react": "^6.8.0",
     "flow-bin": "^0.36.0",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "react": "^15.4.1"
   },
   "engines": {
     "node": ">= 6.x",
