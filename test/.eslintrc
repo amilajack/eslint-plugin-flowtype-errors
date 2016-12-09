@@ -1,8 +1,5 @@
 {
   "env": {
-    "mocha": true
-  },
-  "plugins": [
-    "mocha"
-  ]
+    "jest": true
+  }
 }
