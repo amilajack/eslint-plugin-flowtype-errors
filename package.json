@@ -29,6 +29,9 @@
     "index.js",
     "dist"
   ],
+  "jest": {
+    "testEnvironment": "node"
+  },
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.15.0",
     "q": "^1.4.1",
