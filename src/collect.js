@@ -110,12 +110,14 @@ function executeFlow(stdin, root, filepath) {
     parsedJSONArray = fatalError(stringifiedStdout);
   }
 
+  const fullFilepath = pathModule.resolve(root, filepath);
+
   // Loop through errors in the file
   const output = parsedJSONArray.errors
     // Temporarily hide the 'inconsistent use of library definitions' issue
     .filter(({ message }) => (
       !message[0].descr.includes('inconsistent use of') &&
-      pathModule.resolve(root, message[0].path) === filepath &&
+      pathModule.resolve(root, message[0].path) === fullFilepath &&
       message[0].descr &&
       message[0].descr !== ''
     ))
