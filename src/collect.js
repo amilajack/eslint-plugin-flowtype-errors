@@ -5,6 +5,7 @@
  * https://github.com/facebook/nuclide/blob/master/pkg/nuclide-flow-rpc/lib/FlowRoot.js
  * https://github.com/ptmt/tryflow/blob/gh-pages/js/worker.js
  */
+import path from 'path';
 import childProcess from 'child_process';
 import slash from 'slash';
 import shell from 'shelljs';
@@ -114,7 +115,7 @@ function executeFlow(stdin, root, filepath) {
     // Temporarily hide the 'inconsistent use of library definitions' issue
     .filter(({ message }) => (
       !message[0].descr.includes('inconsistent use of') &&
-      message[0].path === filepath &&
+      path.resolve(root, message[0].path) === filepath &&
       message[0].descr &&
       message[0].descr !== ''
     ))
