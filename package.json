@@ -35,7 +35,7 @@
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.15.0",
     "q": "^1.4.1",
-    "ramda": "^0.22.1",
+    "ramda": "^0.23.0",
     "shelljs": "^0.7.5",
     "slash": "^1.0.0"
   },
