@@ -7,7 +7,7 @@ let runOnAllFiles;
 
 export default {
   rules: {
-    'show-errors': function showErrors(context) {
+    'flowtype-errors': function showErrors(context) {
       return {
         Program() {
           const onTheFly = true;
