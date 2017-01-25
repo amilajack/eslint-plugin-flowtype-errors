@@ -114,14 +114,33 @@ function executeFlow(stdin, root, filepath) {
 
   // Loop through errors in the file
   const output = parsedJSONArray.errors
+    // Hack #33
+    .map(({ message }) => {
+      if (
+        pathModule.resolve(root, message[0].path) !== fullFilepath &&
+        message.length === 3 &&
+        message[1].descr === 'Property not found in' &&
+        message[2].descr === 'object literal' &&
+        /^property `.+`$/.test(message[0].descr)
+      ) {
+        /* eslint no-param-reassign: 0 */
+        const tmp = message[0];
+        message[0] = message[2];
+        message[2] = tmp;
+        const tmp2 = message[0].descr;
+        message[0].descr = message[2].descr;
+        message[2].descr = tmp2;
+      }
+      return message;
+    })
     // Temporarily hide the 'inconsistent use of library definitions' issue
-    .filter(({ message }) => (
+    .filter((message) => (
       !message[0].descr.includes('inconsistent use of') &&
       pathModule.resolve(root, message[0].path) === fullFilepath &&
       message[0].descr &&
       message[0].descr !== ''
     ))
-    .map(({ message }) => {
+    .map((message) => {
       const [firstMessage, ...remainingMessages] = message;
       const entireMessage = `${firstMessage.descr}: ${
         remainingMessages.reduce(
