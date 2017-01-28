@@ -19,7 +19,7 @@ try {
     flowBin = require('flow-bin'); // eslint-disable-line global-require
   }
 } catch (e) {
-  /* eslint no-console: 0 */
+  /* eslint-disable */
   console.log();
   console.log('Oops! Something went wrong! :(');
   console.log();
@@ -32,7 +32,7 @@ try {
   console.log('  npm i -D flow-bin@latest');
   console.log();
   process.exit(1);
-  /* eslint no-console: 2 */
+  /* eslint-enable */
 }
 
 /**
