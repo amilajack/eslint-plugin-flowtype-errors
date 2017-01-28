@@ -1,38 +1,38 @@
 export default [
   {
-    end: 18,
+    end: 12,
     loc: {
       end: {
         column: 3,
-        line: 18,
-        offset: 264
+        line: 12,
+        offset: 171
       },
       start: {
         column: 10,
-        line: 15,
-        offset: 214
+        line: 9,
+        offset: 121
       }
     },
-    message: "property `lastName`:  Property not found in 'props of React element `Foo`'. See line 31",
-    start: 15,
+    message: "property `lastName`:  Property not found in 'props of React element `Foo`'. See line 25",
+    start: 9,
     type: 'default'
   },
   {
-    end: 31,
+    end: 25,
     loc: {
       end: {
-        column: 32,
-        line: 31,
-        offset: 489
+        column: 35,
+        line: 25,
+        offset: 399
       },
       start: {
-        column: 27,
-        line: 31,
-        offset: 483
+        column: 12,
+        line: 25,
+        offset: 375
       }
     },
-    message: "string:  This type is incompatible with 'object type'. See line 16",
-    start: 31,
+    message: "props of React element `Foo`:  This type is incompatible with 'object type'. See line 9",
+    start: 25,
     type: 'default'
   }
 ];

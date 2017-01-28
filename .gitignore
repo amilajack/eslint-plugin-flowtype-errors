@@ -41,3 +41,4 @@ node_modules
 
 # Compiled source
 dist
+.eslintcache

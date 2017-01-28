@@ -1,10 +1,4 @@
-/*
-  eslint
-  react/prefer-stateless-function: 0,
-  react/no-multi-comp: 0,
-  react/jsx-filename-extension: 0
-*/
-
+/* eslint-disable */
 /**
  * @flow
  */
