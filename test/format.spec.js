@@ -1,10 +1,5 @@
-/*
-  eslint global-require: 0,
-  import/no-dynamic-require: 0,
-  no-restricted-syntax: 0
-*/
-import { expect } from 'chai';
 import path from 'path';
+import { expect as chaiExpect } from 'chai';
 import { readFileSync } from 'fs';
 import collect from '../src/collect';
 
@@ -22,7 +17,7 @@ const testFilenames = [
 
 const testResults = testFilenames.map((filename, index) => {
   const root = process.cwd();
-  const filepath = path.join(root, `./test/${filename}`);
+  const filepath = path.join(root, 'test', filename);
   const stdin = readFileSync(filepath).toString();
   const parsedJSONArray = collect(stdin, root, filepath);
 
@@ -34,7 +29,7 @@ describe('Format', () => {
     it(`${filename} - should have expected properties`, done => {
       const exactFormat = require(`./${filename}`.replace('example', 'expect'));
 
-      expect(parsedJSONArray).to.be.an('array');
+      chaiExpect(parsedJSONArray).to.be.an('array');
 
       // Filter out the 'path' property because this changes between environments
       expect(parsedJSONArray.map(e => ({
@@ -43,13 +38,14 @@ describe('Format', () => {
         loc: { start: e.loc.start, end: e.loc.end },
         message: e.message,
         start: e.start
-      }))).to.eql(exactFormat);
+      })))
+      .toEqual(exactFormat);
 
       for (const e of parsedJSONArray) {
         if (e !== false) {
-          expect(e.type).to.be.a('string');
-          expect(e.path).to.be.a('string').that.includes(path.join(process.cwd(), 'test'));
-          expect(e.path).to.be.a('string').that.includes('.example.js');
+          chaiExpect(e.type).to.be.a('string');
+          chaiExpect(e.path).to.be.a('string').that.contains(path.join(process.cwd(), 'test'));
+          chaiExpect(e.path).to.be.a('string').that.contains('.example.js');
         }
       }
 

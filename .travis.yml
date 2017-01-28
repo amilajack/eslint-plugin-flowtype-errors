@@ -14,8 +14,8 @@ cache: yarn
 
 script:
   - node --version
-  - npm --version
-  - npm test
+  - yarn --version
+  - yarn test
 
 notifications:
   email: false
