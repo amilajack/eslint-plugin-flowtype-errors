@@ -11,13 +11,15 @@ import slash from 'slash';
 import shell from 'shelljs';
 import filter from './filter';
 
-/* eslint-disable */
+
 let flowBin;
+
 try {
   if (!process.env.FLOW_BIN) {
     flowBin = require('flow-bin');
   }
 } catch (e) {
+  /* eslint no-console: 0 */
   console.log();
   console.log('Oops! Something went wrong! :(');
   console.log();
@@ -30,9 +32,8 @@ try {
   console.log('  npm i -D flow-bin@latest');
   console.log();
   process.exit(1);
+  /* eslint no-console: 2 */
 }
-/* eslint-enable */
-
 
 /**
  * Wrap critical Flow exception into default Error json format
@@ -134,13 +135,13 @@ function executeFlow(stdin, root, filepath) {
       return message;
     })
     // Temporarily hide the 'inconsistent use of library definitions' issue
-    .filter((message) => (
+    .filter(message => (
       !message[0].descr.includes('inconsistent use of') &&
       pathModule.resolve(root, message[0].path) === fullFilepath &&
       message[0].descr &&
       message[0].descr !== ''
     ))
-    .map((message) => {
+    .map(message => {
       const [firstMessage, ...remainingMessages] = message;
       const entireMessage = `${firstMessage.descr}: ${
         remainingMessages.reduce(
