@@ -16,7 +16,7 @@ let flowBin;
 
 try {
   if (!process.env.FLOW_BIN) {
-    flowBin = require('flow-bin');
+    flowBin = require('flow-bin'); // eslint-disable-line global-require
   }
 } catch (e) {
   /* eslint no-console: 0 */
