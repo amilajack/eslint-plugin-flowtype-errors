@@ -20,6 +20,8 @@ eslint-plugin-flowtype-errors
 ## Getting Started
 This guide assumes that you have installed eslint, babel, babel-plugin-transform-flow-strip-types and configured flow. Check out the [from-scratch guide](https://github.com/amilajack/eslint-plugin-flowtype-errors/wiki/Getting-Started) for the full guide on getting started.
 
+⚠️ Make sure the 64-bit version of your texteditor/IDE. For atom, [see this comment](https://github.com/amilajack/eslint-plugin-flowtype-errors/issues/40#issuecomment-275983387)
+
 **Step 1. Install**
 
 ```bash
