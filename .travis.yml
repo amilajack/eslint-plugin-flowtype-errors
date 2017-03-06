@@ -21,6 +21,5 @@ script:
 notifications:
   email: false
 
-matrix:
-  allow_failures:
-    - node: 4
+allow_failures:
+  - node: 4
