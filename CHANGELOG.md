@@ -1,3 +1,9 @@
+## v3.0.1
+
+### Added
+
+- Support for node >= 4
+
 ## v3.0.0
 
 ### Added
