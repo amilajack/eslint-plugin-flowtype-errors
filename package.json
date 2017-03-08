@@ -57,7 +57,7 @@
     "react": "^15.4.2"
   },
   "engines": {
-    "node": ">=6.x",
+    "node": ">=4.x",
     "npm": ">=3.x"
   },
   "peerDependencies": {

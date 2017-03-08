@@ -9,6 +9,7 @@ os:
 node_js:
   - 7
   - 6
+  - 4
 
 cache: yarn
 
@@ -19,3 +20,6 @@ script:
 
 notifications:
   email: false
+
+allow_failures:
+  - node: 4
