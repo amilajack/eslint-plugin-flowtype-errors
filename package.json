@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-flowtype-errors",
-  "version": "3.0.1",
+  "version": "3.0.2-0",
   "description": "Retrieve Flow errors as ESLint errors.",
   "author": "Amila Welihinda",
   "bugs": {
