@@ -28,7 +28,7 @@ const testResults = testFilenames.map((filename, index) => {
 
 describe('Format', () => {
   for (const { parsedJSONArray, filename } of testResults) {
-    it(`${filename} - should have expected properties`, done => {
+    it(`${filename} - should have expected properties`, () => {
       const exactFormat = require(`./${filename}`.replace('example', 'expect'));
 
       chaiExpect(parsedJSONArray).to.be.an('array');
@@ -50,8 +50,6 @@ describe('Format', () => {
           chaiExpect(e.path).to.be.a('string').that.contains('.example.js');
         }
       }
-
-      done();
     });
   }
 });
@@ -71,7 +69,7 @@ const codebases = [
 
 describe('Check codebases', () => {
   for (const folder of codebases) {
-    it(`${folder} - eslint should give expected output`, done => {
+    it(`${folder} - eslint should give expected output`, () => {
       const fullFolder = path.resolve(`./test/codebases/${folder}`);
 
       // Spawn a eslint process
@@ -83,8 +81,6 @@ describe('Check codebases', () => {
       expect(stdout.replace(regexp, match => match.replace(fullFolder, '.').replace(/\\/g, '/'))).toMatchSnapshot();
 
       expect(stderr).toEqual('');
-
-      done();
     });
   }
 });
