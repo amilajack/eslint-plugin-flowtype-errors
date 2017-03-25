@@ -10,7 +10,7 @@
   "main": "index.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production babel src --out-dir dist",
-    "lint": "eslint --ignore-path .gitignore --cache --format=node_modules/eslint-formatter-pretty .",
+    "lint": "eslint --ignore-path .gitignore --ignore-pattern test/codebases/** --cache --format=node_modules/eslint-formatter-pretty .",
     "preversion": "npm run build",
     "spec": "npm run build && jest test/format.spec.js",
     "test": "npm run lint && npm run spec"
@@ -47,6 +47,7 @@
     "babel-register": "^6.24.0",
     "chai": "^3.5.0",
     "cross-env": "^3.2.4",
+    "cross-spawn": "^5.1.0",
     "eslint": "^3.18.0",
     "eslint-config-airbnb-base": "^11.1.1",
     "eslint-formatter-pretty": "^1.1.0",

@@ -1,6 +1,7 @@
 import path from 'path';
 import { expect as chaiExpect } from 'chai';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
+import { sync as spawnSync } from 'cross-spawn';
 import collect from '../src/collect';
 
 
@@ -27,7 +28,7 @@ const testResults = testFilenames.map((filename, index) => {
 
 describe('Format', () => {
   for (const { parsedJSONArray, filename } of testResults) {
-    it(`${filename} - should have expected properties`, done => {
+    it(`${filename} - should have expected properties`, () => {
       const exactFormat = require(`./${filename}`.replace('example', 'expect'));
 
       chaiExpect(parsedJSONArray).to.be.an('array');
@@ -49,8 +50,67 @@ describe('Format', () => {
           chaiExpect(e.path).to.be.a('string').that.contains('.example.js');
         }
       }
+    });
+  }
+});
 
-      done();
+const ESLINT_PATH = path.resolve('./node_modules/eslint/bin/eslint.js');
+
+function runEslint(cwd) {
+  const result = spawnSync(ESLINT_PATH, ['**/*.js'], { cwd });
+  result.stdout = result.stdout && result.stdout.toString();
+  result.stderr = result.stderr && result.stderr.toString();
+  return result;
+}
+
+const codebases = [
+  'project-1'
+];
+
+const eslintConfig = `
+var Module = require('module');
+var path = require('path');
+var original = Module._resolveFilename;
+
+// Hack to allow eslint to find the plugin
+Module._resolveFilename = function(request, parent, isMain) {
+  if (request === 'eslint-plugin-flowtype-errors') {
+    return path.resolve('../../../dist/index.js');
+  }
+  return original.call(this, request, parent, isMain);
+};
+
+module.exports = {
+  parser: 'babel-eslint',
+  root: true, // Make ESLint ignore configuration files in parent folders
+  env: {
+    node: true,
+    es6: true
+  },
+  plugins: ['flowtype-errors'],
+  rules: {
+    'flowtype-errors/show-errors': 2
+  }
+};
+`;
+
+describe('Check codebases', () => {
+  for (const folder of codebases) {
+    it(`${folder} - eslint should give expected output`, () => {
+      const fullFolder = path.resolve(`./test/codebases/${folder}`);
+
+      // Write config file
+      writeFileSync(path.resolve(fullFolder, '.eslintrc.js'), eslintConfig);
+
+      // Spawn a eslint process
+      const { stdout, stderr } = runEslint(fullFolder);
+
+      const regexp = new RegExp(`^${fullFolder.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')}.+\\.js$`, 'gm'); // Escape regexp
+
+      // Strip root from filenames
+      expect(stdout.replace(regexp, match => match.replace(fullFolder, '.').replace(/\\/g, '/'))).toMatchSnapshot();
+
+      expect(stderr).toEqual('');
     });
   }
 });
