@@ -5,6 +5,20 @@ import collect from './collect';
 
 let runOnAllFiles;
 
+function hasFlowPragma(source) {
+  let has = false;
+  const comments = source.getAllComments();
+
+  for (let i = 0; i < comments.length; i += 1) {
+    if (/@flow/.test(comments[i].value)) {
+      has = true;
+      break;
+    }
+  }
+
+  return has;
+}
+
 export default {
   rules: {
     'show-errors': function showErrors(context) {
@@ -14,7 +28,7 @@ export default {
           let collected;
 
           if (onTheFly) {
-            const stdin = context.getSourceCode().getText();
+            const source = context.getSourceCode();
             const root = process.cwd();
 
             // Check to see if we should run on every file
@@ -29,16 +43,11 @@ export default {
               }
             }
 
-            if (stdin) {
-              if (runOnAllFiles === false) {
-                // `String.prototype.includes` is an O(n) operation :(
-                if (!stdin.includes('@flow')) {
-                  return true;
-                }
-              }
+            if (runOnAllFiles === false && !hasFlowPragma(source)) {
+              return true;
             }
 
-            collected = collect(stdin, root, context.getFilename());
+            collected = collect(source.getText(), root, context.getFilename());
           } else {
             collected = collect();
           }

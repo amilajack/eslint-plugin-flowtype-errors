@@ -182,6 +182,6 @@ function executeFlow(stdin, root, filepath) {
     : true;
 }
 
-export default function Collect(stdin, root, filepath) {
-  return executeFlow(stdin, root, filepath, {});
+export default function collect(stdin, root, filepath) {
+  return executeFlow(stdin, root, filepath);
 }
