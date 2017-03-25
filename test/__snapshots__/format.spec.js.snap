@@ -1,0 +1,43 @@
+exports[`Check codebases project-1 - eslint should give expected output 1`] = `
+"
+./1.example.js
+   5:11  error  string:  This type is incompatible with the expected return type of \'boolean\'. See line 4  flowtype-errors/show-errors
+   8:7   error  identifier \`x\`:  Could not resolve name                                                    flowtype-errors/show-errors
+  15:15  error  string:  The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+
+./2.example.js
+   8:25  error  parameter \`x\`:  Missing annotation       flowtype-errors/show-errors
+  12:7   error  identifier \`x\`:  Could not resolve name  flowtype-errors/show-errors
+
+./3.example.js
+   9:11  error  string:  This type is incompatible with the expected return type of \'number\'. See line 8   flowtype-errors/show-errors
+  13:11  error  string:  This type is incompatible with the expected return type of \'number\'. See line 12  flowtype-errors/show-errors
+  16:20  error  string:  This type is incompatible with \'number\'. See line 16                              flowtype-errors/show-errors
+  18:8   error  who:  name is already bound \'function who\'. See line 12                                    flowtype-errors/show-errors
+  20:12  error  function:  This type cannot be added to \'number\'. See line 20                              flowtype-errors/show-errors
+
+./4.example.js
+   8:11  error  property \`lastName\`:  Property not found in \'props of React element \`Foo\`\'. See line 24  flowtype-errors/show-errors
+  24:13  error  props of React element \`Foo\`:  This type is incompatible with \'object type\'. See line 8  flowtype-errors/show-errors
+
+./5.example.js
+  8:4  error  string:  This type is incompatible with the expected param type of \'number\'. See line 4  flowtype-errors/show-errors
+
+./6.example.js
+   8:6  error  number:  This type is incompatible with the expected param type of \'object type\'. See line 4       flowtype-errors/show-errors
+  10:2  error  function call:  \'property \`baz\`\'. See line 4. Property not found in \'object literal\'. See line 10  flowtype-errors/show-errors
+
+./7.example.js
+  6:4  error  string:  This type is incompatible with the expected param type of \'number\'. See ./5.example.js:4  flowtype-errors/show-errors
+
+./8.example.js
+  6:6  error  number:  This type is incompatible with the expected param type of \'object type\'. See ./6.example.js:4      flowtype-errors/show-errors
+  8:2  error  function call:  \'property \`baz\`\'. See ./6.example.js:4. Property not found in \'object literal\'. See line 8  flowtype-errors/show-errors
+
+./9.example.js
+  8:18  error  React element \`Hello\`:  \'property \`name\`\'. See ./9.example.import.js:6. Property not found in \'props of React element \`Hello\`\'. See line 8  flowtype-errors/show-errors
+
+✖ 19 problems (19 errors, 0 warnings)
+
+"
+`;

@@ -42,3 +42,6 @@ node_modules
 # Compiled source
 dist
 .eslintcache
+
+# Config file for tests
+test/codebases/*/.eslintrc.js
