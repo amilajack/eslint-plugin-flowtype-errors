@@ -53,7 +53,7 @@
     "eslint-nibble-ignore": "^3.0.0",
     "eslint-plugin-import": "^2.2.0",
     "flow-bin": "^0.42.0",
-    "jest-cli": "^19.0.2",
+    "jest-cli": "18.1.0",
     "react": "^15.4.2"
   },
   "engines": {

@@ -49,7 +49,7 @@ export default [
         offset: 205
       }
     },
-    message: 'string:  The operand of an arithmetic operation must be a number.',
+    message: 'string:  The operand of an arithmetic operation must be a number',
     start: 16,
     type: 'default'
   }
