@@ -35,7 +35,24 @@ try {
   /* eslint-enable */
 }
 
-function mainLocOfError(error) {
+// Adapted from https://github.com/facebook/flow/blob/master/tsrc/flowResult.js
+
+type FlowLoc = {
+  source: ?string
+}
+
+type FlowMessage = {
+  descr: string,
+  type: "Blame" | "Comment",
+  loc?: ?FlowLoc
+}
+
+type FlowError = {
+  message: Array<FlowMessage>,
+  operation?: FlowMessage
+}
+
+function mainLocOfError(error: FlowError): ?FlowLoc {
   const { operation, message } = error;
   return operation && operation.loc || message[0].loc;
 }
@@ -121,12 +138,16 @@ function executeFlow(stdin, root, filepath) {
   // Loop through errors in the file
   const output = parsedJSONArray.errors
     // Temporarily hide the 'inconsistent use of library definitions' issue
-    .filter(error => (
-      error.message[0].descr &&
-      !error.message[0].descr.includes('inconsistent use of') &&
-      mainLocOfError(error).source &&
-      pathModule.resolve(root, mainLocOfError(error).source) === fullFilepath
-    ))
+    .filter(error => {
+      const mainLoc = mainLocOfError(error);
+      const mainFile = mainLoc && mainLoc.source;
+      return (
+        mainFile &&
+        error.message[0].descr &&
+        !error.message[0].descr.includes('inconsistent use of') &&
+        pathModule.resolve(root, mainFile) === fullFilepath
+      );
+    })
     .map(error => {
       const { message, operation } = error;
       const [firstMessage, ...remainingMessages] = [].concat(operation || [], message);
