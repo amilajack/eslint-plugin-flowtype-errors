@@ -35,6 +35,11 @@ try {
   /* eslint-enable */
 }
 
+function mainLocOfError(error) {
+  const { operation, message } = error;
+  return operation && operation.loc || message[0].loc;
+}
+
 /**
  * Wrap critical Flow exception into default Error json format
  */
@@ -59,10 +64,10 @@ function _formatMessage(message, messages, root, path) {
     case 'Blame': {
       const see = message.path !== ''
                     ? ` See ${
-                      path.includes(message.path)
+                      path === message.path
                         ? `line ${message.line}`
                         : `.${slash(message.path.replace(root, ''))}:${message.line}`
-                      }`
+                      }.`
                     : '';
       return `'${message.descr}'.${see}`;
     }
@@ -115,34 +120,16 @@ function executeFlow(stdin, root, filepath) {
 
   // Loop through errors in the file
   const output = parsedJSONArray.errors
-    // Hack #33
-    .map(({ message }) => {
-      if (
-        pathModule.resolve(root, message[0].path) !== fullFilepath &&
-        message.length === 3 &&
-        message[1].descr === 'Property not found in' &&
-        message[2].descr === 'object literal' &&
-        /^property `.+`$/.test(message[0].descr)
-      ) {
-        /* eslint no-param-reassign: 0 */
-        const tmp = message[0];
-        message[0] = message[2];
-        message[2] = tmp;
-        const tmp2 = message[0].descr;
-        message[0].descr = message[2].descr;
-        message[2].descr = tmp2;
-      }
-      return message;
-    })
     // Temporarily hide the 'inconsistent use of library definitions' issue
-    .filter(message => (
-      !message[0].descr.includes('inconsistent use of') &&
-      pathModule.resolve(root, message[0].path) === fullFilepath &&
-      message[0].descr &&
-      message[0].descr !== ''
+    .filter(error => (
+      error.message[0].descr &&
+      !error.message[0].descr.includes('inconsistent use of') &&
+      mainLocOfError(error).source &&
+      pathModule.resolve(root, mainLocOfError(error).source) === fullFilepath
     ))
-    .map(message => {
-      const [firstMessage, ...remainingMessages] = message;
+    .map(error => {
+      const { message, operation } = error;
+      const [firstMessage, ...remainingMessages] = [].concat(operation || [], message);
       const entireMessage = `${firstMessage.descr}: ${
         remainingMessages.reduce(
           (previousMessage,
@@ -161,7 +148,7 @@ function executeFlow(stdin, root, filepath) {
 
       return {
         ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? parsedJSONArray : {}),
-        message: entireMessage,
+        message: entireMessage.replace(/\.$/, ''),
         path: firstMessage.path,
         start: firstMessage.loc.start.line,
         end: firstMessage.loc.end.line,

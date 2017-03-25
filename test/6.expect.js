@@ -18,21 +18,21 @@ export default [
     type: 'default'
   },
   {
-    end: 5,
+    end: 11,
     loc: {
       end: {
-        column: 38,
-        line: 5,
-        offset: 76
+        column: 17,
+        line: 11,
+        offset: 132
       },
       start: {
-        column: 26,
-        line: 5,
-        offset: 63
+        column: 1,
+        line: 11,
+        offset: 115
       }
     },
-    message: "property `baz`:  Property not found in 'object literal'. See line 11",
-    start: 5,
+    message: "function call:  'property `baz`'. See line 5. Property not found in 'object literal'. See line 11",
+    start: 11,
     type: 'default'
   }
 ];
