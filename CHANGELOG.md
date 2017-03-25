@@ -1,3 +1,13 @@
+## v3.0.3
+
+### Fixed
+- Fixed bug that suppressed jsx errors
+
+## v3.0.2
+
+### Updated
+- `flow-bin@0.39.0` -> `flow-bin@0.42.0`
+
 ## v3.0.1
 
 ### Added
