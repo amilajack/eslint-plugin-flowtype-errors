@@ -21,17 +21,17 @@ export default [
     end: 9,
     loc: {
       end: {
-        column: 16,
+        column: 17,
         line: 9,
-        offset: 105
+        offset: 106
       },
       start: {
-        column: 5,
+        column: 1,
         line: 9,
-        offset: 93
+        offset: 89
       }
     },
-    message: "property `baz`:  Property not found in 'object literal'. See ./test/6.example.js:5",
+    message: "function call:  'property `baz`'. See ./test/6.example.js:5. Property not found in 'object literal'. See line 9",
     start: 9,
     type: 'default'
   }
