@@ -1,6 +1,6 @@
 import path from 'path';
 import { expect as chaiExpect } from 'chai';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { sync as spawnSync } from 'cross-spawn';
 import collect from '../src/collect';
 
@@ -67,10 +67,40 @@ const codebases = [
   'project-1'
 ];
 
+const eslintConfig = `
+var Module = require('module');
+var path = require('path');
+var original = Module._resolveFilename;
+
+// Hack to allow eslint to find the plugin
+Module._resolveFilename = function(request, parent, isMain) {
+  if (request === 'eslint-plugin-flowtype-errors') {
+    return path.resolve('../../../dist/index.js');
+  }
+  return original.call(this, request, parent, isMain);
+};
+
+module.exports = {
+  parser: 'babel-eslint',
+  root: true, // Make ESLint ignore configuration files in parent folders
+  env: {
+    node: true,
+    es6: true
+  },
+  plugins: ['flowtype-errors'],
+  rules: {
+    'flowtype-errors/show-errors': 2
+  }
+};
+`;
+
 describe('Check codebases', () => {
   for (const folder of codebases) {
     it(`${folder} - eslint should give expected output`, () => {
       const fullFolder = path.resolve(`./test/codebases/${folder}`);
+
+      // Write config file
+      writeFileSync(path.resolve(fullFolder, '.eslintrc.js'), eslintConfig);
 
       // Spawn a eslint process
       const { stdout, stderr } = runEslint(fullFolder);
