@@ -1,6 +1,7 @@
 import path from 'path';
 import { expect as chaiExpect } from 'chai';
 import { readFileSync } from 'fs';
+import { sync as spawnSync } from 'cross-spawn';
 import collect from '../src/collect';
 
 
@@ -49,6 +50,39 @@ describe('Format', () => {
           chaiExpect(e.path).to.be.a('string').that.contains('.example.js');
         }
       }
+
+      done();
+    });
+  }
+});
+
+const ESLINT_PATH = path.resolve('./node_modules/eslint/bin/eslint.js');
+
+function runEslint(cwd) {
+  const result = spawnSync(ESLINT_PATH, ['**/*.js'], { cwd });
+  result.stdout = result.stdout && result.stdout.toString();
+  result.stderr = result.stderr && result.stderr.toString();
+  return result;
+}
+
+const codebases = [
+  'project-1'
+];
+
+describe('Check codebases', () => {
+  for (const folder of codebases) {
+    it(`${folder} - eslint should give expected output`, done => {
+      const fullFolder = path.resolve(`./test/${folder}`);
+
+      // Spawn a eslint process
+      const { stdout, stderr } = runEslint(fullFolder);
+
+      const regexp = new RegExp(`^${fullFolder.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')}.+\\.js$`, 'gm'); // Escape regexp
+
+      // Strip root from filenames
+      expect(stdout.replace(regexp, match => match.replace(fullFolder, '.').replace(/\\/g, '/'))).toMatchSnapshot();
+
+      expect(stderr).toEqual('');
 
       done();
     });
