@@ -72,7 +72,7 @@ const codebases = [
 describe('Check codebases', () => {
   for (const folder of codebases) {
     it(`${folder} - eslint should give expected output`, done => {
-      const fullFolder = path.resolve(`./test/${folder}`);
+      const fullFolder = path.resolve(`./test/codebases/${folder}`);
 
       // Spawn a eslint process
       const { stdout, stderr } = runEslint(fullFolder);

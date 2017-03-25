@@ -5,7 +5,7 @@ var original = Module._resolveFilename;
 // Hack to allow eslint to find the plugin
 Module._resolveFilename = function(request, parent, isMain) {
   if (request === 'eslint-plugin-flowtype-errors') {
-    return path.resolve('../../dist/index.js');
+    return path.resolve('../../../dist/index.js');
   }
   return original.call(this, request, parent, isMain);
 };
