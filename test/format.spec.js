@@ -64,6 +64,8 @@ function runEslint(cwd) {
 }
 
 const codebases = [
+  'flow-pragma-1',
+  'flow-pragma-2',
   'no-flow-pragma',
   'project-1',
   'run-all'
