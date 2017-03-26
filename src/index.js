@@ -6,17 +6,7 @@ import collect from './collect';
 let runOnAllFiles;
 
 function hasFlowPragma(source) {
-  let has = false;
-  const comments = source.getAllComments();
-
-  for (let i = 0; i < comments.length; i += 1) {
-    if (/@flow/.test(comments[i].value)) {
-      has = true;
-      break;
-    }
-  }
-
-  return has;
+  return source.getAllComments().some(comment => /@flow/.test(comment.value));
 }
 
 export default {
