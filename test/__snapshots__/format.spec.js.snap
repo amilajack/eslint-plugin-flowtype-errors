@@ -1,3 +1,29 @@
+exports[`Check codebases flow-pragma-1 - eslint should give expected output 1`] = `
+"
+./example.js
+   4:11  error  string:  This type is incompatible with the expected return type of \'boolean\'. See line 3  flowtype-errors/show-errors
+   7:7   error  identifier \`x\`:  Could not resolve name                                                    flowtype-errors/show-errors
+  14:15  error  string:  The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+
+✖ 3 problems (3 errors, 0 warnings)
+
+"
+`;
+
+exports[`Check codebases flow-pragma-2 - eslint should give expected output 1`] = `
+"
+./example.js
+   6:11  error  string:  This type is incompatible with the expected return type of \'boolean\'. See line 5  flowtype-errors/show-errors
+   9:7   error  identifier \`x\`:  Could not resolve name                                                    flowtype-errors/show-errors
+  16:15  error  string:  The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+
+✖ 3 problems (3 errors, 0 warnings)
+
+"
+`;
+
+exports[`Check codebases no-flow-pragma - eslint should give expected output 1`] = `""`;
+
 exports[`Check codebases project-1 - eslint should give expected output 1`] = `
 "
 ./1.example.js
@@ -38,6 +64,18 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
   8:18  error  React element \`Hello\`:  \'property \`name\`\'. See ./9.example.import.js:6. Property not found in \'props of React element \`Hello\`\'. See line 8  flowtype-errors/show-errors
 
 ✖ 19 problems (19 errors, 0 warnings)
+
+"
+`;
+
+exports[`Check codebases run-all - eslint should give expected output 1`] = `
+"
+./example.js
+   2:11  error  string:  This type is incompatible with the expected return type of \'boolean\'. See line 1  flowtype-errors/show-errors
+   5:7   error  identifier \`x\`:  Could not resolve name                                                    flowtype-errors/show-errors
+  12:15  error  string:  The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+
+✖ 3 problems (3 errors, 0 warnings)
 
 "
 `;
