@@ -1,1 +1,6 @@
+.npm
+lib-cov
+coverage
+dist
+node_modules
 test/codebases/**
