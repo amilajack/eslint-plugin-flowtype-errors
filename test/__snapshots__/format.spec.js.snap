@@ -43,3 +43,15 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
 
 "
 `;
+
+exports[`Check codebases run-all - eslint should give expected output 1`] = `
+"
+./example.js
+   2:11  error  string:  This type is incompatible with the expected return type of \'boolean\'. See line 1  flowtype-errors/show-errors
+   5:7   error  identifier \`x\`:  Could not resolve name                                                    flowtype-errors/show-errors
+  12:15  error  string:  The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+
+✖ 3 problems (3 errors, 0 warnings)
+
+"
+`;
