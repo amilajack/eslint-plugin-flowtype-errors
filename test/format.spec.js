@@ -64,6 +64,7 @@ function runEslint(cwd) {
 }
 
 const codebases = [
+  'no-flow-pragma',
   'project-1'
 ];
 
