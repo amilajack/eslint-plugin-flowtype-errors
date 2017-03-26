@@ -1,6 +1,6 @@
 import path from 'path';
 import { expect as chaiExpect } from 'chai';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, unlinkSync } from 'fs';
 import { sync as spawnSync } from 'cross-spawn';
 import collect from '../src/collect';
 
@@ -64,7 +64,11 @@ function runEslint(cwd) {
 }
 
 const codebases = [
-  'project-1'
+  'flow-pragma-1',
+  'flow-pragma-2',
+  'no-flow-pragma',
+  'project-1',
+  'run-all'
 ];
 
 const eslintConfig = `
@@ -98,9 +102,10 @@ describe('Check codebases', () => {
   for (const folder of codebases) {
     it(`${folder} - eslint should give expected output`, () => {
       const fullFolder = path.resolve(`./test/codebases/${folder}`);
+      const configPath = path.resolve(fullFolder, '.eslintrc.js');
 
       // Write config file
-      writeFileSync(path.resolve(fullFolder, '.eslintrc.js'), eslintConfig);
+      writeFileSync(configPath, eslintConfig);
 
       // Spawn a eslint process
       const { stdout, stderr } = runEslint(fullFolder);
@@ -111,6 +116,9 @@ describe('Check codebases', () => {
       expect(stdout.replace(regexp, match => match.replace(fullFolder, '.').replace(/\\/g, '/'))).toMatchSnapshot();
 
       expect(stderr).toEqual('');
+
+      // Clean up
+      unlinkSync(configPath);
     });
   }
 });
