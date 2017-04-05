@@ -14,7 +14,7 @@ eslint-plugin-flowtype-errors
 
 ## Why?
 * **Lower barrier:** Any editor that has ESLint support now supports Flow 🎉
-* **Less editor configuration:** No need to change your entire workflow to incoroprate flow. No multiple-linters-per-file nonsense.
+* **Less editor configuration:** No need to change your entire workflow to incorporate flow. No multiple-linters-per-file nonsense.
 * **Simple:** Its literally just an ESLint rule! Just install the dependency, add a flowconfig, and you're good to go!
 
 ## Getting Started
