@@ -68,7 +68,8 @@ const codebases = [
   'flow-pragma-2',
   'no-flow-pragma',
   'project-1',
-  'run-all'
+  'run-all',
+  'run-all-flowdir'
 ];
 
 const eslintConfig = `
@@ -92,6 +93,11 @@ module.exports = {
     es6: true
   },
   plugins: ['flowtype-errors'],
+  "settings": {
+      "flowtype-errors": {
+          "flowDir": "./subdir"
+      }
+  },
   rules: {
     'flowtype-errors/show-errors': 2
   }
