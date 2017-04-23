@@ -24,7 +24,7 @@ export default {
             const root = process.cwd();
             const flowDirSetting = context.settings
               && context.settings['flowtype-errors']
-              && context.settings['flowtype-errors'].flowDir;
+              && context.settings['flowtype-errors'].flowDir || '.';
 
             const flowDir = fs.existsSync(path.join(root, flowDirSetting, '.flowconfig'))
               ? path.join(root, flowDirSetting)
