@@ -93,10 +93,10 @@ module.exports = {
     es6: true
   },
   plugins: ['flowtype-errors'],
-  "settings": {
-      "flowtype-errors": {
-          "flowDir": "./subdir"
-      }
+  settings: {
+    'flowtype-errors': {
+      flowDir: './subdir'
+    }
   },
   rules: {
     'flowtype-errors/show-errors': 2
