@@ -22,12 +22,19 @@ export default {
           if (onTheFly) {
             const source = context.getSourceCode();
             const root = process.cwd();
+            const flowDirSetting = context.settings
+              && context.settings['flowtype-errors']
+              && context.settings['flowtype-errors'].flowDir || '.';
+
+            const flowDir = fs.existsSync(path.join(root, flowDirSetting, '.flowconfig'))
+              ? path.join(root, flowDirSetting)
+              : root;
 
             // Check to see if we should run on every file
             if (runOnAllFiles === undefined) {
               try {
                 runOnAllFiles = fs
-                  .readFileSync(path.join(root, '.flowconfig'))
+                  .readFileSync(path.join(flowDir, '.flowconfig'))
                   .toString()
                   .includes('all=true');
               } catch (err) {
@@ -39,7 +46,7 @@ export default {
               return true;
             }
 
-            collected = collect(source.getText(), root, context.getFilename());
+            collected = collect(source.getText(), flowDir, context.getFilename());
           } else {
             collected = collect();
           }

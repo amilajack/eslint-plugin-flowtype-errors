@@ -48,6 +48,17 @@ Also make sure that your `.flowconfig` is in the root of your project directory
  */
 ```
 
+**Step 3. Settings (optional)**
+
+Add this line to the 'settings' section of your `.eslintrc` if your `.flowconfig` file is located in a different folder than the execution path of eslint.
+```js
+"settings": {
+  "flowtype-errors": {
+    "flowDir": "./myDir"
+  }
+},
+```
+
 Run `eslint` and and you're all set!
 
 ## CI Configuration
