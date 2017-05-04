@@ -177,9 +177,7 @@ function executeFlow(stdin, root, filepath) {
       };
     });
 
-  return output.length
-    ? filter(output)
-    : true;
+  return output;
 }
 
 export default function collect(stdin, root, filepath) {
