@@ -8,7 +8,6 @@
 import pathModule from 'path';
 import childProcess from 'child_process';
 import slash from 'slash';
-import shell from 'shelljs';
 import filter from './filter';
 
 
@@ -102,11 +101,15 @@ function executeFlow(stdin, root, filepath) {
 
   switch (stdin && root && filepath && stdin !== '') {
     case true:
-      stdout = (new shell.ShellString(stdin)).exec([
-        `${getFlowBin()}`,
-        'check-contents --json --root',
-        `${root} ${filepath}`
-      ].join(' '), { silent: true });
+      stdout = childProcess.spawnSync(getFlowBin(), [
+        'check-contents',
+        '--json',
+        `--root=${root}`,
+        filepath
+      ], {
+        input: stdin,
+        encoding: 'utf-8'
+      }).stdout;
       break;
     default:
       stdout = childProcess.spawnSync(getFlowBin(), ['--json']).stdout;

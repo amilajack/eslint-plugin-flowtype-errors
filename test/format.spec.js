@@ -1,6 +1,6 @@
 import path from 'path';
 import { expect as chaiExpect } from 'chai';
-import { readFileSync, writeFileSync, unlinkSync } from 'fs';
+import { readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'fs';
 import { sync as spawnSync } from 'cross-spawn';
 import collect from '../src/collect';
 
@@ -71,6 +71,17 @@ const codebases = [
   'run-all',
   'run-all-flowdir'
 ];
+
+const issue81 = process.platform === 'win32' && 'folder with spaces';
+
+if (issue81) {
+  codebases.push(issue81);
+  try {
+    mkdirSync(path.resolve(`./test/codebases/${issue81}`));
+  } catch (e) {
+    // Already exists
+  }
+}
 
 const eslintConfig = `
   var Module = require('module');
