@@ -34,7 +34,6 @@
   ],
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.23.0",
-    "shelljs": "^0.7.7",
     "slash": "^1.0.0"
   },
   "devDependencies": {

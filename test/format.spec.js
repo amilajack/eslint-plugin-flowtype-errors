@@ -1,6 +1,6 @@
 import path from 'path';
 import { expect as chaiExpect } from 'chai';
-import { readFileSync, writeFileSync, unlinkSync } from 'fs';
+import { readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'fs';
 import { sync as spawnSync } from 'cross-spawn';
 import collect from '../src/collect';
 
@@ -72,6 +72,14 @@ const codebases = [
   'run-all-flowdir'
 ];
 
+const issue81 = process.platform === 'win32' ? 'folder with spaces' : 'folder-with-spaces';
+codebases.push(['folder with spaces', issue81]);
+try {
+  mkdirSync(path.resolve(`./test/codebases/${issue81}`));
+} catch (e) {
+  // Already exists
+}
+
 const eslintConfig = `
   var Module = require('module');
   var path = require('path');
@@ -105,8 +113,19 @@ const eslintConfig = `
 `;
 
 describe('Check codebases', () => {
-  for (const folder of codebases) {
-    it(`${folder} - eslint should give expected output`, () => {
+  for (const codebase of codebases) {
+    let folder;
+    let title;
+
+    if (Array.isArray(codebase)) {
+      title = codebase[0];
+      folder = codebase[1];
+    } else {
+      title = codebase;
+      folder = codebase;
+    }
+
+    it(`${title} - eslint should give expected output`, () => {
       const fullFolder = path.resolve(`./test/codebases/${folder}`);
       const configPath = path.resolve(fullFolder, '.eslintrc.js');
 

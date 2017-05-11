@@ -22,6 +22,8 @@ exports[`Check codebases flow-pragma-2 - eslint should give expected output 1`] 
 "
 `;
 
+exports[`Check codebases folder with spaces - eslint should give expected output 1`] = `""`;
+
 exports[`Check codebases no-flow-pragma - eslint should give expected output 1`] = `""`;
 
 exports[`Check codebases project-1 - eslint should give expected output 1`] = `
