@@ -72,15 +72,12 @@ const codebases = [
   'run-all-flowdir'
 ];
 
-const issue81 = process.platform === 'win32' && 'folder with spaces';
-
-if (issue81) {
-  codebases.push(issue81);
-  try {
-    mkdirSync(path.resolve(`./test/codebases/${issue81}`));
-  } catch (e) {
-    // Already exists
-  }
+const issue81 = process.platform === 'win32' ? 'folder with spaces' : 'folder-with-spaces';
+codebases.push(['folder with spaces', issue81]);
+try {
+  mkdirSync(path.resolve(`./test/codebases/${issue81}`));
+} catch (e) {
+  // Already exists
 }
 
 const eslintConfig = `
@@ -116,8 +113,19 @@ const eslintConfig = `
 `;
 
 describe('Check codebases', () => {
-  for (const folder of codebases) {
-    it(`${folder} - eslint should give expected output`, () => {
+  for (const codebase of codebases) {
+    let folder;
+    let title;
+
+    if (Array.isArray(codebase)) {
+      title = codebase[0];
+      folder = codebase[1];
+    } else {
+      title = codebase;
+      folder = codebase;
+    }
+
+    it(`${title} - eslint should give expected output`, () => {
       const fullFolder = path.resolve(`./test/codebases/${folder}`);
       const configPath = path.resolve(fullFolder, '.eslintrc.js');
 
