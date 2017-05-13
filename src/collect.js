@@ -185,6 +185,52 @@ function executeFlow(stdin, root, filepath) {
     : true;
 }
 
+export function coverage(stdin, root, filepath) {
+  let stdout;
+
+  switch (stdin && root && filepath && stdin !== '') {
+    case true:
+      stdout = childProcess.spawnSync(getFlowBin(), [
+        'coverage',
+        '--json',
+        `--root=${root}`,
+        filepath
+      ], {
+        input: stdin,
+        encoding: 'utf-8'
+      }).stdout;
+      break;
+    default:
+      stdout = childProcess.spawnSync(getFlowBin(), ['--json']).stdout;
+  }
+
+  //
+  // This serves as a temporary HACK to prevent 32 bit OS's from failing. Flow does not
+  // support 32 bit OS's at the moment.
+  // This pretends as if there are now flow errors
+  //
+  // Ideally, there would be a preinstall npm event to check if the user is on a 32 bit OS
+  //
+
+  if (!stdout) {
+    return true;
+  }
+
+  const stringifiedStdout = stdout.toString();
+  let parsedJSON;
+
+  try {
+    parsedJSON = JSON.parse(stringifiedStdout);
+  } catch (e) {
+    parsedJSON = fatalError(stringifiedStdout);
+  }
+
+  return {
+    coveredCount: parsedJSON.expressions.covered_count,
+    uncoveredCount: parsedJSON.expressions.uncovered_count
+  };
+}
+
 export default function collect(stdin, root, filepath) {
   return executeFlow(stdin, root, filepath);
 }

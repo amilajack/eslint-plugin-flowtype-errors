@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import collect from './collect';
+import collect, { coverage } from './collect';
 
 
 let runOnAllFiles;
@@ -11,8 +11,48 @@ function hasFlowPragma(source) {
     .some(comment => /@flow/.test(comment.value));
 }
 
+function lookupFlowDir(context) {
+  const root = process.cwd();
+  const flowDirSetting = context.settings
+    && context.settings['flowtype-errors']
+    && context.settings['flowtype-errors'].flowDir || '.';
+
+  return fs.existsSync(path.join(root, flowDirSetting, '.flowconfig'))
+    ? path.join(root, flowDirSetting)
+    : root;
+}
+
 export default {
   rules: {
+    'enforce-min-coverage': function enforceMinCoverage(context) {
+      return {
+        Program() {
+          const source = context.getSourceCode();
+          const flowDir = lookupFlowDir(context);
+          const requiredCoverage = context.options[0];
+
+          if (hasFlowPragma(source)) {
+            const res = coverage(source.getText(), flowDir, context.getFilename());
+
+            if (res === true) {
+              return;
+            }
+
+            const { coveredCount, uncoveredCount } = res;
+
+            /* eslint prefer-template: 0 */
+            const percentage = Number(Math.round((coveredCount / (coveredCount + uncoveredCount)) * 100 + 'e2') + 'e-2');
+
+            if (percentage < requiredCoverage) {
+              context.report({
+                loc: 1,
+                message: `Expected coverage to be at least ${requiredCoverage}%, but is: ${percentage}%`
+              });
+            }
+          }
+        }
+      };
+    },
     'show-errors': function showErrors(context) {
       return {
         Program() {
@@ -21,14 +61,7 @@ export default {
 
           if (onTheFly) {
             const source = context.getSourceCode();
-            const root = process.cwd();
-            const flowDirSetting = context.settings
-              && context.settings['flowtype-errors']
-              && context.settings['flowtype-errors'].flowDir || '.';
-
-            const flowDir = fs.existsSync(path.join(root, flowDirSetting, '.flowconfig'))
-              ? path.join(root, flowDirSetting)
-              : root;
+            const flowDir = lookupFlowDir(context);
 
             // Check to see if we should run on every file
             if (runOnAllFiles === undefined) {
