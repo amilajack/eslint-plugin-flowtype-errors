@@ -69,7 +69,11 @@ const codebases = [
   'no-flow-pragma',
   'project-1',
   'run-all',
-  'run-all-flowdir'
+  'run-all-flowdir',
+  'coverage-ok',
+  'coverage-ok2',
+  'coverage-fail',
+  'coverage-fail2'
 ];
 
 const issue81 = process.platform === 'win32' ? 'folder with spaces' : 'folder-with-spaces';
@@ -80,7 +84,7 @@ try {
   // Already exists
 }
 
-const eslintConfig = `
+const eslintConfig = (enforceMinCoverage) => `
   var Module = require('module');
   var path = require('path');
   var original = Module._resolveFilename;
@@ -107,7 +111,12 @@ const eslintConfig = `
       }
     },
     rules: {
-      'flowtype-errors/show-errors': 2
+      ${enforceMinCoverage ? `
+        'flowtype-errors/show-errors': 2,
+        'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}]
+      ` : `
+        'flowtype-errors/show-errors': 2
+      `}
     }
   };
 `;
@@ -130,7 +139,7 @@ describe('Check codebases', () => {
       const configPath = path.resolve(fullFolder, '.eslintrc.js');
 
       // Write config file
-      writeFileSync(configPath, eslintConfig);
+      writeFileSync(configPath, eslintConfig(folder.match(/^coverage-/) ? 50 : 0));
 
       // Spawn a eslint process
       const { stdout, stderr } = runEslint(fullFolder);
