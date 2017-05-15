@@ -1,3 +1,4 @@
+/* @flow */
 /**
  * Run Flow and collect errors in JSON format
  *
@@ -7,6 +8,7 @@
  */
 import pathModule from 'path';
 import childProcess from 'child_process';
+// $FlowFixMe
 import slash from 'slash';
 import filter from './filter';
 
@@ -15,6 +17,7 @@ let flowBin;
 
 try {
   if (!process.env.FLOW_BIN) {
+    // $FlowFixMe
     flowBin = require('flow-bin'); // eslint-disable-line global-require
   }
 } catch (e) {
@@ -36,13 +39,23 @@ try {
 
 // Adapted from https://github.com/facebook/flow/blob/master/tsrc/flowResult.js
 
+type FlowPos = {
+  line: number,
+  column: number,
+  offset: number
+}
+
 type FlowLoc = {
-  source: ?string
+  source: ?string,
+  start: FlowPos,
+  end: FlowPos
 }
 
 type FlowMessage = {
+  path: string,
   descr: string,
   type: "Blame" | "Comment",
+  line: number,
   loc?: ?FlowLoc
 }
 
@@ -64,16 +77,15 @@ function fatalError(stderr) {
     errors: [{
       message: [{
         path: '',
-        code: 0,
         line: 0,
-        start: 0,
+        type: 'Comment',
         descr: stderr
       }]
     }]
   };
 }
 
-function _formatMessage(message, messages, root, path) {
+function _formatMessage(message: FlowMessage, messages, root: string, path: string) {
   switch (message.type) {
     case 'Comment':
       return `${message.descr}`;
@@ -154,7 +166,7 @@ function executeFlow(stdin: string, root: string, stopOnExit: boolean, filepath:
   // Loop through errors in the file
   const output = parsedJSONArray.errors
     // Temporarily hide the 'inconsistent use of library definitions' issue
-    .filter(error => {
+    .filter((error: FlowError) => {
       const mainLoc = mainLocOfError(error);
       const mainFile = mainLoc && mainLoc.source;
       return (
@@ -164,7 +176,7 @@ function executeFlow(stdin: string, root: string, stopOnExit: boolean, filepath:
         pathModule.resolve(root, mainFile) === fullFilepath
       );
     })
-    .map(error => {
+    .map((error: FlowError) => {
       const { message, operation } = error;
       const [firstMessage, ...remainingMessages] = [].concat(operation || [], message);
       const entireMessage = `${firstMessage.descr}: ${
@@ -183,12 +195,14 @@ function executeFlow(stdin: string, root: string, stopOnExit: boolean, filepath:
         )
       }`;
 
+      const loc = firstMessage.loc;
+
       return {
         ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? parsedJSONArray : {}),
         message: entireMessage.replace(/\.$/, ''),
         path: firstMessage.path,
-        start: firstMessage.loc.start.line,
-        end: firstMessage.loc.end.line,
+        start: loc && loc.start.line,
+        end: loc && loc.end.line,
         loc: firstMessage.loc
       };
     });
@@ -234,17 +248,20 @@ export function coverage(stdin: string, root: string, stopOnExit: boolean, filep
   }
 
   const stringifiedStdout = stdout.toString();
-  let parsedJSON;
+  let expressions;
 
   try {
-    parsedJSON = JSON.parse(stringifiedStdout);
+    expressions = JSON.parse(stringifiedStdout).expressions;
   } catch (e) {
-    parsedJSON = fatalError(stringifiedStdout);
+    return {
+      coveredCount: 0,
+      uncoveredCount: 0
+    };
   }
 
   return {
-    coveredCount: parsedJSON.expressions.covered_count,
-    uncoveredCount: parsedJSON.expressions.uncovered_count
+    coveredCount: expressions.covered_count,
+    uncoveredCount: expressions.uncovered_count
   };
 }
 
