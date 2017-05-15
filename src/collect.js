@@ -194,7 +194,7 @@ function executeFlow(stdin, root, stopOnExit, filepath) {
     : true;
 }
 
-export function coverage(stdin, root, filepath) {
+export function coverage(stdin, root, stopOnExit, filepath) {
   let stdout;
 
   switch (stdin && root && filepath && stdin !== '') {
@@ -225,6 +225,13 @@ export function coverage(stdin, root, filepath) {
     return true;
   }
 
+  if (!didExecute) {
+    didExecute = true;
+    if (stopOnExit) {
+      process.on('exit', () => childProcess.spawnSync(getFlowBin(), ['stop']));
+    }
+  }
+
   const stringifiedStdout = stdout.toString();
   let parsedJSON;
 
@@ -240,6 +247,6 @@ export function coverage(stdin, root, filepath) {
   };
 }
 
-export default function collect(stdin, root, filepath) {
-  return executeFlow(stdin, root, filepath);
+export default function collect(stdin, root, stopOnExit, filepath) {
+  return executeFlow(stdin, root, stopOnExit, filepath);
 }

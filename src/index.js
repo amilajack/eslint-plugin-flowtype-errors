@@ -36,7 +36,9 @@ export default {
           const requiredCoverage = context.options[0];
 
           if (hasFlowPragma(source)) {
-            const res = coverage(source.getText(), flowDir, context.getFilename());
+            const res = coverage(
+              source.getText(), flowDir, stopOnExit(context), context.getFilename()
+            );
 
             if (res === true) {
               return;
