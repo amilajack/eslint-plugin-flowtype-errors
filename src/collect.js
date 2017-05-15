@@ -98,7 +98,14 @@ function getFlowBin() {
 
 let didExecute = false;
 
-function executeFlow(stdin, root, stopOnExit, filepath) {
+function onExit(root: string) {
+  if (!didExecute) {
+    didExecute = true;
+    process.on('exit', () => childProcess.spawnSync(getFlowBin(), ['stop', `--root=${root}`]));
+  }
+}
+
+function executeFlow(stdin: string, root: string, stopOnExit: boolean, filepath: string) {
   let stdout;
 
   switch (stdin && root && filepath && stdin !== '') {
@@ -129,11 +136,8 @@ function executeFlow(stdin, root, stopOnExit, filepath) {
     return true;
   }
 
-  if (!didExecute) {
-    didExecute = true;
-    if (stopOnExit) {
-      process.on('exit', () => childProcess.spawnSync(getFlowBin(), ['stop']));
-    }
+  if (stopOnExit) {
+    onExit(root);
   }
 
   const stringifiedStdout = stdout.toString();
@@ -194,7 +198,7 @@ function executeFlow(stdin, root, stopOnExit, filepath) {
     : true;
 }
 
-export function coverage(stdin, root, stopOnExit, filepath) {
+export function coverage(stdin: string, root: string, stopOnExit: boolean, filepath: string) {
   let stdout;
 
   switch (stdin && root && filepath && stdin !== '') {
@@ -225,11 +229,8 @@ export function coverage(stdin, root, stopOnExit, filepath) {
     return true;
   }
 
-  if (!didExecute) {
-    didExecute = true;
-    if (stopOnExit) {
-      process.on('exit', () => childProcess.spawnSync(getFlowBin(), ['stop']));
-    }
+  if (stopOnExit) {
+    onExit(root);
   }
 
   const stringifiedStdout = stdout.toString();
@@ -247,6 +248,4 @@ export function coverage(stdin, root, stopOnExit, filepath) {
   };
 }
 
-export default function collect(stdin, root, stopOnExit, filepath) {
-  return executeFlow(stdin, root, stopOnExit, filepath);
-}
+export default executeFlow;

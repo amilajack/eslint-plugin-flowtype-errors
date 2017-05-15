@@ -11,7 +11,7 @@ function hasFlowPragma(source) {
     .some(comment => /@flow/.test(comment.value));
 }
 
-function lookupFlowDir(context) {
+function lookupFlowDir(context): string {
   const root = process.cwd();
   const flowDirSetting = context.settings
     && context.settings['flowtype-errors']
@@ -22,7 +22,7 @@ function lookupFlowDir(context) {
     : root;
 }
 
-function stopOnExit(context) {
+function stopOnExit(context): boolean {
   return !!(context.settings && context.settings.stopOnExit);
 }
 
