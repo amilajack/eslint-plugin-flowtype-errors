@@ -96,7 +96,9 @@ function getFlowBin() {
   return process.env.FLOW_BIN || flowBin;
 }
 
-function executeFlow(stdin, root, filepath) {
+let didExecute = false;
+
+function executeFlow(stdin, root, stopOnExit, filepath) {
   let stdout;
 
   switch (stdin && root && filepath && stdin !== '') {
@@ -125,6 +127,13 @@ function executeFlow(stdin, root, filepath) {
 
   if (!stdout) {
     return true;
+  }
+
+  if (!didExecute) {
+    didExecute = true;
+    if (stopOnExit) {
+      process.on('exit', () => childProcess.spawnSync(getFlowBin(), ['stop']));
+    }
   }
 
   const stringifiedStdout = stdout.toString();

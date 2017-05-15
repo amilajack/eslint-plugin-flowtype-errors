@@ -22,6 +22,10 @@ function lookupFlowDir(context) {
     : root;
 }
 
+function stopOnExit(context) {
+  return !!(context.settings && context.settings.stopOnExit);
+}
+
 export default {
   rules: {
     'enforce-min-coverage': function enforceMinCoverage(context) {
@@ -79,7 +83,9 @@ export default {
               return true;
             }
 
-            collected = collect(source.getText(), flowDir, context.getFilename());
+            collected = collect(
+              source.getText(), flowDir, stopOnExit(context), context.getFilename()
+            );
           } else {
             collected = collect();
           }
