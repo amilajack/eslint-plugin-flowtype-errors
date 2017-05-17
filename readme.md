@@ -91,6 +91,6 @@ http://eslint.org/docs/user-guide/integrations#editors
 * Custom formatting of flow error messages
 * Enable rules to allow and disallow specific flow errors
 
-## Also See:
-* [babel-plugin-tcomb](https://github.com/gcanti/babel-plugin-tcomb)
+## Related flow tools:
+* [flow-runtime](https://github.com/codemix/flow-runtime)
 * [eslint-plugin-flowtype](https://github.com/gajus/eslint-plugin-flowtype)

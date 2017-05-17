@@ -1,7 +1,22 @@
+/* @flow */
+
 import path from 'path';
 import fs from 'fs';
 import collect, { coverage } from './collect';
 
+type EslintContext = {
+  getAllComments: Function,
+  getFilename: Function,
+  getSourceCode: Function,
+  report: Function,
+  settings: ?{
+    "flowtype-errors": ?{
+      flowDir: ?string
+    },
+    stopOnExit: ?any
+  },
+  options: any[]
+}
 
 let runOnAllFiles;
 
@@ -11,9 +26,9 @@ function hasFlowPragma(source) {
     .some(comment => /@flow/.test(comment.value));
 }
 
-function lookupFlowDir(context) {
+function lookupFlowDir(context: EslintContext): string {
   const root = process.cwd();
-  const flowDirSetting = context.settings
+  const flowDirSetting: string = context.settings
     && context.settings['flowtype-errors']
     && context.settings['flowtype-errors'].flowDir || '.';
 
@@ -22,9 +37,13 @@ function lookupFlowDir(context) {
     : root;
 }
 
+function stopOnExit(context: EslintContext): boolean {
+  return !!(context.settings && context.settings.stopOnExit);
+}
+
 export default {
   rules: {
-    'enforce-min-coverage': function enforceMinCoverage(context) {
+    'enforce-min-coverage': function enforceMinCoverage(context: EslintContext) {
       return {
         Program() {
           const source = context.getSourceCode();
@@ -32,7 +51,9 @@ export default {
           const requiredCoverage = context.options[0];
 
           if (hasFlowPragma(source)) {
-            const res = coverage(source.getText(), flowDir, context.getFilename());
+            const res = coverage(
+              source.getText(), flowDir, stopOnExit(context), context.getFilename()
+            );
 
             if (res === true) {
               return;
@@ -41,7 +62,7 @@ export default {
             const { coveredCount, uncoveredCount } = res;
 
             /* eslint prefer-template: 0 */
-            const percentage = Number(Math.round((coveredCount / (coveredCount + uncoveredCount)) * 100 + 'e2') + 'e-2');
+            const percentage = Number(Math.round((coveredCount / (coveredCount + uncoveredCount)) * 10000) + 'e-2');
 
             if (percentage < requiredCoverage) {
               context.report({
@@ -53,41 +74,34 @@ export default {
         }
       };
     },
-    'show-errors': function showErrors(context) {
+    'show-errors': function showErrors(context: EslintContext) {
       return {
         Program() {
-          const onTheFly = true;
-          let collected;
+          const source = context.getSourceCode();
+          const flowDir = lookupFlowDir(context);
 
-          if (onTheFly) {
-            const source = context.getSourceCode();
-            const flowDir = lookupFlowDir(context);
-
-            // Check to see if we should run on every file
-            if (runOnAllFiles === undefined) {
-              try {
-                runOnAllFiles = fs
-                  .readFileSync(path.join(flowDir, '.flowconfig'))
-                  .toString()
-                  .includes('all=true');
-              } catch (err) {
-                runOnAllFiles = false;
-              }
+          // Check to see if we should run on every file
+          if (runOnAllFiles === undefined) {
+            try {
+              runOnAllFiles = fs
+                .readFileSync(path.join(flowDir, '.flowconfig'))
+                .toString()
+                .includes('all=true');
+            } catch (err) {
+              runOnAllFiles = false;
             }
-
-            if (runOnAllFiles === false && !hasFlowPragma(source)) {
-              return true;
-            }
-
-            collected = collect(source.getText(), flowDir, context.getFilename());
-          } else {
-            collected = collect();
           }
 
+          if (runOnAllFiles === false && !hasFlowPragma(source)) {
+            return true;
+          }
+
+          const collected = collect(
+            source.getText(), flowDir, stopOnExit(context), context.getFilename()
+          );
+
           const pluginErrors = Array.isArray(collected)
-            ? (onTheFly ? collected : collected.filter(
-                each => each.path === context.getFilename()
-              ))
+            ? collected
             : [];
 
           pluginErrors.forEach(({ loc, message }) => {
