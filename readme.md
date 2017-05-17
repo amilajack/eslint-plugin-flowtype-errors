@@ -35,6 +35,11 @@ Add this line to the 'rules' section of your `.eslintrc`
 "flowtype-errors/show-errors": 2
 ```
 
+Add this line to the 'rules' section of your `.eslintrc` to enforce a minimum type coverage of 50% per file (optional)
+```js
+"flowtype-errors/enforce-min-coverage": [2, 50]
+```
+
 Add this line to the 'plugins' section of your `.eslintrc`
 ```js
 "flowtype-errors"
