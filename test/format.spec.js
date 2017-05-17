@@ -21,7 +21,7 @@ const testResults = testFilenames.map((filename, index) => {
   const root = process.cwd();
   const filepath = path.join(root, 'test', filename);
   const stdin = readFileSync(filepath).toString();
-  const parsedJSONArray = collect(stdin, root, filepath);
+  const parsedJSONArray = collect(stdin, root, true, filepath);
 
   return { parsedJSONArray, filename, index };
 });
