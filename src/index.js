@@ -11,8 +11,8 @@ type EslintContext = {
   report: Function,
   settings: ?{
     "flowtype-errors": ?{
-      flowDir: ?string,
-      stopOnExit: ?any
+      flowDir?: string,
+      stopOnExit?: any
     }
   },
   options: any[]
