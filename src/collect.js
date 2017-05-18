@@ -113,7 +113,7 @@ let didExecute = false;
 function onExit(root: string) {
   if (!didExecute) {
     didExecute = true;
-    process.on('exit', () => childProcess.spawnSync(getFlowBin(), ['stop', `--root=${root}`]));
+    process.on('exit', () => childProcess.spawnSync(getFlowBin(), ['stop', root]));
   }
 }
 
