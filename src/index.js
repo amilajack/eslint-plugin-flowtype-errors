@@ -11,9 +11,9 @@ type EslintContext = {
   report: Function,
   settings: ?{
     "flowtype-errors": ?{
-      flowDir: ?string
-    },
-    stopOnExit: ?any
+      flowDir: ?string,
+      stopOnExit: ?any
+    }
   },
   options: any[]
 }
@@ -38,7 +38,7 @@ function lookupFlowDir(context: EslintContext): string {
 }
 
 function stopOnExit(context: EslintContext): boolean {
-  return !!(context.settings && context.settings.stopOnExit);
+  return !!(context.settings && context.settings['flowtype-errors'] && context.settings['flowtype-errors'].stopOnExit);
 }
 
 export default {

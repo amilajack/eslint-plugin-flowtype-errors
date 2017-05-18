@@ -107,7 +107,8 @@ const eslintConfig = (enforceMinCoverage) => `
     plugins: ['flowtype-errors'],
     settings: {
       'flowtype-errors': {
-        flowDir: './subdir'
+        flowDir: './subdir',
+        stopOnExit: 'true'
       }
     },
     rules: {
