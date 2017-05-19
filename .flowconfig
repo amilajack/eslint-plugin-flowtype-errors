@@ -2,7 +2,8 @@
 .*/node_modules/fbjs/.*
 .*/node_modules/*
 .*/git/.*
-.*/test/.*
+.*/test/codebases/.*
+.*/test/.*\.example\.js
 
 [options]
 esproposal.class_static_fields=enable
