@@ -10,7 +10,6 @@ import pathModule from 'path';
 import childProcess from 'child_process';
 // $FlowFixMe
 import slash from 'slash';
-import filter from './filter';
 
 
 let flowBin;
@@ -117,48 +116,75 @@ function onExit(root: string) {
   }
 }
 
-function executeFlow(stdin: string, root: string, stopOnExit: boolean, filepath: string) {
-  let stdout;
-
-  switch (stdin && root && filepath && stdin !== '') {
-    case true:
-      stdout = childProcess.spawnSync(getFlowBin(), [
-        'check-contents',
-        '--json',
-        `--root=${root}`,
-        filepath
-      ], {
-        input: stdin,
-        encoding: 'utf-8'
-      }).stdout;
-      break;
-    default:
-      stdout = childProcess.spawnSync(getFlowBin(), ['--json']).stdout;
+function spawnFlow(
+  mode: string, stdin: string, root: string, stopOnExit: boolean, filepath: string
+): string {
+  if (!stdin) {
+    return '';
   }
 
-  //
-  // This serves as a temporary HACK to prevent 32 bit OS's from failing. Flow does not
-  // support 32 bit OS's at the moment.
-  // This pretends as if there are now flow errors
-  //
-  // Ideally, there would be a preinstall npm event to check if the user is on a 32 bit OS
-  //
+  const child = childProcess.spawnSync(getFlowBin(), [
+    mode,
+    '--json',
+    `--root=${root}`,
+    filepath
+  ], {
+    input: stdin,
+    encoding: 'utf-8'
+  });
+
+  const stdout = child.stdout;
 
   if (!stdout) {
-    return true;
+    //
+    // This serves as a temporary HACK to prevent 32 bit OS's from failing. Flow does not
+    // support 32 bit OS's at the moment.
+    // This pretends as if there are no flow errors.
+    //
+    // Ideally, there would be a preinstall npm event to check if the user is on a 32 bit OS
+    //
+    return '';
   }
 
   if (stopOnExit) {
     onExit(root);
   }
 
-  const stringifiedStdout = stdout.toString();
+  return stdout.toString();
+}
+
+function determineRuleType(description) {
+  if (description.toLowerCase().includes('missing annotation')) {
+    return 'missing-annotation';
+  }
+
+  return 'default';
+}
+
+type CollectOutput = Array<{
+  type: string,
+  message: string,
+  path: string,
+  start: ?number,
+  end: ?number,
+  loc: ?FlowLoc
+}>
+
+export function collect(
+  stdin: string, root: string, stopOnExit: boolean, filepath: string
+): CollectOutput | true {
+  const stdout = spawnFlow('check-contents', stdin, root, stopOnExit, filepath);
+
+  if (!stdout) {
+    return true;
+  }
+
   let parsedJSONArray;
 
   try {
-    parsedJSONArray = JSON.parse(stringifiedStdout);
+    parsedJSONArray = JSON.parse(stdout);
   } catch (e) {
-    parsedJSONArray = fatalError(stringifiedStdout);
+    parsedJSONArray = fatalError('Flow returned invalid json');
   }
 
   const fullFilepath = pathModule.resolve(root, filepath);
@@ -196,10 +222,12 @@ function executeFlow(stdin: string, root: string, stopOnExit: boolean, filepath:
       }`;
 
       const loc = firstMessage.loc;
+      const finalMessage = entireMessage.replace(/\.$/, '');
 
       return {
         ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? parsedJSONArray : {}),
-        message: entireMessage.replace(/\.$/, ''),
+        type: determineRuleType(finalMessage),
+        message: finalMessage,
         path: firstMessage.path,
         start: loc && loc.start.line,
         end: loc && loc.end.line,
@@ -207,51 +235,27 @@ function executeFlow(stdin: string, root: string, stopOnExit: boolean, filepath:
       };
     });
 
-  return output.length
-    ? filter(output)
-    : true;
+  return output;
 }
 
-export function coverage(stdin: string, root: string, stopOnExit: boolean, filepath: string) {
-  let stdout;
+type CoverageOutput = {
+  coveredCount: number,
+  uncoveredCount: number
+}
 
-  switch (stdin && root && filepath && stdin !== '') {
-    case true:
-      stdout = childProcess.spawnSync(getFlowBin(), [
-        'coverage',
-        '--json',
-        `--root=${root}`,
-        filepath
-      ], {
-        input: stdin,
-        encoding: 'utf-8'
-      }).stdout;
-      break;
-    default:
-      stdout = childProcess.spawnSync(getFlowBin(), ['--json']).stdout;
-  }
-
-  //
-  // This serves as a temporary HACK to prevent 32 bit OS's from failing. Flow does not
-  // support 32 bit OS's at the moment.
-  // This pretends as if there are now flow errors
-  //
-  // Ideally, there would be a preinstall npm event to check if the user is on a 32 bit OS
-  //
+export function coverage(
+  stdin: string, root: string, stopOnExit: boolean, filepath: string
+): CoverageOutput | true {
+  const stdout = spawnFlow('coverage', stdin, root, stopOnExit, filepath);
 
   if (!stdout) {
     return true;
   }
 
-  if (stopOnExit) {
-    onExit(root);
-  }
-
-  const stringifiedStdout = stdout.toString();
   let expressions;
 
   try {
-    expressions = JSON.parse(stringifiedStdout).expressions;
+    expressions = JSON.parse(stdout).expressions;
   } catch (e) {
     return {
       coveredCount: 0,
@@ -264,5 +268,3 @@ export function coverage(stdin: string, root: string, stopOnExit: boolean, filep
     uncoveredCount: expressions.uncovered_count
   };
 }
-
-export default executeFlow;
