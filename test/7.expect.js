@@ -13,7 +13,7 @@ export default [
         offset: 77
       }
     },
-    message: "string:  This type is incompatible with the expected param type of 'number'. See ./test/5.example.js:5",
+    message: "string:  This type is incompatible with the expected param type of 'number'. See ./5.example.js:5",
     start: 7,
     type: 'default'
   }
