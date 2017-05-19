@@ -34,7 +34,7 @@
     "dist"
   ],
   "dependencies": {
-    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-runtime": "^6.23.0",
     "slash": "^1.0.0"
   },
   "devDependencies": {
@@ -42,6 +42,7 @@
     "babel-eslint": "^7.1.1",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-stage-0": "^6.22.0",
     "babel-register": "^6.24.0",
@@ -54,8 +55,7 @@
     "eslint-nibble-ignore": "^3.0.0",
     "eslint-plugin-import": "^2.2.0",
     "flow-bin": "^0.46.0",
-    "jest-cli": "18.1.0",
-    "react": "^15.4.2"
+    "jest-cli": "18.1.0"
   },
   "engines": {
     "node": ">=4.x",
