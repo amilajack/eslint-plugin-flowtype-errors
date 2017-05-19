@@ -2,7 +2,7 @@ import path from 'path';
 import { expect as chaiExpect } from 'chai';
 import { readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'fs';
 import { sync as spawnSync } from 'cross-spawn';
-import collect from '../src/collect';
+import { collect } from '../src/collect';
 
 
 const testFilenames = [
@@ -18,8 +18,8 @@ const testFilenames = [
 ];
 
 const testResults = testFilenames.map((filename, index) => {
-  const root = process.cwd();
-  const filepath = path.join(root, 'test', filename);
+  const root = path.resolve(process.cwd(), 'test');
+  const filepath = path.join(root, filename);
   const stdin = readFileSync(filepath).toString();
   const parsedJSONArray = collect(stdin, root, true, filepath);
 

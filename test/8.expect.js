@@ -13,7 +13,7 @@ export default [
         offset: 81
       }
     },
-    message: "number:  This type is incompatible with the expected param type of 'object type'. See ./test/6.example.js:5",
+    message: "number:  This type is incompatible with the expected param type of 'object type'. See ./6.example.js:5",
     start: 7,
     type: 'default'
   },
@@ -31,7 +31,7 @@ export default [
         offset: 89
       }
     },
-    message: "function call:  'property `baz`'. See ./test/6.example.js:5. Property not found in 'object literal'. See line 9",
+    message: "function call:  'property `baz`'. See ./6.example.js:5. Property not found in 'object literal'. See line 9",
     start: 9,
     type: 'default'
   }

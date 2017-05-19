@@ -1,11 +1,51 @@
+## Master
+
+- Added `enforce-min-coverage` rule.
+
+```js
+"flowtype-errors/enforce-min-coverage": [2, 50]
+```
+
+- Added `stopOnExit` setting.
+
+```js
+"settings": {
+  "flowtype-errors": {
+    "stopOnExit": "true"
+  }
+},
+```
+
+## v3.2.1
+
+### Fixed
+
+- Fixed error when type checking folders with spaces on Windows.
+
+## v3.2.0
+
+### Added
+
+- Added `flowDir` setting.
+
+```js
+"settings": {
+  "flowtype-errors": {
+    "flowDir": "./myDir"
+  }
+},
+```
+
 ## v3.0.3
 
 ### Fixed
+
 - Fixed bug that suppressed jsx errors
 
 ## v3.0.2
 
 ### Updated
+
 - `flow-bin@0.39.0` -> `flow-bin@0.42.0`
 
 ## v3.0.1
