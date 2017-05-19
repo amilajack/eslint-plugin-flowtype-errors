@@ -2,7 +2,7 @@ import path from 'path';
 import { expect as chaiExpect } from 'chai';
 import { readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'fs';
 import { sync as spawnSync } from 'cross-spawn';
-import collect from '../src/collect';
+import { collect } from '../src/collect';
 
 
 const testFilenames = [

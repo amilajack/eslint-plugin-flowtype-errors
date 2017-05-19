@@ -2,7 +2,7 @@
 
 import path from 'path';
 import fs from 'fs';
-import collect, { coverage } from './collect';
+import { collect, coverage } from './collect';
 
 type EslintContext = {
   getAllComments: Function,
@@ -47,18 +47,17 @@ export default {
       return {
         Program() {
           const source = context.getSourceCode();
-          const flowDir = lookupFlowDir(context);
-          const requiredCoverage = context.options[0];
 
           if (hasFlowPragma(source)) {
             const res = coverage(
-              source.getText(), flowDir, stopOnExit(context), context.getFilename()
+              source.getText(), lookupFlowDir(context), stopOnExit(context), context.getFilename()
             );
 
             if (res === true) {
               return;
             }
 
+            const requiredCoverage = context.options[0];
             const { coveredCount, uncoveredCount } = res;
 
             /* eslint prefer-template: 0 */
@@ -100,11 +99,11 @@ export default {
             source.getText(), flowDir, stopOnExit(context), context.getFilename()
           );
 
-          const pluginErrors = Array.isArray(collected)
-            ? collected
-            : [];
+          if (collected === true) {
+            return;
+          }
 
-          pluginErrors.forEach(({ loc, message }) => {
+          collected.forEach(({ loc, message }) => {
             context.report({
               loc,
               message
