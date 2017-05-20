@@ -35,6 +35,11 @@ Add this line to the 'rules' section of your `.eslintrc`
 "flowtype-errors/show-errors": 2
 ```
 
+Add this line to the 'rules' section of your `.eslintrc` to enforce a minimum percentage of flow coverage per file (optional). Here's an example of enforcing a converage of at least 50%:
+```js
+"flowtype-errors/enforce-min-coverage": [2, 50]
+```
+
 Add this line to the 'plugins' section of your `.eslintrc`
 ```js
 "flowtype-errors"
