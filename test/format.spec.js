@@ -41,7 +41,7 @@ describe('Format', () => {
         message: e.message,
         start: e.start
       })))
-      .toEqual(exactFormat);
+        .toMatchSnapshot(exactFormat);
 
       for (const e of parsedJSONArray) {
         if (e !== false) {
@@ -103,6 +103,10 @@ const eslintConfig = (enforceMinCoverage) => `
     env: {
       node: true,
       es6: true
+    },
+    parserOptions: {
+      sourceType: "module",
+      allowImportExportEverywhere: true
     },
     plugins: ['flowtype-errors'],
     settings: {

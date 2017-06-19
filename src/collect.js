@@ -90,12 +90,12 @@ function _formatMessage(message: FlowMessage, messages, root: string, path: stri
       return `${message.descr}`;
     case 'Blame': {
       const see = message.path !== ''
-                    ? ` See ${
-                      path === message.path
-                        ? `line ${message.line}`
-                        : `.${slash(message.path.replace(root, ''))}:${message.line}`
-                      }.`
-                    : '';
+        ? ` See ${
+          path === message.path
+            ? `line ${message.line}`
+            : `.${slash(message.path.replace(root, ''))}:${message.line}`
+        }.`
+        : '';
       return `'${message.descr}'.${see}`;
     }
     default:
