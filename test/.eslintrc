@@ -3,8 +3,8 @@
     "jest": true
   },
   "rules": {
-    "global-require": 0,
-    "import/no-dynamic-require": 0,
-    "no-restricted-syntax": 0
+    "global-require": "off",
+    "import/no-dynamic-require": "off",
+    "no-restricted-syntax": "off"
   }
 }

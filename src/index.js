@@ -10,47 +10,56 @@ type EslintContext = {
   getSourceCode: Function,
   report: Function,
   settings: ?{
-    "flowtype-errors": ?{
+    'flowtype-errors': ?{
       flowDir?: string,
       stopOnExit?: any
     }
   },
   options: any[]
-}
+};
 
 let runOnAllFiles;
 
 function hasFlowPragma(source) {
-  return source
-    .getAllComments()
-    .some(comment => /@flow/.test(comment.value));
+  return source.getAllComments().some(comment => /@flow/.test(comment.value));
 }
 
 function lookupFlowDir(context: EslintContext): string {
   const root = process.cwd();
-  const flowDirSetting: string = context.settings
-    && context.settings['flowtype-errors']
-    && context.settings['flowtype-errors'].flowDir || '.';
+  const flowDirSetting: string =
+    (context.settings &&
+      context.settings['flowtype-errors'] &&
+      context.settings['flowtype-errors'].flowDir) ||
+    '.';
 
   return fs.existsSync(path.join(root, flowDirSetting, '.flowconfig'))
     ? path.join(root, flowDirSetting)
     : root;
 }
 
-function stopOnExit(context: EslintContext): boolean {
-  return !!(context.settings && context.settings['flowtype-errors'] && context.settings['flowtype-errors'].stopOnExit);
+function stopOnExit(context: EslintContext): bool {
+  return !!(
+    context.settings &&
+    context.settings['flowtype-errors'] &&
+    context.settings['flowtype-errors'].stopOnExit
+  );
 }
 
 export default {
   rules: {
-    'enforce-min-coverage': function enforceMinCoverage(context: EslintContext) {
+    'enforce-min-coverage': function enforceMinCoverage(
+      context: EslintContext
+    ) {
       return {
         Program() {
           const source = context.getSourceCode();
 
           if (hasFlowPragma(source)) {
             const res = coverage(
-              source.getText(), lookupFlowDir(context), stopOnExit(context), context.getFilename()
+              source.getText(),
+              lookupFlowDir(context),
+              stopOnExit(context),
+              context.getFilename()
             );
 
             if (res === true) {
@@ -61,7 +70,11 @@ export default {
             const { coveredCount, uncoveredCount } = res;
 
             /* eslint prefer-template: 0 */
-            const percentage = Number(Math.round((coveredCount / (coveredCount + uncoveredCount)) * 10000) + 'e-2');
+            const percentage = Number(
+              Math.round(
+                (coveredCount / (coveredCount + uncoveredCount)) * 10000
+              ) + 'e-2'
+            );
 
             if (percentage < requiredCoverage) {
               context.report({
@@ -96,11 +109,14 @@ export default {
           }
 
           const collected = collect(
-            source.getText(), flowDir, stopOnExit(context), context.getFilename()
+            source.getText(),
+            flowDir,
+            stopOnExit(context),
+            context.getFilename()
           );
 
           if (collected === true) {
-            return;
+            return; // eslint-disable-line
           }
 
           collected.forEach(({ loc, message }) => {
