@@ -29,8 +29,6 @@ const testResults = testFilenames.map((filename, index) => {
 describe('Format', () => {
   for (const { parsedJSONArray, filename } of testResults) {
     it(`${filename} - should have expected properties`, () => {
-      const exactFormat = require(`./${filename}`.replace('example', 'expect'));
-
       chaiExpect(parsedJSONArray).to.be.an('array');
 
       // Filter out the 'path' property because this changes between environments
@@ -41,7 +39,7 @@ describe('Format', () => {
         message: e.message,
         start: e.start
       })))
-      .toEqual(exactFormat);
+      .toMatchSnapshot();
 
       for (const e of parsedJSONArray) {
         if (e !== false) {

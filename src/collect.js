@@ -11,7 +11,6 @@ import childProcess from 'child_process';
 // $FlowFixMe
 import slash from 'slash';
 
-
 let flowBin;
 
 try {
@@ -24,11 +23,17 @@ try {
   console.log();
   console.log('Oops! Something went wrong! :(');
   console.log();
-  console.log('eslint-plugin-flowtype-errors could not find the package "flow-bin". This can happen for a couple different reasons.');
+  console.log(
+    'eslint-plugin-flowtype-errors could not find the package "flow-bin". This can happen for a couple different reasons.'
+  );
   console.log();
-  console.log('1. If ESLint is installed globally, then make sure "flow-bin" is also installed globally.');
+  console.log(
+    '1. If ESLint is installed globally, then make sure "flow-bin" is also installed globally.'
+  );
   console.log();
-  console.log('2. If ESLint is installed locally, then it\'s likely that "flow-bin" is not installed correctly. Try reinstalling by running the following:');
+  console.log(
+    '2. If ESLint is installed locally, then it\'s likely that "flow-bin" is not installed correctly. Try reinstalling by running the following:'
+  );
   console.log();
   console.log('  npm i -D flow-bin@latest');
   console.log();
@@ -42,30 +47,30 @@ type FlowPos = {
   line: number,
   column: number,
   offset: number
-}
+};
 
 type FlowLoc = {
   source: ?string,
   start: FlowPos,
   end: FlowPos
-}
+};
 
 type FlowMessage = {
   path: string,
   descr: string,
-  type: "Blame" | "Comment",
+  type: 'Blame' | 'Comment',
   line: number,
   loc?: ?FlowLoc
-}
+};
 
 type FlowError = {
   message: Array<FlowMessage>,
   operation?: FlowMessage
-}
+};
 
 function mainLocOfError(error: FlowError): ?FlowLoc {
   const { operation, message } = error;
-  return operation && operation.loc || message[0].loc;
+  return (operation && operation.loc) || message[0].loc;
 }
 
 /**
@@ -73,29 +78,36 @@ function mainLocOfError(error: FlowError): ?FlowLoc {
  */
 function fatalError(stderr) {
   return {
-    errors: [{
-      message: [{
-        path: '',
-        line: 0,
-        type: 'Comment',
-        descr: stderr
-      }]
-    }]
+    errors: [
+      {
+        message: [
+          {
+            path: '',
+            line: 0,
+            type: 'Comment',
+            descr: stderr
+          }
+        ]
+      }
+    ]
   };
 }
 
-function _formatMessage(message: FlowMessage, messages, root: string, path: string) {
+function formatMessage(
+  message: FlowMessage,
+  messages,
+  root: string,
+  path: string
+) {
   switch (message.type) {
     case 'Comment':
       return `${message.descr}`;
     case 'Blame': {
       const see = message.path !== ''
-                    ? ` See ${
-                      path === message.path
-                        ? `line ${message.line}`
-                        : `.${slash(message.path.replace(root, ''))}:${message.line}`
-                      }.`
-                    : '';
+        ? ` See ${path === message.path
+            ? `line ${message.line}`
+            : `.${slash(message.path.replace(root, ''))}:${message.line}`}.`
+        : '';
       return `'${message.descr}'.${see}`;
     }
     default:
@@ -112,26 +124,31 @@ let didExecute = false;
 function onExit(root: string) {
   if (!didExecute) {
     didExecute = true;
-    process.on('exit', () => childProcess.spawnSync(getFlowBin(), ['stop', root]));
+    process.on('exit', () =>
+      childProcess.spawnSync(getFlowBin(), ['stop', root])
+    );
   }
 }
 
 function spawnFlow(
-  mode: string, stdin: string, root: string, stopOnExit: boolean, filepath: string
+  mode: string,
+  stdin: string,
+  root: string,
+  stopOnExit: bool,
+  filepath: string
 ): string {
   if (!stdin) {
     return '';
   }
 
-  const child = childProcess.spawnSync(getFlowBin(), [
-    mode,
-    '--json',
-    `--root=${root}`,
-    filepath
-  ], {
-    input: stdin,
-    encoding: 'utf-8'
-  });
+  const child = childProcess.spawnSync(
+    getFlowBin(),
+    [mode, '--json', `--root=${root}`, filepath],
+    {
+      input: stdin,
+      encoding: 'utf-8'
+    }
+  );
 
   const stdout = child.stdout;
 
@@ -168,10 +185,13 @@ type CollectOutput = Array<{
   start: ?number,
   end: ?number,
   loc: ?FlowLoc
-}>
+}>;
 
 export function collect(
-  stdin: string, root: string, stopOnExit: boolean, filepath: string
+  stdin: string,
+  root: string,
+  stopOnExit: bool,
+  filepath: string
 ): CollectOutput | true {
   const stdout = spawnFlow('check-contents', stdin, root, stopOnExit, filepath);
 
@@ -204,28 +224,28 @@ export function collect(
     })
     .map((error: FlowError) => {
       const { message, operation } = error;
-      const [firstMessage, ...remainingMessages] = [].concat(operation || [], message);
-      const entireMessage = `${firstMessage.descr}: ${
-        remainingMessages.reduce(
-          (previousMessage,
+      const [firstMessage, ...remainingMessages] = [].concat(
+        operation || [],
+        message
+      );
+      const entireMessage = `${firstMessage.descr}: ${remainingMessages.reduce(
+        (previousMessage, currentMessage, index, messages) =>
+          `${previousMessage} ${formatMessage(
             currentMessage,
-            index,
-            messages) =>
-            `${previousMessage} ${_formatMessage(
-              currentMessage,
-              messages,
-              root,
-              firstMessage.path
-            )}`,
-          ''
-        )
-      }`;
+            messages,
+            root,
+            firstMessage.path
+          )}`,
+        ''
+      )}`;
 
       const loc = firstMessage.loc;
       const finalMessage = entireMessage.replace(/\.$/, '');
 
       return {
-        ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? parsedJSONArray : {}),
+        ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true'
+          ? parsedJSONArray
+          : {}),
         type: determineRuleType(finalMessage),
         message: finalMessage,
         path: firstMessage.path,
@@ -241,10 +261,13 @@ export function collect(
 type CoverageOutput = {
   coveredCount: number,
   uncoveredCount: number
-}
+};
 
 export function coverage(
-  stdin: string, root: string, stopOnExit: boolean, filepath: string
+  stdin: string,
+  root: string,
+  stopOnExit: bool,
+  filepath: string
 ): CoverageOutput | true {
   const stdout = spawnFlow('coverage', stdin, root, stopOnExit, filepath);
 
