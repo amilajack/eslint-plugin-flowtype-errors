@@ -1,11 +1,12 @@
 environment:
   matrix:
+    - nodejs_version: 8
     - nodejs_version: 7
     - nodejs_version: 6
 
 test_script:
   - node --version
-  - yarn --version
+  - yarn -V
   - yarn test
 
 install:
@@ -15,6 +16,7 @@ install:
 
 cache:
   - "%LOCALAPPDATA%/Yarn"
+  - node_modules -> package.json
 
 matrix:
   fast_finish: true
