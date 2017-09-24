@@ -72,8 +72,8 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
   20:11  error  function:  This type cannot be added to 'number'. See line 20                              flowtype-errors/show-errors
 
 ./4.example.js
-   6:19  error  identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_695c84e/react.js:27  flowtype-errors/show-errors
-  23:34  error  identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_695c84e/react.js:27  flowtype-errors/show-errors
+  11:29  error  property \`lastName\`:  Property not found in 'props of React element \`Foo\`'. See line 27   flowtype-errors/show-errors
+  27:12  error  props of React element \`Foo\`:  This type is incompatible with 'object type'. See line 11  flowtype-errors/show-errors
 
 ./5.example.js
   8:3  error  string:  This type is incompatible with the expected param type of 'number'. See line 4  flowtype-errors/show-errors
@@ -337,39 +337,39 @@ Array [
 exports[`Format 4.example.js - should have expected properties 1`] = `
 Array [
   Object {
-    "end": 7,
+    "end": 12,
     "loc": Object {
       "end": Object {
-        "column": 27,
-        "line": 7,
-        "offset": 108,
+        "column": 33,
+        "line": 12,
+        "offset": 173,
       },
       "start": Object {
-        "column": 19,
-        "line": 7,
-        "offset": 99,
+        "column": 29,
+        "line": 12,
+        "offset": 168,
       },
     },
-    "message": "identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_2014689e/react.js:27",
-    "start": 7,
+    "message": "property \`lastName\`:  Property not found in 'props of React element \`Foo\`'. See line 28",
+    "start": 12,
     "type": "default",
   },
   Object {
-    "end": 24,
+    "end": 28,
     "loc": Object {
       "end": Object {
-        "column": 42,
-        "line": 24,
-        "offset": 367,
+        "column": 35,
+        "line": 28,
+        "offset": 451,
       },
       "start": Object {
-        "column": 34,
-        "line": 24,
-        "offset": 358,
+        "column": 12,
+        "line": 28,
+        "offset": 427,
       },
     },
-    "message": "identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_2014689e/react.js:27",
-    "start": 24,
+    "message": "props of React element \`Foo\`:  This type is incompatible with 'object type'. See line 12",
+    "start": 28,
     "type": "default",
   },
 ]
