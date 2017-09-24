@@ -1,10 +1,17 @@
 {
-  "extends": "bliss",
+  "extends": [
+    "bliss",
+    "prettier",
+    "prettier/flowtype"
+  ],
   "parser": "babel-eslint",
   "env": {
     "node": true,
     "es6": true
   },
+  "plugins": [
+    "prettier"
+  ],
   "rules": {
     "consistent-return": "off",
     "fp/no-arguments": "off",

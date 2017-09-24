@@ -4,16 +4,17 @@
 import React, { Component } from 'react';
 
 class Foo extends Component {
-
   props: {
     firstName: Object,
-    lastName: string,
-  }
+    lastName: string
+  };
 
   render() {
     return (
       <div>
-        <h1>Hello {this.props.firstName} {this.props.lastName}</h1>
+        <h1>
+          Hello {this.props.firstName} {this.props.lastName}
+        </h1>
       </div>
     );
   }

@@ -4,7 +4,6 @@ import { readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'fs';
 import { sync as spawnSync } from 'cross-spawn';
 import { collect } from '../src/collect';
 
-
 const testFilenames = [
   '1.example.js',
   '2.example.js',
@@ -32,20 +31,25 @@ describe('Format', () => {
       chaiExpect(parsedJSONArray).to.be.an('array');
 
       // Filter out the 'path' property because this changes between environments
-      expect(parsedJSONArray.map(e => ({
-        end: e.end,
-        type: e.type,
-        loc: { start: e.loc.start, end: e.loc.end },
-        message: e.message,
-        start: e.start
-      })))
-      .toMatchSnapshot();
+      expect(
+        parsedJSONArray.map(e => ({
+          end: e.end,
+          type: e.type,
+          loc: { start: e.loc.start, end: e.loc.end },
+          message: e.message,
+          start: e.start
+        }))
+      ).toMatchSnapshot();
 
       for (const e of parsedJSONArray) {
         if (e !== false) {
           chaiExpect(e.type).to.be.a('string');
-          chaiExpect(e.path).to.be.a('string').that.contains(path.join(process.cwd(), 'test'));
-          chaiExpect(e.path).to.be.a('string').that.contains('.example.js');
+          chaiExpect(e.path)
+            .to.be.a('string')
+            .that.contains(path.join(process.cwd(), 'test'));
+          chaiExpect(e.path)
+            .to.be.a('string')
+            .that.contains('.example.js');
         }
       }
     });
@@ -74,7 +78,8 @@ const codebases = [
   'coverage-fail2'
 ];
 
-const issue81 = process.platform === 'win32' ? 'folder with spaces' : 'folder-with-spaces';
+const issue81 =
+  process.platform === 'win32' ? 'folder with spaces' : 'folder-with-spaces';
 codebases.push(['folder with spaces', issue81]);
 try {
   mkdirSync(path.resolve(`./test/codebases/${issue81}`));
@@ -82,7 +87,7 @@ try {
   // Already exists
 }
 
-const eslintConfig = (enforceMinCoverage) => `
+const eslintConfig = enforceMinCoverage => `
   var Module = require('module');
   var path = require('path');
   var original = Module._resolveFilename;
@@ -110,10 +115,12 @@ const eslintConfig = (enforceMinCoverage) => `
       }
     },
     rules: {
-      ${enforceMinCoverage ? `
+      ${enforceMinCoverage
+        ? `
         'flowtype-errors/show-errors': 2,
         'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}]
-      ` : `
+      `
+        : `
         'flowtype-errors/show-errors': 2
       `}
     }
@@ -138,15 +145,25 @@ describe('Check codebases', () => {
       const configPath = path.resolve(fullFolder, '.eslintrc.js');
 
       // Write config file
-      writeFileSync(configPath, eslintConfig(folder.match(/^coverage-/) ? 50 : 0));
+      writeFileSync(
+        configPath,
+        eslintConfig(folder.match(/^coverage-/) ? 50 : 0)
+      );
 
       // Spawn a eslint process
       const { stdout, stderr } = runEslint(fullFolder);
 
-      const regexp = new RegExp(`^${fullFolder.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')}.+\\.js$`, 'gm'); // Escape regexp
+      const regexp = new RegExp(
+        `^${fullFolder.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')}.+\\.js$`,
+        'gm'
+      ); // Escape regexp
 
       // Strip root from filenames
-      expect(stdout.replace(regexp, match => match.replace(fullFolder, '.').replace(/\\/g, '/'))).toMatchSnapshot();
+      expect(
+        stdout.replace(regexp, match =>
+          match.replace(fullFolder, '.').replace(/\\/g, '/')
+        )
+      ).toMatchSnapshot();
 
       expect(stderr).toEqual('');
 

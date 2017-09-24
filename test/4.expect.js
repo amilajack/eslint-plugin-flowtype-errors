@@ -13,7 +13,8 @@ export default [
         offset: 121
       }
     },
-    message: "property `lastName`:  Property not found in 'props of React element `Foo`'. See line 25",
+    message:
+      "property `lastName`:  Property not found in 'props of React element `Foo`'. See line 25",
     start: 9,
     type: 'default'
   },
@@ -31,7 +32,8 @@ export default [
         offset: 375
       }
     },
-    message: "props of React element `Foo`:  This type is incompatible with 'object type'. See line 9",
+    message:
+      "props of React element `Foo`:  This type is incompatible with 'object type'. See line 9",
     start: 25,
     type: 'default'
   }

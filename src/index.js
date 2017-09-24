@@ -72,7 +72,7 @@ export default {
             /* eslint prefer-template: 0 */
             const percentage = Number(
               Math.round(
-                (coveredCount / (coveredCount + uncoveredCount)) * 10000
+                coveredCount / (coveredCount + uncoveredCount) * 10000
               ) + 'e-2'
             );
 
@@ -123,13 +123,13 @@ export default {
             context.report({
               loc: loc
                 ? {
-                  ...loc,
-                  start: {
-                    ...loc.start,
-                    // Flow's column numbers are 1-based, while ESLint's are 0-based.
-                    column: loc.start.column - 1
+                    ...loc,
+                    start: {
+                      ...loc.start,
+                      // Flow's column numbers are 1-based, while ESLint's are 0-based.
+                      column: loc.start.column - 1
+                    }
                   }
-                }
                 : loc,
               message
             });

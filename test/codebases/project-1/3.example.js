@@ -9,7 +9,7 @@ export function moo(): number {
   return 'undefined';
 }
 
-export function who(some:string):number {
+export function who(some: string): number {
   return some;
 }
 

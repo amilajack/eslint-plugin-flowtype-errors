@@ -13,7 +13,8 @@ export default [
         offset: 134
       }
     },
-    message: "string:  This type is incompatible with the expected return type of 'number'. See line 9",
+    message:
+      "string:  This type is incompatible with the expected return type of 'number'. See line 9",
     start: 10,
     type: 'default'
   },
@@ -31,7 +32,8 @@ export default [
         offset: 201
       }
     },
-    message: "string:  This type is incompatible with the expected return type of 'number'. See line 13",
+    message:
+      "string:  This type is incompatible with the expected return type of 'number'. See line 13",
     start: 14,
     type: 'default'
   },

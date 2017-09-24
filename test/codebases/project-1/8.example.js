@@ -5,4 +5,4 @@ import { foo } from './6.example.js';
 
 foo(1234);
 
-foo({xyz: 'abc'});
+foo({ xyz: 'abc' });

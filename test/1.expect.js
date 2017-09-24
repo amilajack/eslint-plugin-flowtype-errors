@@ -13,7 +13,8 @@ export default [
         offset: 83
       }
     },
-    message: "string:  This type is incompatible with the expected return type of 'boolean'. See line 5",
+    message:
+      "string:  This type is incompatible with the expected return type of 'boolean'. See line 5",
     start: 6,
     type: 'default'
   },
