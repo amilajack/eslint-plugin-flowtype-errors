@@ -72,8 +72,8 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
   20:11  error  function:  This type cannot be added to 'number'. See line 20                              flowtype-errors/show-errors
 
 ./4.example.js
-   8:10  error  property \`lastName\`:  Property not found in 'props of React element \`Foo\`'. See line 24  flowtype-errors/show-errors
-  24:12  error  props of React element \`Foo\`:  This type is incompatible with 'object type'. See line 8  flowtype-errors/show-errors
+   6:19  error  identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_1d334e03/react.js:27  flowtype-errors/show-errors
+  23:34  error  identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_1d334e03/react.js:27  flowtype-errors/show-errors
 
 ./5.example.js
   8:3  error  string:  This type is incompatible with the expected param type of 'number'. See line 4  flowtype-errors/show-errors
@@ -247,12 +247,12 @@ Array [
       "end": Object {
         "column": 13,
         "line": 14,
-        "offset": 205,
+        "offset": 207,
       },
       "start": Object {
         "column": 10,
         "line": 14,
-        "offset": 201,
+        "offset": 203,
       },
     },
     "message": "string:  This type is incompatible with the expected return type of 'number'. See line 13",
@@ -265,12 +265,12 @@ Array [
       "end": Object {
         "column": 32,
         "line": 17,
-        "offset": 242,
+        "offset": 244,
       },
       "start": Object {
         "column": 19,
         "line": 17,
-        "offset": 228,
+        "offset": 230,
       },
     },
     "message": "string:  This type is incompatible with 'number'. See line 17",
@@ -283,12 +283,12 @@ Array [
       "end": Object {
         "column": 9,
         "line": 19,
-        "offset": 254,
+        "offset": 256,
       },
       "start": Object {
         "column": 7,
         "line": 19,
-        "offset": 251,
+        "offset": 253,
       },
     },
     "message": "who:  name is already bound 'function who'. See line 13",
@@ -301,12 +301,12 @@ Array [
       "end": Object {
         "column": 13,
         "line": 21,
-        "offset": 275,
+        "offset": 277,
       },
       "start": Object {
         "column": 5,
         "line": 21,
-        "offset": 266,
+        "offset": 268,
       },
     },
     "message": "unused function argument: ",
@@ -319,12 +319,12 @@ Array [
       "end": Object {
         "column": 13,
         "line": 21,
-        "offset": 275,
+        "offset": 277,
       },
       "start": Object {
         "column": 11,
         "line": 21,
-        "offset": 272,
+        "offset": 274,
       },
     },
     "message": "function:  This type cannot be added to 'number'. See line 21",
@@ -337,39 +337,39 @@ Array [
 exports[`Format 4.example.js - should have expected properties 1`] = `
 Array [
   Object {
-    "end": 12,
+    "end": 7,
     "loc": Object {
       "end": Object {
-        "column": 3,
-        "line": 12,
-        "offset": 171,
+        "column": 27,
+        "line": 7,
+        "offset": 108,
       },
       "start": Object {
-        "column": 10,
-        "line": 9,
-        "offset": 121,
+        "column": 19,
+        "line": 7,
+        "offset": 99,
       },
     },
-    "message": "property \`lastName\`:  Property not found in 'props of React element \`Foo\`'. See line 25",
-    "start": 9,
+    "message": "identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_1b51e247/react.js:27",
+    "start": 7,
     "type": "default",
   },
   Object {
-    "end": 25,
+    "end": 24,
     "loc": Object {
       "end": Object {
-        "column": 35,
-        "line": 25,
-        "offset": 399,
+        "column": 42,
+        "line": 24,
+        "offset": 367,
       },
       "start": Object {
-        "column": 12,
-        "line": 25,
-        "offset": 375,
+        "column": 34,
+        "line": 24,
+        "offset": 358,
       },
     },
-    "message": "props of React element \`Foo\`:  This type is incompatible with 'object type'. See line 9",
-    "start": 25,
+    "message": "identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_1b51e247/react.js:27",
+    "start": 24,
     "type": "default",
   },
 ]
@@ -406,12 +406,12 @@ Array [
       "end": Object {
         "column": 8,
         "line": 9,
-        "offset": 111,
+        "offset": 113,
       },
       "start": Object {
         "column": 5,
         "line": 9,
-        "offset": 107,
+        "offset": 109,
       },
     },
     "message": "number:  This type is incompatible with the expected param type of 'object type'. See line 5",
@@ -422,14 +422,14 @@ Array [
     "end": 11,
     "loc": Object {
       "end": Object {
-        "column": 17,
+        "column": 19,
         "line": 11,
-        "offset": 132,
+        "offset": 136,
       },
       "start": Object {
         "column": 1,
         "line": 11,
-        "offset": 115,
+        "offset": 117,
       },
     },
     "message": "function call:  'property \`baz\`'. See line 5. Property not found in 'object literal'. See line 11",
@@ -486,9 +486,9 @@ Array [
     "end": 9,
     "loc": Object {
       "end": Object {
-        "column": 17,
+        "column": 19,
         "line": 9,
-        "offset": 106,
+        "offset": 108,
       },
       "start": Object {
         "column": 1,
@@ -509,9 +509,9 @@ Array [
     "end": 9,
     "loc": Object {
       "end": Object {
-        "column": 24,
+        "column": 25,
         "line": 9,
-        "offset": 167,
+        "offset": 168,
       },
       "start": Object {
         "column": 17,
