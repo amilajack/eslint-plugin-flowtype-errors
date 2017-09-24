@@ -4,6 +4,12 @@
 
 - Fixed off-by-one error in reported column numbers.
 
+## v3.3.1
+
+- No interesting changes.
+
+## v3.3.0
+
 ### Added
 
 - Added `enforce-min-coverage` rule.
