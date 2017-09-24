@@ -1,5 +1,11 @@
 ## Master
 
+### Fixed
+
+- Fixed off-by-one error in reported column numbers.
+
+### Added
+
 - Added `enforce-min-coverage` rule.
 
 ```js
