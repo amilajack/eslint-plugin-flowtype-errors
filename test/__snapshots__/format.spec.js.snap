@@ -72,8 +72,8 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
   20:11  error  function:  This type cannot be added to 'number'. See line 20                              flowtype-errors/show-errors
 
 ./4.example.js
-   6:19  error  identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_1d334e03/react.js:27  flowtype-errors/show-errors
-  23:34  error  identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_1d334e03/react.js:27  flowtype-errors/show-errors
+   6:19  error  identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_695c84e/react.js:27  flowtype-errors/show-errors
+  23:34  error  identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_695c84e/react.js:27  flowtype-errors/show-errors
 
 ./5.example.js
   8:3  error  string:  This type is incompatible with the expected param type of 'number'. See line 4  flowtype-errors/show-errors
@@ -350,7 +350,7 @@ Array [
         "offset": 99,
       },
     },
-    "message": "identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_1b51e247/react.js:27",
+    "message": "identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_2014689e/react.js:27",
     "start": 7,
     "type": "default",
   },
@@ -368,7 +368,7 @@ Array [
         "offset": 358,
       },
     },
-    "message": "identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_1b51e247/react.js:27",
+    "message": "identifier \`Component\`:  Too few type arguments. Expected at least 1 'See type parameters of definition here'. See ./private/tmp/flow/flowlib_2014689e/react.js:27",
     "start": 24,
     "type": "default",
   },
