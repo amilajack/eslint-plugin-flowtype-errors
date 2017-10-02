@@ -8,14 +8,12 @@
  */
 import pathModule from 'path';
 import childProcess from 'child_process';
-// $FlowFixMe
 import slash from 'slash';
 
 let flowBin;
 
 try {
   if (!process.env.FLOW_BIN) {
-    // $FlowFixMe
     flowBin = require('flow-bin'); // eslint-disable-line global-require
   }
 } catch (e) {
