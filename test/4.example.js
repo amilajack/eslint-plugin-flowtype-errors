@@ -4,11 +4,13 @@
  */
 import React, { Component } from 'react';
 
-class Foo extends Component {
-  props: {
-    firstName: Object,
-    lastName: string
-  };
+type Props = {
+  firstName: Object,
+  lastName: string
+};
+
+class Foo extends Component<Props, {}> {
+  props: Props
 
   render() {
     return (
@@ -21,7 +23,7 @@ class Foo extends Component {
   }
 }
 
-export default class Bar extends Component {
+export default class Bar extends Component<{}, {}> {
   render() {
     return <Foo firstName="John" />;
   }

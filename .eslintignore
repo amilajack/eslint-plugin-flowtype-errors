@@ -3,3 +3,4 @@ lib-cov
 coverage
 dist
 test/codebases/**
+flow-typed
