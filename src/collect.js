@@ -131,20 +131,20 @@ function onExit(root: string) {
 
 function spawnFlow(
   mode: string,
-  stdin: string,
+  input: string,
   root: string,
   stopOnExit: bool,
   filepath: string
-): string {
-  if (!stdin) {
-    return '';
+): string | bool {
+  if (!input) {
+    return true;
   }
 
   const child = childProcess.spawnSync(
     getFlowBin(),
     [mode, '--json', `--root=${root}`, filepath],
     {
-      input: stdin,
+      input,
       encoding: 'utf-8'
     }
   );
@@ -152,14 +152,8 @@ function spawnFlow(
   const stdout = child.stdout;
 
   if (!stdout) {
-    //
-    // This serves as a temporary HACK to prevent 32 bit OS's from failing. Flow does not
-    // support 32 bit OS's at the moment.
-    // This pretends as if there are no flow errors.
-    //
-    // Ideally, there would be a preinstall npm event to check if the user is on a 32 bit OS
-    //
-    return '';
+    // Flow does not support 32 bit OS's at the moment.
+    return false;
   }
 
   if (stopOnExit) {
@@ -191,11 +185,11 @@ export function collect(
   root: string,
   stopOnExit: bool,
   filepath: string
-): CollectOutput | true {
+): CollectOutput | bool {
   const stdout = spawnFlow('check-contents', stdin, root, stopOnExit, filepath);
 
-  if (!stdout) {
-    return true;
+  if ( typeof stdout !== "string" ) {
+    return stdout;
   }
 
   let parsedJSONArray;
@@ -207,9 +201,10 @@ export function collect(
   }
 
   const fullFilepath = pathModule.resolve(root, filepath);
+  const errors = parsedJSONArray.errors || [];
 
   // Loop through errors in the file
-  const output = parsedJSONArray.errors
+  const output = errors
     // Temporarily hide the 'inconsistent use of library definitions' issue
     .filter((error: FlowError) => {
       const mainLoc = mainLocOfError(error);
@@ -267,11 +262,11 @@ export function coverage(
   root: string,
   stopOnExit: bool,
   filepath: string
-): CoverageOutput | true {
+): CoverageOutput | bool {
   const stdout = spawnFlow('coverage', stdin, root, stopOnExit, filepath);
 
-  if (!stdout) {
-    return true;
+  if ( typeof stdout !== "string" ) {
+    return stdout;
   }
 
   let expressions;
