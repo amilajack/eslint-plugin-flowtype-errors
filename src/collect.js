@@ -114,7 +114,8 @@ function formatMessage(
   root: string,
   path: string,
   flowVersion: string,
-  isOnlyMessage = false
+  isOnlyMessage: boolean,
+  lineOffset: number
 ) {
   switch (message.type) {
     case 'Comment':
@@ -123,7 +124,7 @@ function formatMessage(
       const see =
         message.path !== ''
           ? ` See ${path === message.path
-              ? `line ${message.line}`
+              ? `line ${lineOffset + message.line}`
               : formatSeePath(message, root, flowVersion)}.`
           : '';
       if (isOnlyMessage) {
@@ -203,7 +204,8 @@ export function collect(
   stdin: string,
   root: string,
   stopOnExit: boolean,
-  filepath: string
+  filepath: string,
+  programOffset: { line: number, column: number }
 ): CollectOutput | boolean {
   const stdout = spawnFlow('check-contents', stdin, root, stopOnExit, filepath);
 
@@ -282,7 +284,8 @@ export function collect(
               root,
               mainErrorMessage.path,
               json.flowVersion,
-              true
+              true,
+              programOffset.line
             )
           : `${firstMessage.descr.replace(
               /:$/,
@@ -293,22 +296,38 @@ export function collect(
                   currentMessage,
                   root,
                   mainErrorMessage.path,
-                  json.flowVersion
+                  json.flowVersion,
+                  false,
+                  programOffset.line
                 )
               )
               .join(' ')}`;
 
-      const loc = mainErrorMessage.loc;
+      const defaultPos = { line: 1, column: 1, offset: 0 };
+      const loc = mainErrorMessage.loc || { start: defaultPos, end: defaultPos };
       const finalMessage = entireMessage.replace(/\.$/, '');
+
+      const newLoc = {
+        start: {
+          line: loc.start.line + programOffset.line,
+          column: loc.start.line === 0 ? loc.start.column + programOffset.column : loc.start.column,
+          offset: loc.start.offset
+        },
+        end: {
+          line: loc.end.line + programOffset.line,
+          column: loc.end.line === 0 ? loc.end.column + programOffset.column : loc.end.column,
+          offset: loc.end.offset
+        }
+      };
 
       return {
         ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? json : {}),
         type: determineRuleType(finalMessage),
         message: finalMessage,
         path: mainErrorMessage.path,
-        start: loc && loc.start.line,
-        end: loc && loc.end.line,
-        loc
+        start: newLoc.start.line,
+        end: newLoc.end.line,
+        loc: newLoc
       };
     });
 

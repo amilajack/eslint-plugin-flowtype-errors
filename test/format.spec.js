@@ -20,7 +20,7 @@ const testResults = testFilenames.map((filename, index) => {
   const root = path.resolve(process.cwd(), 'test');
   const filepath = path.join(root, filename);
   const stdin = readFileSync(filepath).toString();
-  const parsedJSONArray = collect(stdin, root, true, filepath);
+  const parsedJSONArray = collect(stdin, root, true, filepath, { line: 0, column: 0 });
 
   return { parsedJSONArray, filename, index };
 });
@@ -66,6 +66,7 @@ function runEslint(cwd) {
 }
 
 const codebases = [
+  'column-offset',
   'flow-pragma-1',
   'flow-pragma-2',
   'no-flow-pragma',
