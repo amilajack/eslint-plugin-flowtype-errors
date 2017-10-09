@@ -39,6 +39,16 @@ try {
   /* eslint-enable */
 }
 
+type Pos = {
+  line: number,
+  column: number
+};
+
+type Loc = {
+  start: Pos,
+  end: Pos
+};
+
 // Adapted from https://github.com/facebook/flow/blob/master/tsrc/flowResult.js
 
 type FlowPos = {
@@ -71,24 +81,13 @@ function mainLocOfError(error: FlowError): ?FlowLoc {
   return (operation && operation.loc) || message[0].loc;
 }
 
-/**
- * Wrap critical Flow exception into default Error json format
- */
-function fatalError(stderr) {
-  return {
-    errors: [
-      {
-        message: [
-          {
-            path: '',
-            line: 0,
-            type: 'Comment',
-            descr: stderr
-          }
-        ]
-      }
-    ]
-  };
+function fatalError(message) {
+  return [
+    {
+      message,
+      loc: { start: { line: 1, column: 1 }, end: { line: 1, column: 1 } }
+    }
+  ];
 }
 
 function formatMessage(
@@ -172,12 +171,8 @@ function determineRuleType(description) {
 }
 
 type CollectOutput = Array<{
-  type: string,
   message: string,
-  path: string,
-  start: ?number,
-  end: ?number,
-  loc: ?FlowLoc
+  loc: Loc
 }>;
 
 export function collect(
@@ -192,19 +187,22 @@ export function collect(
     return stdout;
   }
 
-  let parsedJSONArray;
+  let json;
 
   try {
-    parsedJSONArray = JSON.parse(stdout);
+    json = JSON.parse(stdout);
   } catch (e) {
-    parsedJSONArray = fatalError('Flow returned invalid json');
+    return fatalError('Flow returned invalid json');
+  }
+
+  if ( !Array.isArray(json.errors) ) {
+    return json.exit ? fatalError(`Flow returned an error: ${json.exit.msg} (code: ${json.exit.code})`) : fatalError('Flow returned invalid json');
   }
 
   const fullFilepath = pathModule.resolve(root, filepath);
-  const errors = parsedJSONArray.errors || [];
 
   // Loop through errors in the file
-  const output = errors
+  const output = json.errors
     // Temporarily hide the 'inconsistent use of library definitions' issue
     .filter((error: FlowError) => {
       const mainLoc = mainLocOfError(error);
@@ -238,7 +236,7 @@ export function collect(
 
       return {
         ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true'
-          ? parsedJSONArray
+          ? json
           : {}),
         type: determineRuleType(finalMessage),
         message: finalMessage,
