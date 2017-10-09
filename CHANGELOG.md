@@ -2,6 +2,13 @@
 
 ### Fixed
 
+- Show error on 32 bit OS's. Closes [#46](https://github.com/amilajack/eslint-plugin-flowtype-errors/issues/46).
+- Fixed [#100](https://github.com/amilajack/eslint-plugin-flowtype-errors/issues/100).
+
+## v3.3.2
+
+### Fixed
+
 - Fixed off-by-one error in reported column numbers.
 
 ## v3.3.1

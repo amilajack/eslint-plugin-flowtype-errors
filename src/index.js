@@ -45,6 +45,13 @@ function stopOnExit(context: EslintContext): bool {
   );
 }
 
+function error32bit() {
+  return {
+    loc: 1,
+    message: "Flow does not support 32 bit OS's at the moment."
+  };
+}
+
 export default {
   rules: {
     'enforce-min-coverage': function enforceMinCoverage(
@@ -63,6 +70,11 @@ export default {
             );
 
             if (res === true) {
+              return;
+            }
+
+            if (res === false) {
+              context.report(error32bit());
               return;
             }
 
@@ -116,7 +128,12 @@ export default {
           );
 
           if (collected === true) {
-            return; // eslint-disable-line
+            return;
+          }
+
+          if (collected === false) {
+            context.report(error32bit());
+            return;
           }
 
           collected.forEach(({ loc, message }) => {
