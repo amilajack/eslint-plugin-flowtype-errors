@@ -1,6 +1,6 @@
 {
   "extends": [
-    "bliss",
+    "airbnb-base",
     "prettier",
     "prettier/flowtype"
   ],
@@ -30,6 +30,7 @@
     "fp/no-this": "off",
     "fp/no-throw": "off",
     "fp/no-unused-expression": "off",
-    "fp/no-valueof-field": "off"
+    "fp/no-valueof-field": "off",
+    "prefer-destructuring": "off"
   }
 }
