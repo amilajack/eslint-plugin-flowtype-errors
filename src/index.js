@@ -37,7 +37,7 @@ function lookupFlowDir(context: EslintContext): string {
     : root;
 }
 
-function stopOnExit(context: EslintContext): bool {
+function stopOnExit(context: EslintContext): boolean {
   return !!(
     context.settings &&
     context.settings['flowtype-errors'] &&

@@ -95,10 +95,16 @@ function fatalError(message) {
   ];
 }
 
-function formatSeePath(message: FlowMessage, root: string, flowVersion: string) {
+function formatSeePath(
+  message: FlowMessage,
+  root: string,
+  flowVersion: string
+) {
   const relativePath = message.path.replace(root, '');
   return relativePath === message.path // The path is for a Flow built-in lib
-    ? `https://github.com/facebook/flow/blob/v${flowVersion}/lib/${pathModule.basename(message.path)}#L${message.line}`
+    ? `https://github.com/facebook/flow/blob/v${flowVersion}/lib/${pathModule.basename(
+        message.path
+      )}#L${message.line}`
     : `.${slash(relativePath)}:${message.line}`;
 }
 
@@ -117,12 +123,11 @@ function formatMessage(
         message.path !== ''
           ? ` See ${path === message.path
               ? `line ${message.line}`
-              : formatSeePath(message, root, flowVersion)
-            }.`
+              : formatSeePath(message, root, flowVersion)}.`
           : '';
       // Omit duplicated message that should already be in `firstMessage` in the collect() function
       return message.descr.startsWith('property `')
-        ?  see
+        ? see
         : `'${message.descr}'.${see}`;
     }
     default:
@@ -149,9 +154,9 @@ function spawnFlow(
   mode: string,
   input: string,
   root: string,
-  stopOnExit: bool,
+  stopOnExit: boolean,
   filepath: string
-): string | bool {
+): string | boolean {
   if (!input) {
     return true;
   }
@@ -193,12 +198,12 @@ type CollectOutput = Array<{
 export function collect(
   stdin: string,
   root: string,
-  stopOnExit: bool,
+  stopOnExit: boolean,
   filepath: string
-): CollectOutput | bool {
+): CollectOutput | boolean {
   const stdout = spawnFlow('check-contents', stdin, root, stopOnExit, filepath);
 
-  if ( typeof stdout !== "string" ) {
+  if (typeof stdout !== 'string') {
     return stdout;
   }
 
@@ -211,8 +216,10 @@ export function collect(
   }
 
   if (!Array.isArray(json.errors)) {
-    return json.exit ?
-      fatalError(`Flow returned an error: ${json.exit.msg} (code: ${json.exit.code})`)
+    return json.exit
+      ? fatalError(
+          `Flow returned an error: ${json.exit.msg} (code: ${json.exit.code})`
+        )
       : fatalError('Flow returned invalid json');
   }
 
@@ -240,11 +247,14 @@ export function collect(
 
       if (extra !== undefined && extra.length > 0) {
         const children = extra[0].children;
-        const childMessages = children !== undefined && children.length > 0
-          ? children[0].message
-          : [];
+        const childMessages =
+          children !== undefined && children.length > 0
+            ? children[0].message
+            : [];
 
-        [firstMessage, ...remainingMessages] = extra[0].message.concat(childMessages);
+        [firstMessage, ...remainingMessages] = extra[0].message.concat(
+          childMessages
+        );
       } else {
         [firstMessage, ...remainingMessages] = [].concat(
           operation || [],
@@ -252,7 +262,10 @@ export function collect(
         );
       }
 
-      const entireMessage = `${firstMessage.descr.replace(/:$/, '')}: ${remainingMessages.reduce(
+      const entireMessage = `${firstMessage.descr.replace(
+        /:$/,
+        ''
+      )}: ${remainingMessages.reduce(
         (previousMessage, currentMessage, index, messages) =>
           `${previousMessage} ${formatMessage(
             currentMessage,
@@ -268,9 +281,7 @@ export function collect(
       const finalMessage = entireMessage.replace(/\.$/, '');
 
       return {
-        ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true'
-          ? json
-          : {}),
+        ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? json : {}),
         type: determineRuleType(finalMessage),
         message: finalMessage,
         path: mainErrorMessage.path,
@@ -291,9 +302,9 @@ type CoverageOutput = {
 export function coverage(
   stdin: string,
   root: string,
-  stopOnExit: bool,
+  stopOnExit: boolean,
   filepath: string
-): CoverageOutput | bool {
+): CoverageOutput | boolean {
   const stdout = spawnFlow('coverage', stdin, root, stopOnExit, filepath);
 
   if (typeof stdout !== 'string') {
