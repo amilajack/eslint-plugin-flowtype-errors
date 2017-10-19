@@ -73,7 +73,13 @@ type FlowMessage = {
 
 type FlowError = {
   message: Array<FlowMessage>,
-  operation?: FlowMessage
+  operation?: FlowMessage,
+  extra?: Array<{
+    message: Array<FlowMessage>,
+    children?: Array<{
+      message: Array<FlowMessage>
+    }>
+  }>
 };
 
 function mainLocOfError(error: FlowError): ?FlowLoc {
@@ -90,11 +96,19 @@ function fatalError(message) {
   ];
 }
 
+function formatSeePath(message: FlowMessage, root: string, flowVersion: string) {
+  const relativePath = message.path.replace(root, '');
+  return relativePath === message.path // The path is for a Flow built-in lib
+    ? `https://github.com/facebook/flow/blob/v${flowVersion}/lib/${pathModule.basename(message.path)}#L${message.line}`
+    : `.${slash(relativePath)}:${message.line}`;
+}
+
 function formatMessage(
   message: FlowMessage,
   messages,
   root: string,
-  path: string
+  path: string,
+  flowVersion: string
 ) {
   switch (message.type) {
     case 'Comment':
@@ -104,8 +118,13 @@ function formatMessage(
         message.path !== ''
           ? ` See ${path === message.path
               ? `line ${message.line}`
-              : `.${slash(message.path.replace(root, ''))}:${message.line}`}.`
+              : formatSeePath(message, root, flowVersion)
+            }.`
           : '';
+      // Omit duplicated message that should already be in `firstMessage` in the collect() function
+      if (message.descr.startsWith('property `')) {
+        return see;
+      }
       return `'${message.descr}'.${see}`;
     }
     default:
@@ -215,23 +234,39 @@ export function collect(
       );
     })
     .map((error: FlowError) => {
-      const { message, operation } = error;
-      const [firstMessage, ...remainingMessages] = [].concat(
-        operation || [],
-        message
-      );
-      const entireMessage = `${firstMessage.descr}: ${remainingMessages.reduce(
+      const { message, operation, extra } = error;
+      const mainErrorMessage = operation || message[0];
+
+      let firstMessage;
+      let remainingMessages = null;
+
+      if (extra !== undefined && extra.length > 0) {
+        const children = extra[0].children;
+        const childMessages = children !== undefined && children.length > 0
+          ? children[0].message
+          : [];
+
+        [firstMessage, ...remainingMessages] = extra[0].message.concat(childMessages);
+      } else {
+        [firstMessage, ...remainingMessages] = [].concat(
+          operation || [],
+          message
+        );
+      }
+
+      const entireMessage = `${firstMessage.descr.replace(/:$/, '')}: ${remainingMessages.reduce(
         (previousMessage, currentMessage, index, messages) =>
           `${previousMessage} ${formatMessage(
             currentMessage,
             messages,
             root,
-            firstMessage.path
+            mainErrorMessage.path,
+            json.flowVersion
           )}`,
         ''
       )}`;
 
-      const loc = firstMessage.loc;
+      const loc = mainErrorMessage.loc;
       const finalMessage = entireMessage.replace(/\.$/, '');
 
       return {
@@ -240,10 +275,10 @@ export function collect(
           : {}),
         type: determineRuleType(finalMessage),
         message: finalMessage,
-        path: firstMessage.path,
+        path: mainErrorMessage.path,
         start: loc && loc.start.line,
         end: loc && loc.end.line,
-        loc: firstMessage.loc
+        loc
       };
     });
 

@@ -58,13 +58,13 @@
     "eslint-nibble-ignore": "^3.0.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-prettier": "^2.3.1",
-    "flow-bin": "^0.55.0",
+    "flow-bin": "^0.57.3",
     "jest-cli": "^21.1.0",
     "regenerator-runtime": "^0.11.0"
   },
   "peerDependencies": {
     "eslint": ">=4.0.0",
-    "flow-bin": "^0.55.0"
+    "flow-bin": "^0.57.3"
   },
   "engines": {
     "node": ">=4.x",
