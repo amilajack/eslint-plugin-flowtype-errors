@@ -50,7 +50,6 @@ type Loc = {
 };
 
 // Adapted from https://github.com/facebook/flow/blob/master/tsrc/flowResult.js
-
 type FlowPos = {
   line: number,
   column: number,
@@ -122,10 +121,9 @@ function formatMessage(
             }.`
           : '';
       // Omit duplicated message that should already be in `firstMessage` in the collect() function
-      if (message.descr.startsWith('property `')) {
-        return see;
-      }
-      return `'${message.descr}'.${see}`;
+      return message.descr.startsWith('property `')
+        ?  see
+        : `'${message.descr}'.${see}`;
     }
     default:
       return `'${message.descr}'.`;
@@ -182,11 +180,9 @@ function spawnFlow(
 }
 
 function determineRuleType(description) {
-  if (description.toLowerCase().includes('missing annotation')) {
-    return 'missing-annotation';
-  }
-
-  return 'default';
+  return description.toLowerCase().includes('missing annotation')
+    ? 'missing-annotation'
+    : 'default';
 }
 
 type CollectOutput = Array<{
@@ -214,8 +210,10 @@ export function collect(
     return fatalError('Flow returned invalid json');
   }
 
-  if ( !Array.isArray(json.errors) ) {
-    return json.exit ? fatalError(`Flow returned an error: ${json.exit.msg} (code: ${json.exit.code})`) : fatalError('Flow returned invalid json');
+  if (!Array.isArray(json.errors)) {
+    return json.exit ?
+      fatalError(`Flow returned an error: ${json.exit.msg} (code: ${json.exit.code})`)
+      : fatalError('Flow returned invalid json');
   }
 
   const fullFilepath = pathModule.resolve(root, filepath);
@@ -298,7 +296,7 @@ export function coverage(
 ): CoverageOutput | bool {
   const stdout = spawnFlow('coverage', stdin, root, stopOnExit, filepath);
 
-  if ( typeof stdout !== "string" ) {
+  if (typeof stdout !== 'string') {
     return stdout;
   }
 
