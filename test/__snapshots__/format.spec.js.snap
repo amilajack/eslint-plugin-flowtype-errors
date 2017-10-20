@@ -72,8 +72,8 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
   20:11  error  function: This type cannot be added to 'number'. See line 20                              flowtype-errors/show-errors
 
 ./4.example.js
-  27:12  error  Property \`firstName\` is incompatible: 'string'. See line 27. This type is incompatible with 'object type'. See line 7  flowtype-errors/show-errors
   27:12  error  Property \`lastName\` is incompatible: See line 11. Property not found in 'props of React element \`Foo\`'. See line 27    flowtype-errors/show-errors
+  27:27  error  Property \`firstName\` is incompatible: 'string'. See line 27. This type is incompatible with 'object type'. See line 7  flowtype-errors/show-errors
 
 ./5.example.js
   8:3  error  string: This type is incompatible with the expected param type of 'number'. See line 4  flowtype-errors/show-errors
@@ -341,14 +341,14 @@ Array [
     "end": 28,
     "loc": Object {
       "end": Object {
-        "column": 35,
+        "column": 32,
         "line": 28,
-        "offset": 451,
+        "offset": 448,
       },
       "start": Object {
-        "column": 12,
+        "column": 27,
         "line": 28,
-        "offset": 427,
+        "offset": 442,
       },
     },
     "message": "Property \`firstName\` is incompatible: 'string'. See line 28. This type is incompatible with 'object type'. See line 8",
