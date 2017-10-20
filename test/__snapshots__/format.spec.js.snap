@@ -27,9 +27,9 @@ exports[`Check codebases coverage-ok2 - eslint should give expected output 1`] =
 exports[`Check codebases flow-pragma-1 - eslint should give expected output 1`] = `
 "
 ./example.js
-   4:10  error  string:  This type is incompatible with the expected return type of 'boolean'. See line 3  flowtype-errors/show-errors
-   7:6   error  identifier \`x\`:  Could not resolve name                                                    flowtype-errors/show-errors
-  14:14  error  string:  The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+   4:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 3  flowtype-errors/show-errors
+   7:6   error  identifier \`x\`: Could not resolve name                                                    flowtype-errors/show-errors
+  14:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
 
 ✖ 3 problems (3 errors, 0 warnings)
 
@@ -39,9 +39,9 @@ exports[`Check codebases flow-pragma-1 - eslint should give expected output 1`] 
 exports[`Check codebases flow-pragma-2 - eslint should give expected output 1`] = `
 "
 ./example.js
-   6:10  error  string:  This type is incompatible with the expected return type of 'boolean'. See line 5  flowtype-errors/show-errors
-   9:6   error  identifier \`x\`:  Could not resolve name                                                    flowtype-errors/show-errors
-  16:14  error  string:  The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+   6:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 5  flowtype-errors/show-errors
+   9:6   error  identifier \`x\`: Could not resolve name                                                    flowtype-errors/show-errors
+  16:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
 
 ✖ 3 problems (3 errors, 0 warnings)
 
@@ -55,43 +55,43 @@ exports[`Check codebases no-flow-pragma - eslint should give expected output 1`]
 exports[`Check codebases project-1 - eslint should give expected output 1`] = `
 "
 ./1.example.js
-   5:10  error  string:  This type is incompatible with the expected return type of 'boolean'. See line 4  flowtype-errors/show-errors
-   8:6   error  identifier \`x\`:  Could not resolve name                                                    flowtype-errors/show-errors
-  15:14  error  string:  The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+   5:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 4  flowtype-errors/show-errors
+   8:6   error  identifier \`x\`: Could not resolve name                                                    flowtype-errors/show-errors
+  15:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
 
 ./2.example.js
-   8:24  error  parameter \`x\`:  Missing annotation       flowtype-errors/show-errors
-  12:6   error  identifier \`x\`:  Could not resolve name  flowtype-errors/show-errors
+   8:24  error  parameter \`x\`: Missing annotation       flowtype-errors/show-errors
+  12:6   error  identifier \`x\`: Could not resolve name  flowtype-errors/show-errors
 
 ./3.example.js
-   9:10  error  string:  This type is incompatible with the expected return type of 'number'. See line 8   flowtype-errors/show-errors
-  13:10  error  string:  This type is incompatible with the expected return type of 'number'. See line 12  flowtype-errors/show-errors
-  16:19  error  string:  This type is incompatible with 'number'. See line 16                              flowtype-errors/show-errors
-  18:7   error  who:  name is already bound 'function who'. See line 12                                    flowtype-errors/show-errors
-  20:5   error  function expects no arguments:                                                             flowtype-errors/show-errors
-  20:11  error  function:  This type cannot be added to 'number'. See line 20                              flowtype-errors/show-errors
+   9:10  error  string: This type is incompatible with the expected return type of 'number'. See line 8   flowtype-errors/show-errors
+  13:10  error  string: This type is incompatible with the expected return type of 'number'. See line 12  flowtype-errors/show-errors
+  16:19  error  string: This type is incompatible with 'number'. See line 16                              flowtype-errors/show-errors
+  18:7   error  who: name is already bound 'function who'. See line 12                                    flowtype-errors/show-errors
+  20:5   error  function expects no arguments. See line 8                                                 flowtype-errors/show-errors
+  20:11  error  function: This type cannot be added to 'number'. See line 20                              flowtype-errors/show-errors
 
 ./4.example.js
-  27:12  error  Property \`firstName\` is incompatible:  'string'. See line 27. This type is incompatible with 'object type'. See line 7  flowtype-errors/show-errors
-  27:12  error  Property \`lastName\` is incompatible:   See line 11. Property not found in 'props of React element \`Foo\`'. See line 27   flowtype-errors/show-errors
+  27:12  error  Property \`firstName\` is incompatible: 'string'. See line 27. This type is incompatible with 'object type'. See line 7  flowtype-errors/show-errors
+  27:12  error  Property \`lastName\` is incompatible: See line 11. Property not found in 'props of React element \`Foo\`'. See line 27    flowtype-errors/show-errors
 
 ./5.example.js
-  8:3  error  string:  This type is incompatible with the expected param type of 'number'. See line 4  flowtype-errors/show-errors
+  8:3  error  string: This type is incompatible with the expected param type of 'number'. See line 4  flowtype-errors/show-errors
 
 ./6.example.js
-   8:5  error  number:  This type is incompatible with the expected param type of 'object type'. See line 4       flowtype-errors/show-errors
-  10:5  error  Property \`baz\` is incompatible:   See line 4. Property not found in 'object literal'. See line 10  flowtype-errors/show-errors
+   8:5  error  number: This type is incompatible with the expected param type of 'object type'. See line 4      flowtype-errors/show-errors
+  10:5  error  Property \`baz\` is incompatible: See line 4. Property not found in 'object literal'. See line 10  flowtype-errors/show-errors
 
 ./7.example.js
-  6:3  error  string:  This type is incompatible with the expected param type of 'number'. See ./5.example.js:4  flowtype-errors/show-errors
+  6:3  error  string: This type is incompatible with the expected param type of 'number'. See ./5.example.js:4  flowtype-errors/show-errors
 
 ./8.example.js
-  6:5  error  number:  This type is incompatible with the expected param type of 'object type'. See ./6.example.js:4      flowtype-errors/show-errors
-  8:5  error  Property \`baz\` is incompatible:   See ./6.example.js:4. Property not found in 'object literal'. See line 8  flowtype-errors/show-errors
+  6:5  error  number: This type is incompatible with the expected param type of 'object type'. See ./6.example.js:4     flowtype-errors/show-errors
+  8:5  error  Property \`baz\` is incompatible: See ./6.example.js:4. Property not found in 'object literal'. See line 8  flowtype-errors/show-errors
 
 ./9.example.js
-  8:17  error  Property \`name\` is incompatible:   See ./9.example.import.js:6. Property not found in 'props of React element \`Hello\`'. See line 8                  flowtype-errors/show-errors
-  8:28  error  null:  This type is incompatible with the expected param type of 'Element'. See https://github.com/facebook/flow/blob/v0.57.3/lib/react-dom.js#L17  flowtype-errors/show-errors
+  8:17  error  Property \`name\` is incompatible: See ./9.example.import.js:6. Property not found in 'props of React element \`Hello\`'. See line 8                   flowtype-errors/show-errors
+  8:28  error  null: This type is incompatible with the expected param type of 'Element'. See https://github.com/facebook/flow/blob/v0.57.3/lib/react-dom.js#L17  flowtype-errors/show-errors
 
 ✖ 21 problems (21 errors, 0 warnings)
 
@@ -101,9 +101,9 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
 exports[`Check codebases run-all - eslint should give expected output 1`] = `
 "
 ./example.js
-   2:10  error  string:  This type is incompatible with the expected return type of 'boolean'. See line 1  flowtype-errors/show-errors
-   5:6   error  identifier \`x\`:  Could not resolve name                                                    flowtype-errors/show-errors
-  12:14  error  string:  The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+   2:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 1  flowtype-errors/show-errors
+   5:6   error  identifier \`x\`: Could not resolve name                                                    flowtype-errors/show-errors
+  12:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
 
 ✖ 3 problems (3 errors, 0 warnings)
 
@@ -113,9 +113,9 @@ exports[`Check codebases run-all - eslint should give expected output 1`] = `
 exports[`Check codebases run-all-flowdir - eslint should give expected output 1`] = `
 "
 ./subdir/example.js
-   2:10  error  string:  This type is incompatible with the expected return type of 'boolean'. See line 1  flowtype-errors/show-errors
-   5:6   error  identifier \`x\`:  Could not resolve name                                                    flowtype-errors/show-errors
-  12:14  error  string:  The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+   2:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 1  flowtype-errors/show-errors
+   5:6   error  identifier \`x\`: Could not resolve name                                                    flowtype-errors/show-errors
+  12:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
 
 ✖ 3 problems (3 errors, 0 warnings)
 
@@ -138,7 +138,7 @@ Array [
         "offset": 83,
       },
     },
-    "message": "string:  This type is incompatible with the expected return type of 'boolean'. See line 5",
+    "message": "string: This type is incompatible with the expected return type of 'boolean'. See line 5",
     "start": 6,
     "type": "default",
   },
@@ -156,7 +156,7 @@ Array [
         "offset": 101,
       },
     },
-    "message": "identifier \`x\`:  Could not resolve name",
+    "message": "identifier \`x\`: Could not resolve name",
     "start": 9,
     "type": "default",
   },
@@ -174,7 +174,7 @@ Array [
         "offset": 205,
       },
     },
-    "message": "string:  The operand of an arithmetic operation must be a number",
+    "message": "string: The operand of an arithmetic operation must be a number",
     "start": 16,
     "type": "default",
   },
@@ -197,7 +197,7 @@ Array [
         "offset": 95,
       },
     },
-    "message": "parameter \`x\`:  Missing annotation",
+    "message": "parameter \`x\`: Missing annotation",
     "start": 9,
     "type": "missing-annotation",
   },
@@ -215,7 +215,7 @@ Array [
         "offset": 120,
       },
     },
-    "message": "identifier \`x\`:  Could not resolve name",
+    "message": "identifier \`x\`: Could not resolve name",
     "start": 13,
     "type": "default",
   },
@@ -238,7 +238,7 @@ Array [
         "offset": 134,
       },
     },
-    "message": "string:  This type is incompatible with the expected return type of 'number'. See line 9",
+    "message": "string: This type is incompatible with the expected return type of 'number'. See line 9",
     "start": 10,
     "type": "default",
   },
@@ -256,7 +256,7 @@ Array [
         "offset": 203,
       },
     },
-    "message": "string:  This type is incompatible with the expected return type of 'number'. See line 13",
+    "message": "string: This type is incompatible with the expected return type of 'number'. See line 13",
     "start": 14,
     "type": "default",
   },
@@ -274,7 +274,7 @@ Array [
         "offset": 230,
       },
     },
-    "message": "string:  This type is incompatible with 'number'. See line 17",
+    "message": "string: This type is incompatible with 'number'. See line 17",
     "start": 17,
     "type": "default",
   },
@@ -292,7 +292,7 @@ Array [
         "offset": 253,
       },
     },
-    "message": "who:  name is already bound 'function who'. See line 13",
+    "message": "who: name is already bound 'function who'. See line 13",
     "start": 19,
     "type": "default",
   },
@@ -310,7 +310,7 @@ Array [
         "offset": 268,
       },
     },
-    "message": "function expects no arguments: ",
+    "message": "function expects no arguments. See line 9",
     "start": 21,
     "type": "default",
   },
@@ -328,7 +328,7 @@ Array [
         "offset": 274,
       },
     },
-    "message": "function:  This type cannot be added to 'number'. See line 21",
+    "message": "function: This type cannot be added to 'number'. See line 21",
     "start": 21,
     "type": "default",
   },
@@ -351,7 +351,7 @@ Array [
         "offset": 427,
       },
     },
-    "message": "Property \`firstName\` is incompatible:  'string'. See line 28. This type is incompatible with 'object type'. See line 8",
+    "message": "Property \`firstName\` is incompatible: 'string'. See line 28. This type is incompatible with 'object type'. See line 8",
     "start": 28,
     "type": "default",
   },
@@ -369,7 +369,7 @@ Array [
         "offset": 427,
       },
     },
-    "message": "Property \`lastName\` is incompatible:   See line 12. Property not found in 'props of React element \`Foo\`'. See line 28",
+    "message": "Property \`lastName\` is incompatible: See line 12. Property not found in 'props of React element \`Foo\`'. See line 28",
     "start": 28,
     "type": "default",
   },
@@ -392,7 +392,7 @@ Array [
         "offset": 90,
       },
     },
-    "message": "string:  This type is incompatible with the expected param type of 'number'. See line 5",
+    "message": "string: This type is incompatible with the expected param type of 'number'. See line 5",
     "start": 9,
     "type": "default",
   },
@@ -415,7 +415,7 @@ Array [
         "offset": 109,
       },
     },
-    "message": "number:  This type is incompatible with the expected param type of 'object type'. See line 5",
+    "message": "number: This type is incompatible with the expected param type of 'object type'. See line 5",
     "start": 9,
     "type": "default",
   },
@@ -433,7 +433,7 @@ Array [
         "offset": 121,
       },
     },
-    "message": "Property \`baz\` is incompatible:   See line 5. Property not found in 'object literal'. See line 11",
+    "message": "Property \`baz\` is incompatible: See line 5. Property not found in 'object literal'. See line 11",
     "start": 11,
     "type": "default",
   },
@@ -456,7 +456,7 @@ Array [
         "offset": 77,
       },
     },
-    "message": "string:  This type is incompatible with the expected param type of 'number'. See ./5.example.js:5",
+    "message": "string: This type is incompatible with the expected param type of 'number'. See ./5.example.js:5",
     "start": 7,
     "type": "default",
   },
@@ -479,7 +479,7 @@ Array [
         "offset": 81,
       },
     },
-    "message": "number:  This type is incompatible with the expected param type of 'object type'. See ./6.example.js:5",
+    "message": "number: This type is incompatible with the expected param type of 'object type'. See ./6.example.js:5",
     "start": 7,
     "type": "default",
   },
@@ -497,7 +497,7 @@ Array [
         "offset": 93,
       },
     },
-    "message": "Property \`baz\` is incompatible:   See ./6.example.js:5. Property not found in 'object literal'. See line 9",
+    "message": "Property \`baz\` is incompatible: See ./6.example.js:5. Property not found in 'object literal'. See line 9",
     "start": 9,
     "type": "default",
   },
@@ -520,7 +520,7 @@ Array [
         "offset": 159,
       },
     },
-    "message": "Property \`name\` is incompatible:   See ./9.example.import.js:7. Property not found in 'props of React element \`Hello\`'. See line 9",
+    "message": "Property \`name\` is incompatible: See ./9.example.import.js:7. Property not found in 'props of React element \`Hello\`'. See line 9",
     "start": 9,
     "type": "default",
   },
@@ -538,7 +538,7 @@ Array [
         "offset": 170,
       },
     },
-    "message": "null:  This type is incompatible with the expected param type of 'Element'. See https://github.com/facebook/flow/blob/v0.57.3/lib/react-dom.js#L17",
+    "message": "null: This type is incompatible with the expected param type of 'Element'. See https://github.com/facebook/flow/blob/v0.57.3/lib/react-dom.js#L17",
     "start": 9,
     "type": "default",
   },

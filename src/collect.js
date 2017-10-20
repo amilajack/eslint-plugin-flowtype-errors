@@ -110,10 +110,10 @@ function formatSeePath(
 
 function formatMessage(
   message: FlowMessage,
-  messages,
   root: string,
   path: string,
-  flowVersion: string
+  flowVersion: string,
+  isOnlyMessage = false
 ) {
   switch (message.type) {
     case 'Comment':
@@ -125,9 +125,12 @@ function formatMessage(
               ? `line ${message.line}`
               : formatSeePath(message, root, flowVersion)}.`
           : '';
+      if (isOnlyMessage) {
+        return `${message.descr}.${see}`;
+      }
       // Omit duplicated message that should already be in `firstMessage` in the collect() function
       return message.descr.startsWith('property `')
-        ? see
+        ? see.slice(1)
         : `'${message.descr}'.${see}`;
     }
     default:
@@ -262,20 +265,28 @@ export function collect(
         );
       }
 
-      const entireMessage = `${firstMessage.descr.replace(
-        /:$/,
-        ''
-      )}: ${remainingMessages.reduce(
-        (previousMessage, currentMessage, index, messages) =>
-          `${previousMessage} ${formatMessage(
-            currentMessage,
-            messages,
-            root,
-            mainErrorMessage.path,
-            json.flowVersion
-          )}`,
-        ''
-      )}`;
+      const entireMessage =
+        remainingMessages.length === 0
+          ? formatMessage(
+              firstMessage,
+              root,
+              mainErrorMessage.path,
+              json.flowVersion,
+              true
+            )
+          : `${firstMessage.descr.replace(
+              /:$/,
+              ''
+            )}: ${remainingMessages
+              .map(currentMessage =>
+                formatMessage(
+                  currentMessage,
+                  root,
+                  mainErrorMessage.path,
+                  json.flowVersion
+                )
+              )
+              .join(' ')}`;
 
       const loc = mainErrorMessage.loc;
       const finalMessage = entireMessage.replace(/\.$/, '');
