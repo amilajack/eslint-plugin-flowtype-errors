@@ -59,7 +59,8 @@ type FlowPos = {
 type FlowLoc = {
   source: ?string,
   start: FlowPos,
-  end: FlowPos
+  end: FlowPos,
+  type: 'SourceFile' | 'LibFile'
 };
 
 type FlowMessage = {
@@ -67,6 +68,7 @@ type FlowMessage = {
   descr: string,
   type: 'Blame' | 'Comment',
   line: number,
+  endline: number,
   loc?: ?FlowLoc
 };
 
@@ -100,12 +102,11 @@ function formatSeePath(
   root: string,
   flowVersion: string
 ) {
-  const relativePath = message.path.replace(root, '');
-  return relativePath === message.path // The path is for a Flow built-in lib
+  return message.loc && message.loc.type === 'LibFile'
     ? `https://github.com/facebook/flow/blob/v${flowVersion}/lib/${pathModule.basename(
         message.path
       )}#L${message.line}`
-    : `.${slash(relativePath)}:${message.line}`;
+    : `.${slash(message.path.replace(root, ''))}:${message.line}`;
 }
 
 function formatMessage(
@@ -243,10 +244,10 @@ export function collect(
     })
     .map((error: FlowError) => {
       const { message, operation, extra } = error;
-      const mainErrorMessage = operation || message[0];
 
       let firstMessage;
       let remainingMessages = null;
+      let mainErrorMessage = operation || message[0];
 
       if (extra !== undefined && extra.length > 0) {
         const children = extra[0].children;
@@ -258,6 +259,15 @@ export function collect(
         [firstMessage, ...remainingMessages] = extra[0].message.concat(
           childMessages
         );
+
+        if (
+          remainingMessages.length > 0 &&
+          remainingMessages[0].path === mainErrorMessage.path &&
+          remainingMessages[0].line >= mainErrorMessage.line &&
+          remainingMessages[0].endline <= mainErrorMessage.endline
+        ) {
+          mainErrorMessage = remainingMessages[0];
+        }
       } else {
         [firstMessage, ...remainingMessages] = [].concat(
           operation || [],
