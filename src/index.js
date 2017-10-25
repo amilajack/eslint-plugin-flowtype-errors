@@ -45,10 +45,15 @@ function stopOnExit(context: EslintContext): boolean {
   );
 }
 
-function error32bit() {
+function errorFlowCouldNotRun() {
   return {
     loc: 1,
-    message: "Flow does not support 32 bit OS's at the moment."
+    message:
+`Flow could not be run. Possible causes include:
+  * Running on 32-bit OS (https://github.com/facebook/flow/issues/2262)
+  * Recent glibc version not available (https://github.com/flowtype/flow-bin/issues/49)
+  * FLOW_BIN environment variable ${process.env.FLOW_BIN ? 'set incorrectly' : 'not set'}
+.`
   };
 }
 
@@ -74,7 +79,7 @@ export default {
             }
 
             if (res === false) {
-              context.report(error32bit());
+              context.report(errorFlowCouldNotRun());
               return;
             }
 
@@ -132,7 +137,7 @@ export default {
           }
 
           if (collected === false) {
-            context.report(error32bit());
+            context.report(errorFlowCouldNotRun());
             return;
           }
 
