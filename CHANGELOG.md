@@ -1,7 +1,9 @@
-## Master
+## v3.3.3
+
+### Added
+- Improved accuracy of error messages.
 
 ### Fixed
-
 - Show error on 32 bit OS's. Closes [#46](https://github.com/amilajack/eslint-plugin-flowtype-errors/issues/46).
 - Fixed [#100](https://github.com/amilajack/eslint-plugin-flowtype-errors/issues/100).
 
