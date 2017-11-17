@@ -91,7 +91,7 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
 
 ./9.example.js
   8:17  error  Property \`name\` is incompatible: See ./9.example.import.js:6. Property not found in 'props of React element \`Hello\`'. See line 8                   flowtype-errors/show-errors
-  8:28  error  null: This type is incompatible with the expected param type of 'Element'. See https://github.com/facebook/flow/blob/v0.57.3/lib/react-dom.js#L17  flowtype-errors/show-errors
+  8:28  error  null: This type is incompatible with the expected param type of 'Element'. See https://github.com/facebook/flow/blob/v0.59.0/lib/react-dom.js#L17  flowtype-errors/show-errors
 
 ✖ 21 problems (21 errors, 0 warnings)
 
@@ -538,7 +538,7 @@ Array [
         "offset": 170,
       },
     },
-    "message": "null: This type is incompatible with the expected param type of 'Element'. See https://github.com/facebook/flow/blob/v0.57.3/lib/react-dom.js#L17",
+    "message": "null: This type is incompatible with the expected param type of 'Element'. See https://github.com/facebook/flow/blob/v0.59.0/lib/react-dom.js#L17",
     "start": 9,
     "type": "default",
   },
