@@ -62,6 +62,17 @@ exports[`Check codebases flow-pragma-2 - eslint should give expected output 1`] 
 
 exports[`Check codebases folder with spaces - eslint should give expected output 1`] = `""`;
 
+exports[`Check codebases html-support - eslint should give expected output 1`] = `
+"
+./a.vue
+   8:15  error  ./b.vue: Required module not found                           flowtype-errors/show-errors
+  14:19  error  string: This type is incompatible with 'number'. See line 9  flowtype-errors/show-errors
+
+✖ 2 problems (2 errors, 0 warnings)
+
+"
+`;
+
 exports[`Check codebases no-flow-pragma - eslint should give expected output 1`] = `""`;
 
 exports[`Check codebases project-1 - eslint should give expected output 1`] = `
