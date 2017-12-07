@@ -3,9 +3,9 @@
 exports[`Check codebases column-offset - eslint should give expected output 1`] = `
 "
 ./example.js
-  7:4  error  identifier \`test\`: Could not resolve name  flowtype-errors/show-errors
-  7:9  error  identifier \`x\`: Could not resolve name     flowtype-errors/show-errors
-  8:6  error  identifier \`y\`: Could not resolve name     flowtype-errors/show-errors
+  7:4  error  test: Could not resolve name  flowtype-errors/show-errors
+  7:9  error  x: Could not resolve name     flowtype-errors/show-errors
+  8:6  error  y: Could not resolve name     flowtype-errors/show-errors
 
 ✖ 3 problems (3 errors, 0 warnings)
 
