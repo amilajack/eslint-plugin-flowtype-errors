@@ -28,7 +28,7 @@ exports[`Check codebases flow-pragma-1 - eslint should give expected output 1`] 
 "
 ./example.js
    4:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 3  flowtype-errors/show-errors
-   7:6   error  identifier \`x\`: Could not resolve name                                                    flowtype-errors/show-errors
+   7:6   error  x: Could not resolve name                                                                 flowtype-errors/show-errors
   14:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
 
 ✖ 3 problems (3 errors, 0 warnings)
@@ -40,7 +40,7 @@ exports[`Check codebases flow-pragma-2 - eslint should give expected output 1`] 
 "
 ./example.js
    6:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 5  flowtype-errors/show-errors
-   9:6   error  identifier \`x\`: Could not resolve name                                                    flowtype-errors/show-errors
+   9:6   error  x: Could not resolve name                                                                 flowtype-errors/show-errors
   16:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
 
 ✖ 3 problems (3 errors, 0 warnings)
@@ -56,12 +56,12 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
 "
 ./1.example.js
    5:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 4  flowtype-errors/show-errors
-   8:6   error  identifier \`x\`: Could not resolve name                                                    flowtype-errors/show-errors
+   8:6   error  x: Could not resolve name                                                                 flowtype-errors/show-errors
   15:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
 
 ./2.example.js
-   8:24  error  parameter \`x\`: Missing annotation       flowtype-errors/show-errors
-  12:6   error  identifier \`x\`: Could not resolve name  flowtype-errors/show-errors
+   8:24  error  x: Missing annotation      flowtype-errors/show-errors
+  12:6   error  x: Could not resolve name  flowtype-errors/show-errors
 
 ./3.example.js
    9:10  error  string: This type is incompatible with the expected return type of 'number'. See line 8   flowtype-errors/show-errors
@@ -91,7 +91,7 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
 
 ./9.example.js
   8:17  error  Property \`name\` is incompatible: See ./9.example.import.js:6. Property not found in 'props of React element \`Hello\`'. See line 8                   flowtype-errors/show-errors
-  8:28  error  null: This type is incompatible with the expected param type of 'Element'. See https://github.com/facebook/flow/blob/v0.59.0/lib/react-dom.js#L17  flowtype-errors/show-errors
+  8:28  error  null: This type is incompatible with the expected param type of 'Element'. See https://github.com/facebook/flow/blob/v0.60.1/lib/react-dom.js#L17  flowtype-errors/show-errors
 
 ✖ 21 problems (21 errors, 0 warnings)
 
@@ -102,7 +102,7 @@ exports[`Check codebases run-all - eslint should give expected output 1`] = `
 "
 ./example.js
    2:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 1  flowtype-errors/show-errors
-   5:6   error  identifier \`x\`: Could not resolve name                                                    flowtype-errors/show-errors
+   5:6   error  x: Could not resolve name                                                                 flowtype-errors/show-errors
   12:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
 
 ✖ 3 problems (3 errors, 0 warnings)
@@ -114,7 +114,7 @@ exports[`Check codebases run-all-flowdir - eslint should give expected output 1`
 "
 ./subdir/example.js
    2:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 1  flowtype-errors/show-errors
-   5:6   error  identifier \`x\`: Could not resolve name                                                    flowtype-errors/show-errors
+   5:6   error  x: Could not resolve name                                                                 flowtype-errors/show-errors
   12:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
 
 ✖ 3 problems (3 errors, 0 warnings)
@@ -156,7 +156,7 @@ Array [
         "offset": 101,
       },
     },
-    "message": "identifier \`x\`: Could not resolve name",
+    "message": "x: Could not resolve name",
     "start": 9,
     "type": "default",
   },
@@ -197,7 +197,7 @@ Array [
         "offset": 95,
       },
     },
-    "message": "parameter \`x\`: Missing annotation",
+    "message": "x: Missing annotation",
     "start": 9,
     "type": "missing-annotation",
   },
@@ -215,7 +215,7 @@ Array [
         "offset": 120,
       },
     },
-    "message": "identifier \`x\`: Could not resolve name",
+    "message": "x: Could not resolve name",
     "start": 13,
     "type": "default",
   },
@@ -538,7 +538,7 @@ Array [
         "offset": 170,
       },
     },
-    "message": "null: This type is incompatible with the expected param type of 'Element'. See https://github.com/facebook/flow/blob/v0.59.0/lib/react-dom.js#L17",
+    "message": "null: This type is incompatible with the expected param type of 'Element'. See https://github.com/facebook/flow/blob/v0.60.1/lib/react-dom.js#L17",
     "start": 9,
     "type": "default",
   },
