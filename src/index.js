@@ -3,25 +3,13 @@
 import path from 'path';
 import fs from 'fs';
 import { collect, coverage } from './collect';
-
-type EslintContext = {
-  getAllComments: Function,
-  getFilename: Function,
-  getSourceCode: Function,
-  report: Function,
-  settings: ?{
-    'flowtype-errors': ?{
-      flowDir?: string,
-      stopOnExit?: any
-    }
-  },
-  options: any[]
-};
+import { getScripts } from './parse';
+import type { EslintContext } from './context';
 
 let runOnAllFiles;
 
-function hasFlowPragma(source) {
-  return source.getAllComments().some(comment => /@flow/.test(comment.value));
+function hasFlowPragma(code): boolean {
+  return /@flow/.test(code);
 }
 
 function lookupFlowDir(context: EslintContext): string {
@@ -64,41 +52,46 @@ export default {
     ) {
       return {
         Program() {
-          const source = context.getSourceCode();
+          const scripts = getScripts(context);
 
-          if (hasFlowPragma(source)) {
-            const res = coverage(
-              source.getText(),
-              lookupFlowDir(context),
-              stopOnExit(context),
-              context.getFilename()
-            );
+          const requiredCoverage = context.options[0];
+          const { coveredCount, uncoveredCount } = scripts.reduce((acc, script) => {
+            if (hasFlowPragma(script.code)) {
+              const res = coverage(
+                script.code,
+                lookupFlowDir(context),
+                stopOnExit(context),
+                context.getFilename()
+              );
 
-            if (res === true) {
-              return;
+              if (res === true) {
+                return acc;
+              }
+
+              if (res === false) {
+                context.report(errorFlowCouldNotRun());
+                return acc;
+              }
+
+              acc.coveredCount += res.coveredCount;
+              acc.uncoveredCount += res.uncoveredCount;
             }
 
-            if (res === false) {
-              context.report(errorFlowCouldNotRun());
-              return;
-            }
+            return acc;
+          }, { coveredCount: 0, uncoveredCount: 0 });
 
-            const requiredCoverage = context.options[0];
-            const { coveredCount, uncoveredCount } = res;
+          /* eslint prefer-template: 0 */
+          const percentage = Number(
+            Math.round(
+              coveredCount / (coveredCount + uncoveredCount) * 10000
+            ) + 'e-2'
+          );
 
-            /* eslint prefer-template: 0 */
-            const percentage = Number(
-              Math.round(
-                coveredCount / (coveredCount + uncoveredCount) * 10000
-              ) + 'e-2'
-            );
-
-            if (percentage < requiredCoverage) {
-              context.report({
-                loc: 1,
-                message: `Expected coverage to be at least ${requiredCoverage}%, but is: ${percentage}%`
-              });
-            }
+          if (percentage < requiredCoverage) {
+            context.report({
+              loc: 1,
+              message: `Expected coverage to be at least ${requiredCoverage}%, but is: ${percentage}%`
+            });
           }
         }
       };
@@ -106,7 +99,7 @@ export default {
     'show-errors': function showErrors(context: EslintContext) {
       return {
         Program() {
-          const source = context.getSourceCode();
+          const scripts = getScripts(context);
           const flowDir = lookupFlowDir(context);
 
           // Check to see if we should run on every file
@@ -121,39 +114,42 @@ export default {
             }
           }
 
-          if (runOnAllFiles === false && !hasFlowPragma(source)) {
-            return true;
-          }
+          scripts.forEach(script => {
+            if (runOnAllFiles === false && !hasFlowPragma(script.code)) {
+              return;
+            }
 
-          const collected = collect(
-            source.getText(),
-            flowDir,
-            stopOnExit(context),
-            context.getFilename()
-          );
+            const collected = collect(
+              script.code,
+              flowDir,
+              stopOnExit(context),
+              context.getFilename()
+            );
 
-          if (collected === true) {
-            return;
-          }
+            if (collected === true) {
+              return;
+            }
 
-          if (collected === false) {
-            context.report(errorFlowCouldNotRun());
-            return;
-          }
+            if (collected === false) {
+              context.report(errorFlowCouldNotRun());
+              return;
+            }
 
-          collected.forEach(({ loc, message }) => {
-            context.report({
-              loc: loc
-                ? {
-                    ...loc,
-                    start: {
-                      ...loc.start,
-                      // Flow's column numbers are 1-based, while ESLint's are 0-based.
-                      column: loc.start.column - 1
+            collected.forEach(({ loc, message }) => {
+              context.report({
+                loc: loc
+                  ? {
+                      ...loc,
+                      start: {
+                        ...loc.start,
+                        // Flow's column numbers are 1-based, while ESLint's are 0-based.
+                        column: loc.start.column - 1,
+                        row: loc.start.line + script.start
+                      }
                     }
-                  }
-                : loc,
-              message
+                  : loc,
+                message
+              });
             });
           });
         }
