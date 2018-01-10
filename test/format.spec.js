@@ -59,7 +59,7 @@ describe('Format', () => {
 const ESLINT_PATH = path.resolve('./node_modules/eslint/bin/eslint.js');
 
 function runEslint(cwd) {
-  const result = spawnSync(ESLINT_PATH, ['**/*.js'], { cwd });
+  const result = spawnSync(ESLINT_PATH, ['**/*.js', '**/*.vue'], { cwd });
   result.stdout = result.stdout && result.stdout.toString();
   result.stderr = result.stderr && result.stderr.toString();
   return result;
@@ -71,6 +71,7 @@ const codebases = [
   'no-flow-pragma',
   'project-1',
   'run-all',
+  'run-all-vue',
   'run-all-flowdir',
   'coverage-ok',
   'coverage-ok2',
@@ -101,7 +102,10 @@ const eslintConfig = enforceMinCoverage => `
   };
 
   module.exports = {
-    parser: 'babel-eslint',
+    parser: 'vue-eslint-parser',
+    parserOptions: {
+      parser: 'babel-eslint',
+    },
     root: true, // Make ESLint ignore configuration files in parent folders
     env: {
       node: true,

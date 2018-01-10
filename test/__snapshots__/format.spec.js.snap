@@ -122,6 +122,18 @@ exports[`Check codebases run-all-flowdir - eslint should give expected output 1`
 "
 `;
 
+exports[`Check codebases run-all-vue - eslint should give expected output 1`] = `
+"
+/home/ladoch/Projects/lxmx/eslint-plugin-flowtype-errors/test/codebases/run-all-vue/example.vue
+   4:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 3  flowtype-errors/show-errors
+   7:6   error  x: Could not resolve name                                                                 flowtype-errors/show-errors
+  14:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+
+✖ 3 problems (3 errors, 0 warnings)
+
+"
+`;
+
 exports[`Format 1.example.js - should have expected properties 1`] = `
 Array [
   Object {
