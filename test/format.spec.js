@@ -20,7 +20,7 @@ const testResults = testFilenames.map((filename, index) => {
   const root = path.resolve(process.cwd(), 'test');
   const filepath = path.join(root, filename);
   const stdin = readFileSync(filepath).toString();
-  const parsedJSONArray = collect(stdin, root, true, filepath);
+  const parsedJSONArray = collect(stdin, root, true, filepath, { line: 0, column: 0 });
 
   return { parsedJSONArray, filename, index };
 });
@@ -59,19 +59,21 @@ describe('Format', () => {
 const ESLINT_PATH = path.resolve('./node_modules/eslint/bin/eslint.js');
 
 function runEslint(cwd) {
-  const result = spawnSync(ESLINT_PATH, ['**/*.js'], { cwd });
+  const result = spawnSync(ESLINT_PATH, ['**/*.js', '**/*.vue'], { cwd });
   result.stdout = result.stdout && result.stdout.toString();
   result.stderr = result.stderr && result.stderr.toString();
   return result;
 }
 
 const codebases = [
+  'column-offset',
   'flow-pragma-1',
   'flow-pragma-2',
   'no-flow-pragma',
   'project-1',
   'run-all',
   'run-all-flowdir',
+  'html-support',
   'coverage-ok',
   'coverage-ok2',
   'coverage-fail',
@@ -87,15 +89,21 @@ try {
   // Already exists
 }
 
-const eslintConfig = enforceMinCoverage => `
+const eslintConfig = (enforceMinCoverage, html) => `
   var Module = require('module');
   var path = require('path');
   var original = Module._resolveFilename;
 
-  // Hack to allow eslint to find the plugin
+  // Hack to allow eslint to find the plugins
   Module._resolveFilename = function(request, parent, isMain) {
     if (request === 'eslint-plugin-flowtype-errors') {
       return path.resolve('../../../dist/index.js');
+    }
+    if (request === 'eslint-plugin-html') {
+      return require.resolve('../../../node_modules/eslint-plugin-html');
+    }
+    if (request === 'eslint-plugin-vue') {
+      return require.resolve('../../../node_modules/eslint-plugin-vue');
     }
     return original.call(this, request, parent, isMain);
   };
@@ -107,7 +115,7 @@ const eslintConfig = enforceMinCoverage => `
       node: true,
       es6: true
     },
-    plugins: ['flowtype-errors'],
+    plugins: [${html ? `'html', 'vue',` : ''}'flowtype-errors'],
     settings: {
       'flowtype-errors': {
         flowDir: './subdir',
@@ -147,14 +155,14 @@ describe('Check codebases', () => {
       // Write config file
       writeFileSync(
         configPath,
-        eslintConfig(folder.match(/^coverage-/) ? 50 : 0)
+        eslintConfig(folder.match(/^coverage-/) ? 50 : 0, /html-support/.test(folder))
       );
 
       // Spawn a eslint process
       const { stdout, stderr } = runEslint(fullFolder);
 
       const regexp = new RegExp(
-        `^${fullFolder.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')}.+\\.js$`,
+        `^${fullFolder.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')}.+\\.(js|vue)$`,
         'gm'
       ); // Escape regexp
 

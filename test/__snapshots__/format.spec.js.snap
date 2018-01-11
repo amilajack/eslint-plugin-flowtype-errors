@@ -1,9 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Check codebases column-offset - eslint should give expected output 1`] = `
+"
+./example.js
+  7:4  error  test: Could not resolve name  flowtype-errors/show-errors
+  7:9  error  x: Could not resolve name     flowtype-errors/show-errors
+  8:6  error  y: Could not resolve name     flowtype-errors/show-errors
+
+✖ 3 problems (3 errors, 0 warnings)
+
+"
+`;
+
 exports[`Check codebases coverage-fail - eslint should give expected output 1`] = `
 "
 ./example.js
-  0:0  error  Expected coverage to be at least 50%, but is: 0%  flowtype-errors/enforce-min-coverage
+  1:1  error  Expected coverage to be at least 50%, but is: 0%  flowtype-errors/enforce-min-coverage
 
 ✖ 1 problem (1 error, 0 warnings)
 
@@ -13,7 +25,7 @@ exports[`Check codebases coverage-fail - eslint should give expected output 1`] 
 exports[`Check codebases coverage-fail2 - eslint should give expected output 1`] = `
 "
 ./example.js
-  0:0  error  Expected coverage to be at least 50%, but is: 33.33%  flowtype-errors/enforce-min-coverage
+  1:1  error  Expected coverage to be at least 50%, but is: 33.33%  flowtype-errors/enforce-min-coverage
 
 ✖ 1 problem (1 error, 0 warnings)
 
@@ -49,6 +61,17 @@ exports[`Check codebases flow-pragma-2 - eslint should give expected output 1`] 
 `;
 
 exports[`Check codebases folder with spaces - eslint should give expected output 1`] = `""`;
+
+exports[`Check codebases html-support - eslint should give expected output 1`] = `
+"
+./a.vue
+   8:15  error  ./b.vue: Required module not found                           flowtype-errors/show-errors
+  14:19  error  string: This type is incompatible with 'number'. See line 9  flowtype-errors/show-errors
+
+✖ 2 problems (2 errors, 0 warnings)
+
+"
+`;
 
 exports[`Check codebases no-flow-pragma - eslint should give expected output 1`] = `""`;
 

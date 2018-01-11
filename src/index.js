@@ -3,6 +3,7 @@
 import path from 'path';
 import fs from 'fs';
 import { collect, coverage } from './collect';
+import getProgram from './get-program';
 
 type EslintContext = {
   getAllComments: Function,
@@ -45,9 +46,9 @@ function stopOnExit(context: EslintContext): boolean {
   );
 }
 
-function errorFlowCouldNotRun() {
+function errorFlowCouldNotRun(loc) {
   return {
-    loc: 1,
+    loc,
     message:
 `Flow could not be run. Possible causes include:
   * Running on 32-bit OS (https://github.com/facebook/flow/issues/2262)
@@ -63,12 +64,17 @@ export default {
       context: EslintContext
     ) {
       return {
-        Program() {
+        Program(node: Object) {
           const source = context.getSourceCode();
 
           if (hasFlowPragma(source)) {
+            const program = getProgram(source, node);
+            if ( !program ) {
+              return;
+            }
+
             const res = coverage(
-              source.getText(),
+              program.text,
               lookupFlowDir(context),
               stopOnExit(context),
               context.getFilename()
@@ -79,7 +85,7 @@ export default {
             }
 
             if (res === false) {
-              context.report(errorFlowCouldNotRun());
+              context.report(errorFlowCouldNotRun(program.loc));
               return;
             }
 
@@ -95,7 +101,7 @@ export default {
 
             if (percentage < requiredCoverage) {
               context.report({
-                loc: 1,
+                loc: program.loc,
                 message: `Expected coverage to be at least ${requiredCoverage}%, but is: ${percentage}%`
               });
             }
@@ -105,7 +111,7 @@ export default {
     },
     'show-errors': function showErrors(context: EslintContext) {
       return {
-        Program() {
+        Program(node: Object) {
           const source = context.getSourceCode();
           const flowDir = lookupFlowDir(context);
 
@@ -122,14 +128,20 @@ export default {
           }
 
           if (runOnAllFiles === false && !hasFlowPragma(source)) {
-            return true;
+            return;
+          }
+
+          const program = getProgram(source, node);
+          if ( !program ) {
+            return;
           }
 
           const collected = collect(
-            source.getText(),
+            program.text,
             flowDir,
             stopOnExit(context),
-            context.getFilename()
+            context.getFilename(),
+            program.offset
           );
 
           if (collected === true) {
@@ -137,7 +149,7 @@ export default {
           }
 
           if (collected === false) {
-            context.report(errorFlowCouldNotRun());
+            context.report(errorFlowCouldNotRun(program.loc));
             return;
           }
 
