@@ -39,6 +39,9 @@ try {
   /* eslint-enable */
 }
 
+export const LEVEL_ERROR = 'error';
+export const LEVEL_WARNING = 'warning';
+
 type Pos = {
   line: number,
   column: number
@@ -74,6 +77,7 @@ type FlowMessage = {
 
 type FlowError = {
   message: Array<FlowMessage>,
+  level?: string,
   operation?: FlowMessage,
   extra?: Array<{
     message: Array<FlowMessage>,
@@ -91,8 +95,9 @@ function mainLocOfError(error: FlowError): ?FlowLoc {
 function fatalError(message) {
   return [
     {
-      message,
-      loc: { start: { line: 1, column: 1 }, end: { line: 1, column: 1 } }
+      level: LEVEL_ERROR,
+      loc: { start: { line: 1, column: 1 }, end: { line: 1, column: 1 } },
+      message
     }
   ];
 }
@@ -195,10 +200,13 @@ function determineRuleType(description) {
     : 'default';
 }
 
-type CollectOutput = Array<{
-  message: string,
-  loc: Loc
-}>;
+export type CollectOutputElement = {
+  level: string,
+  loc: Loc,
+  message: string
+};
+
+type CollectOutput = Array<CollectOutputElement>;
 
 export function collect(
   stdin: string,
@@ -245,7 +253,7 @@ export function collect(
       );
     })
     .map((error: FlowError) => {
-      const { message, operation, extra } = error;
+      const { extra, level, message, operation } = error;
 
       let firstMessage;
       let remainingMessages = null;
@@ -323,6 +331,7 @@ export function collect(
       return {
         ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? json : {}),
         type: determineRuleType(finalMessage),
+        level: level || LEVEL_ERROR,
         message: finalMessage,
         path: mainErrorMessage.path,
         start: newLoc.start.line,

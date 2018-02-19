@@ -2,7 +2,12 @@
 
 import path from 'path';
 import fs from 'fs';
-import { collect, coverage } from './collect';
+import {
+  type CollectOutputElement,
+  LEVEL_WARNING,
+  collect,
+  coverage
+} from './collect';
 import getProgram from './get-program';
 
 type EslintContext = {
@@ -58,6 +63,71 @@ function errorFlowCouldNotRun(loc) {
   };
 }
 
+function createFilteredErrorRule(filter: (CollectOutputElement) => any) {
+  return function showErrors(context: EslintContext) {
+    return {
+      Program(node: Object) {
+        const source = context.getSourceCode();
+        const flowDir = lookupFlowDir(context);
+
+        // Check to see if we should run on every file
+        if (runOnAllFiles === undefined) {
+          try {
+            runOnAllFiles = fs
+              .readFileSync(path.join(flowDir, '.flowconfig'))
+              .toString()
+              .includes('all=true');
+          } catch (err) {
+            runOnAllFiles = false;
+          }
+        }
+
+        if (runOnAllFiles === false && !hasFlowPragma(source)) {
+          return;
+        }
+
+        const program = getProgram(source, node);
+        if ( !program ) {
+          return;
+        }
+
+        const collected = collect(
+          program.text,
+          flowDir,
+          stopOnExit(context),
+          context.getFilename(),
+          program.offset
+        );
+
+        if (collected === true) {
+          return;
+        }
+
+        if (collected === false) {
+          context.report(errorFlowCouldNotRun(program.loc));
+          return;
+        }
+
+        collected.filter(filter).forEach(({ loc, message }) => {
+          context.report({
+            loc: loc
+              ? {
+                  ...loc,
+                  start: {
+                    ...loc.start,
+                    // Flow's column numbers are 1-based, while ESLint's are 0-based.
+                    column: loc.start.column - 1
+                  }
+                }
+              : loc,
+            message
+          });
+        });
+      }
+    };
+  };
+}
+
 export default {
   rules: {
     'enforce-min-coverage': function enforceMinCoverage(
@@ -109,67 +179,7 @@ export default {
         }
       };
     },
-    'show-errors': function showErrors(context: EslintContext) {
-      return {
-        Program(node: Object) {
-          const source = context.getSourceCode();
-          const flowDir = lookupFlowDir(context);
-
-          // Check to see if we should run on every file
-          if (runOnAllFiles === undefined) {
-            try {
-              runOnAllFiles = fs
-                .readFileSync(path.join(flowDir, '.flowconfig'))
-                .toString()
-                .includes('all=true');
-            } catch (err) {
-              runOnAllFiles = false;
-            }
-          }
-
-          if (runOnAllFiles === false && !hasFlowPragma(source)) {
-            return;
-          }
-
-          const program = getProgram(source, node);
-          if ( !program ) {
-            return;
-          }
-
-          const collected = collect(
-            program.text,
-            flowDir,
-            stopOnExit(context),
-            context.getFilename(),
-            program.offset
-          );
-
-          if (collected === true) {
-            return;
-          }
-
-          if (collected === false) {
-            context.report(errorFlowCouldNotRun(program.loc));
-            return;
-          }
-
-          collected.forEach(({ loc, message }) => {
-            context.report({
-              loc: loc
-                ? {
-                    ...loc,
-                    start: {
-                      ...loc.start,
-                      // Flow's column numbers are 1-based, while ESLint's are 0-based.
-                      column: loc.start.column - 1
-                    }
-                  }
-                : loc,
-              message
-            });
-          });
-        }
-      };
-    }
+    'show-errors': createFilteredErrorRule(({ level }) => level !== LEVEL_WARNING),
+    'show-warnings': createFilteredErrorRule(({ level }) => level === LEVEL_WARNING)
   }
 };
