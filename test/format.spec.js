@@ -67,17 +67,20 @@ function runEslint(cwd) {
 
 const codebases = [
   'column-offset',
+  'coverage-fail',
+  'coverage-fail2',
+  'coverage-ok',
+  'coverage-ok2',
   'flow-pragma-1',
   'flow-pragma-2',
+  'html-support',
   'no-flow-pragma',
   'project-1',
   'run-all',
   'run-all-flowdir',
-  'html-support',
-  'coverage-ok',
-  'coverage-ok2',
-  'coverage-fail',
-  'coverage-fail2'
+  'warnings-all',
+  'warnings-default',
+  'warnings-mixed'
 ];
 
 const issue81 =
@@ -126,10 +129,12 @@ const eslintConfig = (enforceMinCoverage, html) => `
       ${enforceMinCoverage
         ? `
         'flowtype-errors/show-errors': 2,
+        'flowtype-errors/show-warnings': 1,
         'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}]
       `
         : `
-        'flowtype-errors/show-errors': 2
+        'flowtype-errors/show-errors': 2,
+        'flowtype-errors/show-warnings': 1
       `}
     }
   };

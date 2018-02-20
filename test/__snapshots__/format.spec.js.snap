@@ -145,6 +145,29 @@ exports[`Check codebases run-all-flowdir - eslint should give expected output 1`
 "
 `;
 
+exports[`Check codebases warnings-all - eslint should give expected output 1`] = `
+"
+./example.js
+  9:22  warning  unclear-type: Unclear type. Using \`any\`, \`Object\` or \`Function\` types is not safe!. See line 9  flowtype-errors/show-warnings
+
+✖ 1 problem (0 errors, 1 warning)
+
+"
+`;
+
+exports[`Check codebases warnings-default - eslint should give expected output 1`] = `""`;
+
+exports[`Check codebases warnings-mixed - eslint should give expected output 1`] = `
+"
+./example.js
+  10:22  warning  unclear-type: Unclear type. Using \`any\`, \`Object\` or \`Function\` types is not safe!. See line 10  flowtype-errors/show-warnings
+  19:10  error    number: This type is incompatible with the expected return type of 'string'. See line 18         flowtype-errors/show-errors
+
+✖ 2 problems (1 error, 1 warning)
+
+"
+`;
+
 exports[`Format 1.example.js - should have expected properties 1`] = `
 Array [
   Object {
