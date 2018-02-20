@@ -3,9 +3,9 @@
 exports[`Check codebases column-offset - eslint should give expected output 1`] = `
 "
 ./example.js
-  7:4  error  test: Could not resolve name  flowtype-errors/show-errors
-  7:9  error  x: Could not resolve name     flowtype-errors/show-errors
-  8:6  error  y: Could not resolve name     flowtype-errors/show-errors
+  7:4  error  Cannot resolve name \`test\`  flowtype-errors/show-errors
+  7:9  error  Cannot resolve name \`x\`     flowtype-errors/show-errors
+  8:6  error  Cannot resolve name \`y\`     flowtype-errors/show-errors
 
 ✖ 3 problems (3 errors, 0 warnings)
 
@@ -39,9 +39,9 @@ exports[`Check codebases coverage-ok2 - eslint should give expected output 1`] =
 exports[`Check codebases flow-pragma-1 - eslint should give expected output 1`] = `
 "
 ./example.js
-   4:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 3  flowtype-errors/show-errors
-   7:6   error  x: Could not resolve name                                                                 flowtype-errors/show-errors
-  14:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+   4:10  error  Cannot return \`'string'\` because string is incompatible with boolean (see line 3)  flowtype-errors/show-errors
+   7:6   error  Cannot resolve name \`x\`                                                            flowtype-errors/show-errors
+  14:14  error  Cannot perform arithmetic operation because string is not a number                 flowtype-errors/show-errors
 
 ✖ 3 problems (3 errors, 0 warnings)
 
@@ -51,9 +51,9 @@ exports[`Check codebases flow-pragma-1 - eslint should give expected output 1`] 
 exports[`Check codebases flow-pragma-2 - eslint should give expected output 1`] = `
 "
 ./example.js
-   6:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 5  flowtype-errors/show-errors
-   9:6   error  x: Could not resolve name                                                                 flowtype-errors/show-errors
-  16:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+   6:10  error  Cannot return \`'string'\` because string is incompatible with boolean (see line 5)  flowtype-errors/show-errors
+   9:6   error  Cannot resolve name \`x\`                                                            flowtype-errors/show-errors
+  16:14  error  Cannot perform arithmetic operation because string is not a number                 flowtype-errors/show-errors
 
 ✖ 3 problems (3 errors, 0 warnings)
 
@@ -65,8 +65,8 @@ exports[`Check codebases folder with spaces - eslint should give expected output
 exports[`Check codebases html-support - eslint should give expected output 1`] = `
 "
 ./a.vue
-   8:15  error  ./b.vue: Required module not found                           flowtype-errors/show-errors
-  14:19  error  string: This type is incompatible with 'number'. See line 9  flowtype-errors/show-errors
+   8:15  error  Cannot resolve module \`./b.vue\`                                             flowtype-errors/show-errors
+  14:19  error  Cannot assign \`\\"string\\"\` to \`c\` because string is incompatible with number  flowtype-errors/show-errors
 
 ✖ 2 problems (2 errors, 0 warnings)
 
@@ -78,43 +78,43 @@ exports[`Check codebases no-flow-pragma - eslint should give expected output 1`]
 exports[`Check codebases project-1 - eslint should give expected output 1`] = `
 "
 ./1.example.js
-   5:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 4  flowtype-errors/show-errors
-   8:6   error  x: Could not resolve name                                                                 flowtype-errors/show-errors
-  15:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+   5:10  error  Cannot return \`'string'\` because string is incompatible with boolean (see line 4)  flowtype-errors/show-errors
+   8:6   error  Cannot resolve name \`x\`                                                            flowtype-errors/show-errors
+  15:14  error  Cannot perform arithmetic operation because string is not a number                 flowtype-errors/show-errors
 
 ./2.example.js
-   8:24  error  x: Missing annotation      flowtype-errors/show-errors
-  12:6   error  x: Could not resolve name  flowtype-errors/show-errors
+   8:24  error  Missing type annotation for \`x\`  flowtype-errors/show-errors
+  12:6   error  Cannot resolve name \`x\`          flowtype-errors/show-errors
 
 ./3.example.js
-   9:10  error  string: This type is incompatible with the expected return type of 'number'. See line 8   flowtype-errors/show-errors
-  13:10  error  string: This type is incompatible with the expected return type of 'number'. See line 12  flowtype-errors/show-errors
-  16:19  error  string: This type is incompatible with 'number'. See line 16                              flowtype-errors/show-errors
-  18:7   error  who: name is already bound 'function who'. See line 12                                    flowtype-errors/show-errors
-  20:5   error  function expects no arguments. See line 8                                                 flowtype-errors/show-errors
-  20:11  error  function: This type cannot be added to 'number'. See line 20                              flowtype-errors/show-errors
+   9:10  error  Cannot return \`'undefined'\` because string is incompatible with number (see line 8)                  flowtype-errors/show-errors
+  13:10  error  Cannot return \`some\` because string (see line 12) is incompatible with number (see line 12)          flowtype-errors/show-errors
+  16:19  error  Cannot assign \`'hello world!'\` to \`str\` because string is incompatible with number                   flowtype-errors/show-errors
+  18:7   error  Cannot declare \`who\` (see line 12) because the name is already bound                                 flowtype-errors/show-errors
+  20:5   error  Cannot call \`moo\` because no arguments are expected by function (see line 8)                         flowtype-errors/show-errors
+  20:11  error  Cannot add \`str\` and \`who\` because function (see line 12) is incompatible with number (see line 16)  flowtype-errors/show-errors
 
 ./4.example.js
-  27:12  error  Property \`lastName\` is incompatible: See line 11. Property not found in 'props of React element \`Foo\`'. See line 27    flowtype-errors/show-errors
-  27:27  error  Property \`firstName\` is incompatible: 'string'. See line 27. This type is incompatible with 'object type'. See line 7  flowtype-errors/show-errors
+  27:13  error  Cannot create \`Foo\` element because property \`lastName\` is missing in props but exists in \`Props\` (see line 11)   flowtype-errors/show-errors
+  27:27  error  Cannot create \`Foo\` element because string is incompatible with object type (see line 7) in property \`firstName\`  flowtype-errors/show-errors
 
 ./5.example.js
-  8:3  error  string: This type is incompatible with the expected param type of 'number'. See line 4  flowtype-errors/show-errors
+  8:3  error  Cannot call \`s\` with \`'4'\` bound to \`x\` because string is incompatible with number (see line 4)  flowtype-errors/show-errors
 
 ./6.example.js
-   8:5  error  number: This type is incompatible with the expected param type of 'object type'. See line 4      flowtype-errors/show-errors
-  10:5  error  Property \`baz\` is incompatible: See line 4. Property not found in 'object literal'. See line 10  flowtype-errors/show-errors
+   8:5  error  Cannot call \`foo\` with \`1234\` bound to \`bar\` because number is incompatible with object type (see line 4)                                        flowtype-errors/show-errors
+  10:5  error  Cannot call \`foo\` with object literal bound to \`bar\` because property \`baz\` is missing in object literal but exists in object type (see line 4)  flowtype-errors/show-errors
 
 ./7.example.js
-  6:3  error  string: This type is incompatible with the expected param type of 'number'. See ./5.example.js:4  flowtype-errors/show-errors
+  6:3  error  Cannot call \`s\` with \`'4'\` bound to \`x\` because string is incompatible with number (see ./5.example.js:4)  flowtype-errors/show-errors
 
 ./8.example.js
-  6:5  error  number: This type is incompatible with the expected param type of 'object type'. See ./6.example.js:4     flowtype-errors/show-errors
-  8:5  error  Property \`baz\` is incompatible: See ./6.example.js:4. Property not found in 'object literal'. See line 8  flowtype-errors/show-errors
+  6:5  error  Cannot call \`foo\` with \`1234\` bound to \`bar\` because number is incompatible with object type (see ./6.example.js:4)                                        flowtype-errors/show-errors
+  8:5  error  Cannot call \`foo\` with object literal bound to \`bar\` because property \`baz\` is missing in object literal but exists in object type (see ./6.example.js:4)  flowtype-errors/show-errors
 
 ./9.example.js
-  8:17  error  Property \`name\` is incompatible: See ./9.example.import.js:6. Property not found in 'props of React element \`Hello\`'. See line 8                   flowtype-errors/show-errors
-  8:28  error  null: This type is incompatible with the expected param type of 'Element'. See https://github.com/facebook/flow/blob/v0.60.1/lib/react-dom.js#L17  flowtype-errors/show-errors
+  8:18  error  Cannot create \`Hello\` element because property \`name\` is missing in props but exists in object type (see ./9.example.import.js:6)                                                                                                                                                flowtype-errors/show-errors
+  8:28  error  Cannot call \`ReactDOM.render\` with \`document.getElementById(...)\` bound to \`container\` because null (see https://github.com/facebook/flow/blob/v0.66.0/lib/dom.js#L623) is incompatible with \`Element\` (see https://github.com/facebook/flow/blob/v0.66.0/lib/react-dom.js#L18)  flowtype-errors/show-errors
 
 ✖ 21 problems (21 errors, 0 warnings)
 
@@ -124,9 +124,9 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
 exports[`Check codebases run-all - eslint should give expected output 1`] = `
 "
 ./example.js
-   2:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 1  flowtype-errors/show-errors
-   5:6   error  x: Could not resolve name                                                                 flowtype-errors/show-errors
-  12:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+   2:10  error  Cannot return \`'string'\` because string is incompatible with boolean (see line 1)  flowtype-errors/show-errors
+   5:6   error  Cannot resolve name \`x\`                                                            flowtype-errors/show-errors
+  12:14  error  Cannot perform arithmetic operation because string is not a number                 flowtype-errors/show-errors
 
 ✖ 3 problems (3 errors, 0 warnings)
 
@@ -136,9 +136,9 @@ exports[`Check codebases run-all - eslint should give expected output 1`] = `
 exports[`Check codebases run-all-flowdir - eslint should give expected output 1`] = `
 "
 ./subdir/example.js
-   2:10  error  string: This type is incompatible with the expected return type of 'boolean'. See line 1  flowtype-errors/show-errors
-   5:6   error  x: Could not resolve name                                                                 flowtype-errors/show-errors
-  12:14  error  string: The operand of an arithmetic operation must be a number                           flowtype-errors/show-errors
+   2:10  error  Cannot return \`'string'\` because string is incompatible with boolean (see line 1)  flowtype-errors/show-errors
+   5:6   error  Cannot resolve name \`x\`                                                            flowtype-errors/show-errors
+  12:14  error  Cannot perform arithmetic operation because string is not a number                 flowtype-errors/show-errors
 
 ✖ 3 problems (3 errors, 0 warnings)
 
@@ -148,7 +148,7 @@ exports[`Check codebases run-all-flowdir - eslint should give expected output 1`
 exports[`Check codebases warnings-all - eslint should give expected output 1`] = `
 "
 ./example.js
-  9:22  warning  unclear-type: Unclear type. Using \`any\`, \`Object\` or \`Function\` types is not safe!. See line 9  flowtype-errors/show-warnings
+  9:22  warning  Unclear type. Using \`any\`, \`Object\`, or \`Function\` types is not safe! (\`unclear-type\`)  flowtype-errors/show-warnings
 
 ✖ 1 problem (0 errors, 1 warning)
 
@@ -160,8 +160,8 @@ exports[`Check codebases warnings-default - eslint should give expected output 1
 exports[`Check codebases warnings-mixed - eslint should give expected output 1`] = `
 "
 ./example.js
-  10:22  warning  unclear-type: Unclear type. Using \`any\`, \`Object\` or \`Function\` types is not safe!. See line 10  flowtype-errors/show-warnings
-  19:10  error    number: This type is incompatible with the expected return type of 'string'. See line 18         flowtype-errors/show-errors
+  10:22  warning  Unclear type. Using \`any\`, \`Object\`, or \`Function\` types is not safe! (\`unclear-type\`)             flowtype-errors/show-warnings
+  19:10  error    Cannot return \`x.reduce(...) / x.length\` because number is incompatible with string (see line 18)  flowtype-errors/show-errors
 
 ✖ 2 problems (1 error, 1 warning)
 
@@ -184,7 +184,7 @@ Array [
         "offset": 83,
       },
     },
-    "message": "string: This type is incompatible with the expected return type of 'boolean'. See line 5",
+    "message": "Cannot return \`'string'\` because string is incompatible with boolean (see line 5).",
     "start": 6,
     "type": "default",
   },
@@ -202,7 +202,7 @@ Array [
         "offset": 101,
       },
     },
-    "message": "x: Could not resolve name",
+    "message": "Cannot resolve name \`x\`.",
     "start": 9,
     "type": "default",
   },
@@ -220,7 +220,7 @@ Array [
         "offset": 205,
       },
     },
-    "message": "string: The operand of an arithmetic operation must be a number",
+    "message": "Cannot perform arithmetic operation because string is not a number.",
     "start": 16,
     "type": "default",
   },
@@ -243,7 +243,7 @@ Array [
         "offset": 95,
       },
     },
-    "message": "x: Missing annotation",
+    "message": "Missing type annotation for \`x\`.",
     "start": 9,
     "type": "missing-annotation",
   },
@@ -261,7 +261,7 @@ Array [
         "offset": 120,
       },
     },
-    "message": "x: Could not resolve name",
+    "message": "Cannot resolve name \`x\`.",
     "start": 13,
     "type": "default",
   },
@@ -284,7 +284,7 @@ Array [
         "offset": 134,
       },
     },
-    "message": "string: This type is incompatible with the expected return type of 'number'. See line 9",
+    "message": "Cannot return \`'undefined'\` because string is incompatible with number (see line 9).",
     "start": 10,
     "type": "default",
   },
@@ -302,7 +302,7 @@ Array [
         "offset": 203,
       },
     },
-    "message": "string: This type is incompatible with the expected return type of 'number'. See line 13",
+    "message": "Cannot return \`some\` because string (see line 13) is incompatible with number (see line 13).",
     "start": 14,
     "type": "default",
   },
@@ -320,7 +320,7 @@ Array [
         "offset": 230,
       },
     },
-    "message": "string: This type is incompatible with 'number'. See line 17",
+    "message": "Cannot assign \`'hello world!'\` to \`str\` because string is incompatible with number.",
     "start": 17,
     "type": "default",
   },
@@ -338,7 +338,7 @@ Array [
         "offset": 253,
       },
     },
-    "message": "who: name is already bound 'function who'. See line 13",
+    "message": "Cannot declare \`who\` (see line 13) because the name is already bound.",
     "start": 19,
     "type": "default",
   },
@@ -356,7 +356,7 @@ Array [
         "offset": 268,
       },
     },
-    "message": "function expects no arguments. See line 9",
+    "message": "Cannot call \`moo\` because no arguments are expected by function (see line 9).",
     "start": 21,
     "type": "default",
   },
@@ -374,7 +374,7 @@ Array [
         "offset": 274,
       },
     },
-    "message": "function: This type cannot be added to 'number'. See line 21",
+    "message": "Cannot add \`str\` and \`who\` because function (see line 13) is incompatible with number (see line 17).",
     "start": 21,
     "type": "default",
   },
@@ -383,6 +383,24 @@ Array [
 
 exports[`Format 4.example.js - should have expected properties 1`] = `
 Array [
+  Object {
+    "end": 28,
+    "loc": Object {
+      "end": Object {
+        "column": 15,
+        "line": 28,
+        "offset": 431,
+      },
+      "start": Object {
+        "column": 13,
+        "line": 28,
+        "offset": 428,
+      },
+    },
+    "message": "Cannot create \`Foo\` element because property \`lastName\` is missing in props but exists in \`Props\` (see line 12).",
+    "start": 28,
+    "type": "default",
+  },
   Object {
     "end": 28,
     "loc": Object {
@@ -397,25 +415,7 @@ Array [
         "offset": 442,
       },
     },
-    "message": "Property \`firstName\` is incompatible: 'string'. See line 28. This type is incompatible with 'object type'. See line 8",
-    "start": 28,
-    "type": "default",
-  },
-  Object {
-    "end": 28,
-    "loc": Object {
-      "end": Object {
-        "column": 35,
-        "line": 28,
-        "offset": 451,
-      },
-      "start": Object {
-        "column": 12,
-        "line": 28,
-        "offset": 427,
-      },
-    },
-    "message": "Property \`lastName\` is incompatible: See line 12. Property not found in 'props of React element \`Foo\`'. See line 28",
+    "message": "Cannot create \`Foo\` element because string is incompatible with object type (see line 8) in property \`firstName\`.",
     "start": 28,
     "type": "default",
   },
@@ -438,7 +438,7 @@ Array [
         "offset": 90,
       },
     },
-    "message": "string: This type is incompatible with the expected param type of 'number'. See line 5",
+    "message": "Cannot call \`s\` with \`'4'\` bound to \`x\` because string is incompatible with number (see line 5).",
     "start": 9,
     "type": "default",
   },
@@ -461,7 +461,7 @@ Array [
         "offset": 109,
       },
     },
-    "message": "number: This type is incompatible with the expected param type of 'object type'. See line 5",
+    "message": "Cannot call \`foo\` with \`1234\` bound to \`bar\` because number is incompatible with object type (see line 5).",
     "start": 9,
     "type": "default",
   },
@@ -479,7 +479,7 @@ Array [
         "offset": 121,
       },
     },
-    "message": "Property \`baz\` is incompatible: See line 5. Property not found in 'object literal'. See line 11",
+    "message": "Cannot call \`foo\` with object literal bound to \`bar\` because property \`baz\` is missing in object literal but exists in object type (see line 5).",
     "start": 11,
     "type": "default",
   },
@@ -502,7 +502,7 @@ Array [
         "offset": 77,
       },
     },
-    "message": "string: This type is incompatible with the expected param type of 'number'. See ./5.example.js:5",
+    "message": "Cannot call \`s\` with \`'4'\` bound to \`x\` because string is incompatible with number (see ./5.example.js:5).",
     "start": 7,
     "type": "default",
   },
@@ -525,7 +525,7 @@ Array [
         "offset": 81,
       },
     },
-    "message": "number: This type is incompatible with the expected param type of 'object type'. See ./6.example.js:5",
+    "message": "Cannot call \`foo\` with \`1234\` bound to \`bar\` because number is incompatible with object type (see ./6.example.js:5).",
     "start": 7,
     "type": "default",
   },
@@ -543,7 +543,7 @@ Array [
         "offset": 93,
       },
     },
-    "message": "Property \`baz\` is incompatible: See ./6.example.js:5. Property not found in 'object literal'. See line 9",
+    "message": "Cannot call \`foo\` with object literal bound to \`bar\` because property \`baz\` is missing in object literal but exists in object type (see ./6.example.js:5).",
     "start": 9,
     "type": "default",
   },
@@ -556,17 +556,17 @@ Array [
     "end": 9,
     "loc": Object {
       "end": Object {
-        "column": 25,
+        "column": 22,
         "line": 9,
-        "offset": 168,
+        "offset": 165,
       },
       "start": Object {
-        "column": 17,
+        "column": 18,
         "line": 9,
-        "offset": 159,
+        "offset": 160,
       },
     },
-    "message": "Property \`name\` is incompatible: See ./9.example.import.js:7. Property not found in 'props of React element \`Hello\`'. See line 9",
+    "message": "Cannot create \`Hello\` element because property \`name\` is missing in props but exists in object type (see ./9.example.import.js:7).",
     "start": 9,
     "type": "default",
   },
@@ -584,7 +584,7 @@ Array [
         "offset": 170,
       },
     },
-    "message": "null: This type is incompatible with the expected param type of 'Element'. See https://github.com/facebook/flow/blob/v0.60.1/lib/react-dom.js#L17",
+    "message": "Cannot call \`ReactDOM.render\` with \`document.getElementById(...)\` bound to \`container\` because null (see https://github.com/facebook/flow/blob/v0.66.0/lib/dom.js#L623) is incompatible with \`Element\` (see https://github.com/facebook/flow/blob/v0.66.0/lib/react-dom.js#L18).",
     "start": 9,
     "type": "default",
   },

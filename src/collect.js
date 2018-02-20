@@ -82,10 +82,7 @@ type FlowError = {
   level?: string,
   operation?: FlowMessage,
   extra?: Array<{
-    message: Array<FlowMessage>,
-    children?: Array<{
-      message: Array<FlowMessage>
-    }>
+    message: Array<FlowMessage>
   }>
 };
 
@@ -118,33 +115,26 @@ function formatSeePath(
 
 function formatMessage(
   message: FlowMessage,
+  extras: FlowMessage[],
   root: string,
-  path: string,
   flowVersion: string,
-  isOnlyMessage: boolean,
   lineOffset: number
 ) {
-  switch (message.type) {
-    case 'Comment':
-      return `${message.descr}`;
-    case 'Blame': {
-      const see =
-        message.path !== ''
-          ? ` See ${path === message.path
-              ? `line ${lineOffset + message.line}`
-              : formatSeePath(message, root, flowVersion)}.`
-          : '';
-      if (isOnlyMessage) {
-        return `${message.descr}.${see}`;
-      }
-      // Omit duplicated message that should already be in `firstMessage` in the collect() function
-      return message.descr.startsWith('property `')
-        ? see.slice(1)
-        : `'${message.descr}'.${see}`;
+  return message.descr.replace(/ (\[\d+\])/g, (matchedStr, extraDescr) => {
+    const extraMessage = extras.find(extra => extra.descr === extraDescr);
+
+    if (extraMessage === undefined) {
+      return matchedStr;
     }
-    default:
-      return `'${message.descr}'.`;
-  }
+
+    if (extraMessage.path !== message.path) {
+      return ` (see ${formatSeePath(extraMessage, root, flowVersion)})`;
+    }
+
+    return extraMessage.line === message.line
+      ? '' // Avoid adding the "see line" message if it's on the same line
+      : ` (see line ${lineOffset + extraMessage.line})`;
+  });
 }
 
 function getFlowBin() {
@@ -197,7 +187,7 @@ function spawnFlow(
 }
 
 function determineRuleType(description) {
-  return description.toLowerCase().includes('missing annotation')
+  return description.toLowerCase().includes('missing type annotation')
     ? 'missing-annotation'
     : 'default';
 }
@@ -255,87 +245,50 @@ export function collect(
       );
     })
     .map((error: FlowError) => {
-      const { extra, level, message, operation } = error;
-
-      let firstMessage;
-      let remainingMessages = null;
-      let mainErrorMessage = operation || message[0];
+      const { extra, level, message: [messageObject] } = error;
+      let message;
 
       if (extra !== undefined && extra.length > 0) {
-        const children = extra[0].children;
-        const childMessages =
-          children !== undefined && children.length > 0
-            ? children[0].message
-            : [];
-
-        [firstMessage, ...remainingMessages] = extra[0].message.concat(
-          childMessages
+        const extras = extra.map(extraObj => extraObj.message[0]); // Normalize extras
+        message = formatMessage(
+          messageObject,
+          extras,
+          root,
+          json.flowVersion,
+          programOffset.line
         );
-
-        if (
-          remainingMessages.length > 0 &&
-          remainingMessages[0].path === mainErrorMessage.path &&
-          remainingMessages[0].line >= mainErrorMessage.line &&
-          remainingMessages[0].endline <= mainErrorMessage.endline
-        ) {
-          mainErrorMessage = remainingMessages[0];
-        }
       } else {
-        [firstMessage, ...remainingMessages] = [].concat(
-          operation || [],
-          message
-        );
+        message = messageObject.descr;
       }
 
-      const entireMessage =
-        remainingMessages.length === 0
-          ? formatMessage(
-              firstMessage,
-              root,
-              mainErrorMessage.path,
-              json.flowVersion,
-              true,
-              programOffset.line
-            )
-          : `${firstMessage.descr.replace(
-              /:$/,
-              ''
-            )}: ${remainingMessages
-              .map(currentMessage =>
-                formatMessage(
-                  currentMessage,
-                  root,
-                  mainErrorMessage.path,
-                  json.flowVersion,
-                  false,
-                  programOffset.line
-                )
-              )
-              .join(' ')}`;
-
       const defaultPos = { line: 1, column: 1, offset: 0 };
-      const loc = mainErrorMessage.loc || { start: defaultPos, end: defaultPos };
-      const finalMessage = entireMessage.replace(/\.$/, '');
+      const loc = messageObject.loc || { start: defaultPos, end: defaultPos };
 
       const newLoc = {
         start: {
           line: loc.start.line + programOffset.line,
-          column: loc.start.line === 0 ? loc.start.column + programOffset.column : loc.start.column,
+          column:
+            loc.start.line === 0
+              ? loc.start.column + programOffset.column
+              : loc.start.column,
           offset: loc.start.offset
         },
         end: {
           line: loc.end.line + programOffset.line,
-          column: loc.end.line === 0 ? loc.end.column + programOffset.column : loc.end.column,
+          column:
+            loc.end.line === 0
+              ? loc.end.column + programOffset.column
+              : loc.end.column,
           offset: loc.end.offset
         }
       };
 
       return {
         ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? json : {}),
-        type: determineRuleType(finalMessage),
+        type: determineRuleType(message),
         level: level || FlowSeverity.Error,
-        message: finalMessage,
-        path: mainErrorMessage.path,
+        message,
+        path: messageObject.path,
         start: newLoc.start.line,
         end: newLoc.end.line,
         loc: newLoc
