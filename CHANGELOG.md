@@ -1,3 +1,13 @@
+## v3.4.0
+
+### Added
+
+- Added `show-warnings` rule.
+
+```js
+"flowtype-errors/show-warnings": 1
+```
+
 ## v3.3.3
 
 ### Added
