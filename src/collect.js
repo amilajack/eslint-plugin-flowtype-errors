@@ -39,8 +39,10 @@ try {
   /* eslint-enable */
 }
 
-export const LEVEL_ERROR = 'error';
-export const LEVEL_WARNING = 'warning';
+export const FlowSeverity = {
+  Error: 'error',
+  Warning: 'warning',
+};
 
 type Pos = {
   line: number,
@@ -95,7 +97,7 @@ function mainLocOfError(error: FlowError): ?FlowLoc {
 function fatalError(message) {
   return [
     {
-      level: LEVEL_ERROR,
+      level: FlowSeverity.Error,
       loc: { start: { line: 1, column: 1 }, end: { line: 1, column: 1 } },
       message
     }
@@ -331,7 +333,7 @@ export function collect(
       return {
         ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? json : {}),
         type: determineRuleType(finalMessage),
-        level: level || LEVEL_ERROR,
+        level: level || FlowSeverity.Error,
         message: finalMessage,
         path: mainErrorMessage.path,
         start: newLoc.start.line,

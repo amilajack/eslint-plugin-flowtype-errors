@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import {
   type CollectOutputElement,
-  LEVEL_WARNING,
+  FlowSeverity,
   collect,
   coverage
 } from './collect';
@@ -179,7 +179,7 @@ export default {
         }
       };
     },
-    'show-errors': createFilteredErrorRule(({ level }) => level !== LEVEL_WARNING),
-    'show-warnings': createFilteredErrorRule(({ level }) => level === LEVEL_WARNING)
+    'show-errors': createFilteredErrorRule(({ level }) => level !== FlowSeverity.Warning),
+    'show-warnings': createFilteredErrorRule(({ level }) => level === FlowSeverity.Warning)
   }
 };
