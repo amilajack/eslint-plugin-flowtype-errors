@@ -1,0 +1,6 @@
+[lints]
+all=error
+unclear-type=warn
+
+[options]
+include_warnings=true
