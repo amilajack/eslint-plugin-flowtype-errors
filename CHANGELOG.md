@@ -1,3 +1,9 @@
+## v3.5.0
+
+### Added
+
+- Added support for `>=flow@0.66`
+
 ## v3.4.0
 
 ### Added
