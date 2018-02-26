@@ -39,6 +39,9 @@ build/Release
 # Dependency directory
 node_modules
 
+# npm lockfile
+package-lock.json
+
 # Compiled source
 dist
 .eslintcache
