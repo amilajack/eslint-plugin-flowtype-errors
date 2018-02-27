@@ -41,7 +41,7 @@ try {
 
 export const FlowSeverity = {
   Error: 'error',
-  Warning: 'warning',
+  Warning: 'warning'
 };
 
 type Pos = {
@@ -54,7 +54,6 @@ type Loc = {
   end: Pos
 };
 
-// Adapted from https://github.com/facebook/flow/blob/master/tsrc/flowResult.js
 type FlowPos = {
   line: number,
   column: number,
@@ -62,34 +61,40 @@ type FlowPos = {
 };
 
 type FlowLoc = {
-  source: ?string,
+  source: string,
   start: FlowPos,
   end: FlowPos,
   type: 'SourceFile' | 'LibFile'
 };
 
-type FlowMessage = {
-  path: string,
-  descr: string,
-  type: 'Blame' | 'Comment',
-  line: number,
-  endline: number,
-  loc?: ?FlowLoc
+type FlowSimpleMessage = {
+  kind: 'Code' | 'Text',
+  text: string
+};
+
+opaque type FlowReferenceID = string;
+
+type FlowReferenceMessage = {
+  kind: 'Reference',
+  referenceId: FlowReferenceID,
+  message: FlowSimpleMessage[]
+};
+
+type FlowMarkupMessage = FlowSimpleMessage | FlowReferenceMessage;
+
+type FlowReferenceLocs = {
+  [referenceId: FlowReferenceID]: FlowLoc
 };
 
 type FlowError = {
-  message: Array<FlowMessage>,
-  level?: string,
-  operation?: FlowMessage,
-  extra?: Array<{
-    message: Array<FlowMessage>
-  }>
+  kind: 'infer' | 'lint',
+  level: 'error' | 'warning',
+  classic: boolean,
+  primaryLoc: FlowLoc,
+  rootLoc: FlowLoc | null,
+  messageMarkup: FlowMarkupMessage[],
+  referenceLocs: FlowReferenceLocs
 };
-
-function mainLocOfError(error: FlowError): ?FlowLoc {
-  const { operation, message } = error;
-  return (operation && operation.loc) || message[0].loc;
-}
 
 function fatalError(message) {
   return [
@@ -102,39 +107,49 @@ function fatalError(message) {
 }
 
 function formatSeePath(
-  message: FlowMessage,
+  loc: FlowLoc,
   root: string,
   flowVersion: string
-) {
-  return message.loc && message.loc.type === 'LibFile'
+): string {
+  return loc.type === 'LibFile'
     ? `https://github.com/facebook/flow/blob/v${flowVersion}/lib/${pathModule.basename(
-        message.path
-      )}#L${message.line}`
-    : `.${slash(message.path.replace(root, ''))}:${message.line}`;
+        loc.source
+      )}#L${loc.start.line}`
+    : `.${slash(loc.source.replace(root, ''))}:${loc.start.line}`;
 }
 
-function formatMessage(
-  message: FlowMessage,
-  extras: FlowMessage[],
+function formatMessage(message: FlowSimpleMessage): string {
+  switch (message.kind) {
+    case 'Code':
+      return `\`${message.text}\``;
+    case 'Text':
+    default: // In case new kinds are added in later Flow versions
+      return message.text;
+  }
+}
+
+function formatMarkupMessage(
+  markupMessage: FlowMarkupMessage,
+  errorLoc: FlowLoc,
+  referenceLocs: FlowReferenceLocs,
   root: string,
   flowVersion: string,
   lineOffset: number
-) {
-  return message.descr.replace(/ (\[\d+\])/g, (matchedStr, extraDescr) => {
-    const extraMessage = extras.find(extra => extra.descr === extraDescr);
+): string {
+  if (markupMessage.kind !== 'Reference') {
+    return formatMessage(markupMessage);
+  }
 
-    if (extraMessage === undefined) {
-      return matchedStr;
-    }
+  let messageStr = markupMessage.message.map(formatMessage).join('');
+  const referenceLoc = referenceLocs[markupMessage.referenceId];
 
-    if (extraMessage.path !== message.path) {
-      return ` (see ${formatSeePath(extraMessage, root, flowVersion)})`;
-    }
+  if (referenceLoc.source !== errorLoc.source) {
+    messageStr += ` (see ${formatSeePath(referenceLoc, root, flowVersion)})`;
+  } else if (referenceLoc.start.line !== errorLoc.start.line) {
+    messageStr += ` (see line ${referenceLoc.start.line + lineOffset})`;
+  }
 
-    return extraMessage.line === message.line
-      ? '' // Avoid adding the "see line" message if it's on the same line
-      : ` (see line ${lineOffset + extraMessage.line})`;
-  });
+  return messageStr;
 }
 
 function getFlowBin() {
@@ -157,7 +172,8 @@ function spawnFlow(
   input: string,
   root: string,
   stopOnExit: boolean,
-  filepath: string
+  filepath: string,
+  extraOptions?: string[] = []
 ): string | boolean {
   if (!input) {
     return true;
@@ -165,7 +181,7 @@ function spawnFlow(
 
   const child = childProcess.spawnSync(
     getFlowBin(),
-    [mode, '--json', `--root=${root}`, filepath],
+    [mode, '--json', `--root=${root}`, filepath, ...extraOptions],
     {
       input,
       encoding: 'utf-8'
@@ -207,7 +223,14 @@ export function collect(
   filepath: string,
   programOffset: { line: number, column: number }
 ): CollectOutput | boolean {
-  const stdout = spawnFlow('check-contents', stdin, root, stopOnExit, filepath);
+  const stdout = spawnFlow(
+    'check-contents',
+    stdin,
+    root,
+    stopOnExit,
+    filepath,
+    ['--json-version=2']
+  );
 
   if (typeof stdout !== 'string') {
     return stdout;
@@ -229,71 +252,52 @@ export function collect(
       : fatalError('Flow returned invalid json');
   }
 
-  const fullFilepath = pathModule.resolve(root, filepath);
+  const output = json.errors.map((error: FlowError) => {
+    const { level, messageMarkup, primaryLoc: loc, referenceLocs } = error;
 
-  // Loop through errors in the file
-  const output = json.errors
-    // Temporarily hide the 'inconsistent use of library definitions' issue
-    .filter((error: FlowError) => {
-      const mainLoc = mainLocOfError(error);
-      const mainFile = mainLoc && mainLoc.source;
-      return (
-        mainFile &&
-        error.message[0].descr &&
-        !error.message[0].descr.includes('inconsistent use of') &&
-        pathModule.resolve(root, mainFile) === fullFilepath
-      );
-    })
-    .map((error: FlowError) => {
-      const { extra, level, message: [messageObject] } = error;
-      let message;
-
-      if (extra !== undefined && extra.length > 0) {
-        const extras = extra.map(extraObj => extraObj.message[0]); // Normalize extras
-        message = formatMessage(
-          messageObject,
-          extras,
+    const message = messageMarkup
+      .map(markupMessage =>
+        formatMarkupMessage(
+          markupMessage,
+          loc,
+          referenceLocs,
           root,
           json.flowVersion,
           programOffset.line
-        );
-      } else {
-        message = messageObject.descr;
+        )
+      )
+      .join('');
+
+    const newLoc = {
+      start: {
+        line: loc.start.line + programOffset.line,
+        column:
+          loc.start.line === 0
+            ? loc.start.column + programOffset.column
+            : loc.start.column,
+        offset: loc.start.offset
+      },
+      end: {
+        line: loc.end.line + programOffset.line,
+        column:
+          loc.end.line === 0
+            ? loc.end.column + programOffset.column
+            : loc.end.column,
+        offset: loc.end.offset
       }
+    };
 
-      const defaultPos = { line: 1, column: 1, offset: 0 };
-      const loc = messageObject.loc || { start: defaultPos, end: defaultPos };
-
-      const newLoc = {
-        start: {
-          line: loc.start.line + programOffset.line,
-          column:
-            loc.start.line === 0
-              ? loc.start.column + programOffset.column
-              : loc.start.column,
-          offset: loc.start.offset
-        },
-        end: {
-          line: loc.end.line + programOffset.line,
-          column:
-            loc.end.line === 0
-              ? loc.end.column + programOffset.column
-              : loc.end.column,
-          offset: loc.end.offset
-        }
-      };
-
-      return {
-        ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? json : {}),
-        type: determineRuleType(message),
-        level: level || FlowSeverity.Error,
-        message,
-        path: messageObject.path,
-        start: newLoc.start.line,
-        end: newLoc.end.line,
-        loc: newLoc
-      };
-    });
+    return {
+      ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? json : {}),
+      type: determineRuleType(message),
+      level: level || FlowSeverity.Error,
+      message,
+      path: loc.source,
+      start: newLoc.start.line,
+      end: newLoc.end.line,
+      loc: newLoc
+    };
+  });
 
   return output;
 }
