@@ -10,10 +10,12 @@
     "es6": true
   },
   "plugins": [
+    "flowtype",
     "prettier"
   ],
   "rules": {
     "consistent-return": "off",
+    "flowtype/define-flow-type": "error",
     "fp/no-arguments": "off",
     "fp/no-class": "off",
     "fp/no-delete": "off",
