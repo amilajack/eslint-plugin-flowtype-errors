@@ -61,39 +61,66 @@ type FlowPos = {
 };
 
 type FlowLoc = {
-  source: string,
+  source: string | null,
   start: FlowPos,
   end: FlowPos,
-  type: 'SourceFile' | 'LibFile'
+  type:
+    | 'LibFile'
+    | 'SourceFile'
+    | 'JsonFile'
+    | 'ResourceFile'
+    | 'Builtins'
+    | null
 };
 
-type FlowSimpleMessage = {
-  kind: 'Code' | 'Text',
-  text: string
-};
+type FlowSimpleMessage =
+  | { kind: 'Text', text: string }
+  | { kind: 'Code', text: string };
 
 opaque type FlowReferenceID = string;
 
 type FlowReferenceMessage = {
   kind: 'Reference',
   referenceId: FlowReferenceID,
-  message: FlowSimpleMessage[]
+  message: Array<FlowSimpleMessage>
 };
 
-type FlowMarkupMessage = FlowSimpleMessage | FlowReferenceMessage;
+type FlowInlineMessage = FlowSimpleMessage | FlowReferenceMessage;
+
+type FlowUnorderedListMessage = {
+  kind: 'UnorderedList',
+  message: Array<FlowInlineMessage>,
+  items: Array<FlowMessage> // eslint-disable-line no-use-before-define
+};
+
+type FlowMessage = Array<FlowInlineMessage> | FlowUnorderedListMessage;
 
 type FlowReferenceLocs = {
   [referenceId: FlowReferenceID]: FlowLoc
 };
 
 type FlowError = {
-  kind: 'infer' | 'lint',
+  kind:
+    | 'parse'
+    | 'infer'
+    | 'internal'
+    | 'duplicate provider'
+    | 'recursion limit exceeded'
+    | 'lint',
   level: 'error' | 'warning',
-  classic: boolean,
+  suppressions: Array<{ loc: FlowLoc }>,
   primaryLoc: FlowLoc,
   rootLoc: FlowLoc | null,
-  messageMarkup: FlowMarkupMessage[],
+  messageMarkup: FlowMessage,
   referenceLocs: FlowReferenceLocs
+};
+
+type ErrorData = {
+  errorLoc: FlowLoc,
+  referenceLocs: FlowReferenceLocs,
+  root: string,
+  flowVersion: string,
+  lineOffset: number
 };
 
 function fatalError(message) {
@@ -111,6 +138,10 @@ function formatSeePath(
   root: string,
   flowVersion: string
 ): string {
+  if (loc.source === null) {
+    return '??';
+  }
+
   return loc.type === 'LibFile'
     ? `https://github.com/facebook/flow/blob/v${flowVersion}/lib/${pathModule.basename(
         loc.source
@@ -118,30 +149,17 @@ function formatSeePath(
     : `.${slash(loc.source.replace(root, ''))}:${loc.start.line}`;
 }
 
-function formatMessage(message: FlowSimpleMessage): string {
-  switch (message.kind) {
-    case 'Code':
-      return `\`${message.text}\``;
-    case 'Text':
-    default: // In case new kinds are added in later Flow versions
-      return message.text;
-  }
+function formatSimpleMessage(message: FlowSimpleMessage): string {
+  return message.kind === 'Code' ? `\`${message.text}\`` : message.text;
 }
 
-function formatMarkupMessage(
-  markupMessage: FlowMarkupMessage,
-  errorLoc: FlowLoc,
-  referenceLocs: FlowReferenceLocs,
-  root: string,
-  flowVersion: string,
-  lineOffset: number
+function formatReferenceMessage(
+  message: FlowReferenceMessage,
+  errorData: ErrorData
 ): string {
-  if (markupMessage.kind !== 'Reference') {
-    return formatMessage(markupMessage);
-  }
-
-  let messageStr = markupMessage.message.map(formatMessage).join('');
-  const referenceLoc = referenceLocs[markupMessage.referenceId];
+  const { errorLoc, referenceLocs, root, flowVersion, lineOffset } = errorData;
+  const referenceLoc = referenceLocs[message.referenceId];
+  let messageStr = message.message.map(formatSimpleMessage).join('');
 
   if (referenceLoc.source !== errorLoc.source) {
     messageStr += ` (see ${formatSeePath(referenceLoc, root, flowVersion)})`;
@@ -150,6 +168,35 @@ function formatMarkupMessage(
   }
 
   return messageStr;
+}
+
+function formatInlineMessage(
+  message: FlowInlineMessage,
+  errorData: ErrorData
+): string {
+  return message.kind === 'Reference'
+    ? formatReferenceMessage(message, errorData)
+    : formatSimpleMessage(message);
+}
+
+function formatInlineMessageArray(
+  messages: Array<FlowInlineMessage>,
+  errorData: ErrorData
+): string {
+  return messages
+    .map(message => formatInlineMessage(message, errorData))
+    .join('');
+}
+
+function formatMessage(message: FlowMessage, errorData: ErrorData): string {
+  if (Array.isArray(message)) {
+    return formatInlineMessageArray(message, errorData);
+  }
+
+  return [
+    formatInlineMessageArray(message.message, errorData),
+    ...message.items.map(itemMessage => formatMessage(itemMessage, errorData))
+  ].join(' ');
 }
 
 function getFlowBin() {
@@ -253,20 +300,15 @@ export function collect(
   }
 
   const output = json.errors.map((error: FlowError) => {
-    const { level, messageMarkup, primaryLoc: loc, referenceLocs } = error;
+    const loc = error.primaryLoc;
 
-    const message = messageMarkup
-      .map(markupMessage =>
-        formatMarkupMessage(
-          markupMessage,
-          loc,
-          referenceLocs,
-          root,
-          json.flowVersion,
-          programOffset.line
-        )
-      )
-      .join('');
+    const message = formatMessage(error.messageMarkup, {
+      errorLoc: loc,
+      referenceLocs: error.referenceLocs,
+      root,
+      flowVersion: json.flowVersion,
+      lineOffset: programOffset.line
+    });
 
     const newLoc = {
       start: {
@@ -290,7 +332,7 @@ export function collect(
     return {
       ...(process.env.DEBUG_FLOWTYPE_ERRRORS === 'true' ? json : {}),
       type: determineRuleType(message),
-      level: level || FlowSeverity.Error,
+      level: error.level || FlowSeverity.Error,
       message,
       path: loc.source,
       start: newLoc.start.line,
