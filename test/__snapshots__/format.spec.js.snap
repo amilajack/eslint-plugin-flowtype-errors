@@ -590,3 +590,26 @@ Array [
   },
 ]
 `;
+
+exports[`Format 10.example.js - should have expected properties 1`] = `
+Array [
+  Object {
+    "end": 9,
+    "loc": Object {
+      "end": Object {
+        "column": 9,
+        "line": 9,
+        "offset": 145,
+      },
+      "start": Object {
+        "column": 5,
+        "line": 9,
+        "offset": 140,
+      },
+    },
+    "message": "Cannot get \`a.foo\` because: Either property \`foo\` is missing in object type (see line 5). Or property \`foo\` is missing in object type (see line 5).",
+    "start": 9,
+    "type": "default",
+  },
+]
+`;

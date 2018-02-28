@@ -13,7 +13,8 @@ const testFilenames = [
   '6.example.js',
   '7.example.js',
   '8.example.js',
-  '9.example.js'
+  '9.example.js',
+  '10.example.js'
 ];
 
 const testResults = testFilenames.map((filename, index) => {
