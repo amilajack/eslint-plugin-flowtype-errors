@@ -1,3 +1,9 @@
+## v3.5.1
+
+## Fixed
+
+- Fix --json-version=2 support
+
 ## v3.5.0
 
 ### Added
