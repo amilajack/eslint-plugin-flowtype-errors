@@ -114,7 +114,7 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
 
 ./9.example.js
   8:18  error  Cannot create \`Hello\` element because property \`name\` is missing in props but exists in object type (see ./9.example.import.js:6)                                                                                                                                                flowtype-errors/show-errors
-  8:28  error  Cannot call \`ReactDOM.render\` with \`document.getElementById(...)\` bound to \`container\` because null (see https://github.com/facebook/flow/blob/v0.69.0/lib/dom.js#L646) is incompatible with \`Element\` (see https://github.com/facebook/flow/blob/v0.69.0/lib/react-dom.js#L18)  flowtype-errors/show-errors
+  8:28  error  Cannot call \`ReactDOM.render\` with \`document.getElementById(...)\` bound to \`container\` because null (see https://github.com/facebook/flow/blob/v0.73.0/lib/dom.js#L646) is incompatible with \`Element\` (see https://github.com/facebook/flow/blob/v0.73.0/lib/react-dom.js#L18)  flowtype-errors/show-errors
 
 ✖ 21 problems (21 errors, 0 warnings)
 
@@ -148,7 +148,7 @@ exports[`Check codebases run-all-flowdir - eslint should give expected output 1`
 exports[`Check codebases warnings-all - eslint should give expected output 1`] = `
 "
 ./example.js
-  9:22  warning  Unclear type. Using \`any\`, \`Object\`, or \`Function\` types is not safe! (\`unclear-type\`)  flowtype-errors/show-warnings
+  9:22  warning  Unclear type. Using \`any\`, \`Object\`, \`Function\`, \`$Subtype<...>\`, or \`$Supertype<...>\` types is not safe! (\`unclear-type\`)  flowtype-errors/show-warnings
 
 ✖ 1 problem (0 errors, 1 warning)
 
@@ -160,8 +160,8 @@ exports[`Check codebases warnings-default - eslint should give expected output 1
 exports[`Check codebases warnings-mixed - eslint should give expected output 1`] = `
 "
 ./example.js
-  10:22  warning  Unclear type. Using \`any\`, \`Object\`, or \`Function\` types is not safe! (\`unclear-type\`)             flowtype-errors/show-warnings
-  19:10  error    Cannot return \`x.reduce(...) / x.length\` because number is incompatible with string (see line 18)  flowtype-errors/show-errors
+  10:22  warning  Unclear type. Using \`any\`, \`Object\`, \`Function\`, \`$Subtype<...>\`, or \`$Supertype<...>\` types is not safe! (\`unclear-type\`)  flowtype-errors/show-warnings
+  19:10  error    Cannot return \`x.reduce(...) / x.length\` because number is incompatible with string (see line 18)                           flowtype-errors/show-errors
 
 ✖ 2 problems (1 error, 1 warning)
 
@@ -584,7 +584,7 @@ Array [
         "offset": 170,
       },
     },
-    "message": "Cannot call \`ReactDOM.render\` with \`document.getElementById(...)\` bound to \`container\` because null (see https://github.com/facebook/flow/blob/v0.69.0/lib/dom.js#L646) is incompatible with \`Element\` (see https://github.com/facebook/flow/blob/v0.69.0/lib/react-dom.js#L18).",
+    "message": "Cannot call \`ReactDOM.render\` with \`document.getElementById(...)\` bound to \`container\` because null (see https://github.com/facebook/flow/blob/v0.73.0/lib/dom.js#L646) is incompatible with \`Element\` (see https://github.com/facebook/flow/blob/v0.73.0/lib/react-dom.js#L18).",
     "start": 9,
     "type": "default",
   },
