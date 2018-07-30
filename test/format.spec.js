@@ -162,7 +162,7 @@ describe('Check codebases', () => {
       );
 
       // Spawn a eslint process
-      const { stdout, stderr } = await runEslint(fullFolder);
+      const { stdout, stderr } = await runEslint(fullFolder).catch(e => e);
 
       const regexp = new RegExp(
         `^${fullFolder.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')}.+\\.(js|vue)$`,
