@@ -5,6 +5,8 @@ import { readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'fs';
 import execa from 'execa';
 import { collect } from '../src/collect';
 
+jest.setTimeout(10000);
+
 const testFilenames = [
   '1.example.js',
   '2.example.js',
