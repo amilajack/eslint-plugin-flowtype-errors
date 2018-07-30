@@ -230,6 +230,7 @@ function spawnFlow(
     getFlowBin(),
     [mode, '--json', `--root=${root}`, filepath, ...extraOptions],
     {
+      cwd: root,
       input,
       encoding: 'utf-8'
     }

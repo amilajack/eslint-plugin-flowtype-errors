@@ -1,7 +1,8 @@
 import path from 'path';
 import { expect as chaiExpect } from 'chai';
 import { readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'fs';
-import { sync as spawnSync } from 'cross-spawn';
+// $FlowIgnore
+import execa from 'execa';
 import { collect } from '../src/collect';
 
 const testFilenames = [
@@ -17,18 +18,15 @@ const testFilenames = [
   '10.example.js'
 ];
 
-const testResults = testFilenames.map((filename, index) => {
-  const root = path.resolve(process.cwd(), 'test');
-  const filepath = path.join(root, filename);
-  const stdin = readFileSync(filepath).toString();
-  const parsedJSONArray = collect(stdin, root, true, filepath, { line: 0, column: 0 });
-
-  return { parsedJSONArray, filename, index };
-});
-
 describe('Format', () => {
-  for (const { parsedJSONArray, filename } of testResults) {
+  for (const filename of testFilenames) {
     it(`${filename} - should have expected properties`, () => {
+
+      const root = path.resolve(process.cwd(), 'test');
+      const filepath = path.join(root, filename);
+      const stdin = readFileSync(filepath).toString();
+      const parsedJSONArray = collect(stdin, root, true, filepath, { line: 0, column: 0 });
+
       chaiExpect(parsedJSONArray).to.be.an('array');
 
       // Filter out the 'path' property because this changes between environments
@@ -59,8 +57,8 @@ describe('Format', () => {
 
 const ESLINT_PATH = path.resolve('./node_modules/eslint/bin/eslint.js');
 
-function runEslint(cwd) {
-  const result = spawnSync(ESLINT_PATH, ['**/*.js', '**/*.vue'], { cwd });
+async function runEslint(cwd) {
+  const result = await execa(ESLINT_PATH, ['**/*.js', '**/*.vue'], { cwd });
   result.stdout = result.stdout && result.stdout.toString();
   result.stderr = result.stderr && result.stderr.toString();
   return result;
@@ -122,7 +120,6 @@ const eslintConfig = (enforceMinCoverage, html) => `
     plugins: [${html ? `'html', 'vue',` : ''}'flowtype-errors'],
     settings: {
       'flowtype-errors': {
-        flowDir: './subdir',
         stopOnExit: 'true'
       }
     },
@@ -154,7 +151,7 @@ describe('Check codebases', () => {
       folder = codebase;
     }
 
-    it(`${title} - eslint should give expected output`, () => {
+    it(`${title} - eslint should give expected output`, async() => { // eslint-disable-line no-loop-func
       const fullFolder = path.resolve(`./test/codebases/${folder}`);
       const configPath = path.resolve(fullFolder, '.eslintrc.js');
 
@@ -165,7 +162,7 @@ describe('Check codebases', () => {
       );
 
       // Spawn a eslint process
-      const { stdout, stderr } = runEslint(fullFolder);
+      const { stdout, stderr } = await runEslint(fullFolder);
 
       const regexp = new RegExp(
         `^${fullFolder.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')}.+\\.(js|vue)$`,
