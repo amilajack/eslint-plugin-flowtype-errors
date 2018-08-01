@@ -60,7 +60,7 @@ describe('Format', () => {
 const ESLINT_PATH = path.resolve('./node_modules/eslint/bin/eslint.js');
 
 async function runEslint(cwd) {
-  const result = await execa(ESLINT_PATH, ['**/*.js', '**/*.vue'], { cwd });
+  const result = await execa(ESLINT_PATH, ['**/*.js', '**/*.vue'], { cwd, stripEof: false });
   result.stdout = result.stdout && result.stdout.toString();
   result.stderr = result.stderr && result.stderr.toString();
   return result;
