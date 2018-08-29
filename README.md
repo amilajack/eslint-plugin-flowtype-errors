@@ -32,12 +32,12 @@ npm install --save-dev eslint-plugin-flowtype-errors
 
 Add this line to the 'rules' section of your `.eslintrc` to report flow errors.
 ```js
-"flowtype-errors/show-errors": 2
+"flowtype-errors/show-errors": "error"
 ```
 
 Add this line to the 'rules' section of your `.eslintrc` to report flow warnings.
 ```js
-"flowtype-errors/show-warnings": 1
+"flowtype-errors/show-warnings": "warn"
 ```
 Note that flow won't report warnings unless you add this setting to your `.flowconfig`:
 ```toml
@@ -47,7 +47,7 @@ include_warnings=true
 
 Add this line to the 'rules' section of your `.eslintrc` to enforce a minimum percentage of flow coverage per file (optional). Here's an example of enforcing a converage of at least 50%:
 ```js
-"flowtype-errors/enforce-min-coverage": [2, 50]
+"flowtype-errors/enforce-min-coverage": ["error", 50]
 ```
 
 Add this line to the 'plugins' section of your `.eslintrc`
