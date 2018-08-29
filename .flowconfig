@@ -1,5 +1,4 @@
 [ignore]
-.*/node_modules/.*
 .*/git/.*
 .*/test/codebases/.*
 .*/test/.*\.example\.js
