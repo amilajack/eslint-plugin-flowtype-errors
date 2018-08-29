@@ -5,7 +5,7 @@ eslint-plugin-flowtype-errors
 [![Build status](https://ci.appveyor.com/api/projects/status/ag1pm0a914bed8c8/branch/master?svg=true)](https://ci.appveyor.com/project/amilajack/eslint-plugin-flowtype-errors/branch/master)
 [![NPM version](https://badge.fury.io/js/eslint-plugin-flowtype-errors.svg)](http://badge.fury.io/js/eslint-plugin-flowtype-errors)
 [![Dependency Status](https://img.shields.io/david/amilajack/eslint-plugin-flowtype-errors.svg)](https://david-dm.org/amilajack/eslint-plugin-flowtype-errors)
-[![npm](https://img.shields.io/npm/dm/eslint-plugin-flowtype-errors.svg)](https://npm-stat.com/charts.html?package=eslint-plugin-flowtype-errors)
+[![npm](https://img.shields.io/npm/dm/eslint-plugin-flowtype-errors.svg)](https://npm-stat.com/charts.html?package=eslint-plugin-flowtype-errors) [![Greenkeeper badge](https://badges.greenkeeper.io/amilajack/eslint-plugin-flowtype-errors.svg)](https://greenkeeper.io/)
 
 ## Demo
 ![ESLint Flow Demo](https://github.com/amilajack/eslint-plugin-flowtype-errors/blob/master/flow-demo.gif?raw=true)
