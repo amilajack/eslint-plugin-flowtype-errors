@@ -1,14 +1,13 @@
 {
   "presets": [
-    ["env", {
-      "targets": { "node": 4 },
-      "useBuiltIns": true
-    }],
-    "stage-0",
-    "flow"
-  ],
-  "plugins": [
-    "transform-runtime",
-    "add-module-exports"
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": 8
+        }
+      }
+    ],
+    "@babel/preset-flow"
   ]
 }
