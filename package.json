@@ -14,7 +14,7 @@
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
     "prettier": "prettier --single-quote --write \"./src/*.js\"",
     "preversion": "yarn build",
-    "spec": "yarn build && jest test/format.spec.js",
+    "spec": "yarn build && jest .",
     "test": "yarn flow && yarn lint && yarn spec"
   },
   "repository": {
