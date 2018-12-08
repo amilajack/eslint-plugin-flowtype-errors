@@ -61,7 +61,7 @@
     "eslint-plugin-flowtype": "^2.50.0",
     "eslint-plugin-html": "^4.0.5",
     "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-prettier": "^2.6.2",
+    "eslint-plugin-prettier": "^2.7.0",
     "eslint-plugin-vue": "^4.7.1",
     "execa": "^1.0.0",
     "flow-bin": "^0.79.1",
