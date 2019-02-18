@@ -62,7 +62,7 @@
     "eslint-plugin-html": "^4.0.5",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^2.6.2",
-    "eslint-plugin-vue": "^4.7.1",
+    "eslint-plugin-vue": "^5.2.2",
     "execa": "^1.0.0",
     "flow-bin": "^0.79.1",
     "jest-cli": "^23.5.0",
