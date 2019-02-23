@@ -64,7 +64,7 @@
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-vue": "^4.7.1",
     "execa": "^1.0.0",
-    "flow-bin": "^0.79.1",
+    "flow-bin": "0.93.0",
     "jest-cli": "^23.5.0",
     "prettier": "^1.14.2",
     "regenerator-runtime": "^0.12.1"
