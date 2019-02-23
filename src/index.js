@@ -152,7 +152,7 @@ function createFilteredErrorRule(filter: CollectOutputElement => any) {
   };
 }
 
-export default {
+module.exports = {
   rules: {
     'enforce-min-coverage': function enforceMinCoverage(
       context: EslintContext
