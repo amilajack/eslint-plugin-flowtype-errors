@@ -5,7 +5,7 @@
 import React, { Component } from 'react';
 
 type Props = {
-  firstName: Object,
+  firstName: number,
   lastName: string
 };
 
