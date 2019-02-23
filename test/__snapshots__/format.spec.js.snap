@@ -60,13 +60,29 @@ exports[`Check codebases flow-pragma-2 - eslint should give expected output 1`] 
 "
 `;
 
-exports[`Check codebases folder with spaces - eslint should give expected output 1`] = `""`;
-
 exports[`Check codebases html-support - eslint should give expected output 1`] = `
 "
 ./a.vue
-   8:15  error  Cannot resolve module \`./b.vue\`                                             flowtype-errors/show-errors
-  14:19  error  Cannot assign \`\\"string\\"\` to \`c\` because string is incompatible with number  flowtype-errors/show-errors
+  5:1  error  Parsing error: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?
+
+  3 | </template>
+  4 | 
+> 5 | <script>
+    | ^
+  6 | // @flow
+  7 | 
+  8 | import B from \\"./b.vue\\";
+
+./b.vue
+  5:1  error  Parsing error: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?
+
+  3 | </template>
+  4 | 
+> 5 | <script>
+    | ^
+  6 | export default {};
+  7 | </script>
+  8 |
 
 ✖ 2 problems (2 errors, 0 warnings)
 

@@ -3,9 +3,7 @@
   "version": "3.6.0",
   "description": "Retrieve Flow errors as ESLint errors.",
   "author": "Amila Welihinda",
-  "bugs": {
-    "url": "https://github.com/amilajack/eslint-plugin-flowtype-errors/issues"
-  },
+  "bugs": "https://github.com/amilajack/eslint-plugin-flowtype-errors/issues",
   "homepage": "https://github.com/amilajack/eslint-plugin-flowtype-errors#readme",
   "main": "index.js",
   "scripts": {
@@ -14,13 +12,10 @@
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
     "prettier": "prettier --single-quote --write \"./src/*.js\"",
     "preversion": "yarn build",
-    "spec": "yarn build && jest test/format.spec.js",
+    "spec": "yarn build && jest",
     "test": "yarn flow && yarn lint && yarn spec"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/amilajack/eslint-plugin-flowtype-errors.git"
-  },
+  "repository": "https://github.com/amilajack/eslint-plugin-flowtype-errors",
   "jest": {
     "testEnvironment": "node"
   },
@@ -35,39 +30,37 @@
     "dist"
   ],
   "dependencies": {
-    "babel-runtime": "^6.26.0",
+    "@babel/runtime": "^7.0.0",
     "find-up": "^3.0.0",
     "slash": "^2.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^9.0.0",
-    "babel-jest": "^23.4.2",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-flow": "^6.23.0",
-    "babel-preset-stage-0": "^6.24.1",
-    "babel-register": "^6.26.0",
-    "chai": "^4.1.2",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.1.0",
+    "chai": "^4.2.0",
     "cross-env": "^5.2.0",
     "cross-spawn": "^6.0.5",
-    "eslint": "4.19.1",
+    "eslint": "5.14.1",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-prettier": "^3.0.1",
-    "eslint-formatter-pretty": "^1.3.0",
-    "eslint-nibble-ignore": "^3.0.0",
-    "eslint-plugin-flowtype": "^2.50.0",
-    "eslint-plugin-html": "^4.0.5",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-prettier": "^2.6.2",
-    "eslint-plugin-vue": "^4.7.1",
+    "eslint-config-prettier": "^4.0.0",
+    "eslint-formatter-pretty": "^2.1.1",
+    "eslint-plugin-flowtype": "^3.4.2",
+    "eslint-plugin-html": "^5.0.3",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-vue": "^5.2.2",
     "execa": "^1.0.0",
     "flow-bin": "0.93.0",
-    "jest-cli": "^23.5.0",
-    "prettier": "^1.14.2",
-    "regenerator-runtime": "^0.12.1"
+    "jest-cli": "^24.1.0",
+    "prettier": "^1.16.4",
+    "regenerator-runtime": "^0.13.1"
   },
   "peerDependencies": {
     "eslint": ">=4.0.0",
@@ -76,5 +69,62 @@
   "engines": {
     "node": ">=4.x",
     "npm": ">=5.x"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": 10
+          },
+          "useBuiltIns": "usage"
+        }
+      ],
+      "@babel/preset-flow"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "airbnb-base",
+      "prettier",
+      "prettier/flowtype"
+    ],
+    "parser": "babel-eslint",
+    "env": {
+      "node": true,
+      "es6": true
+    },
+    "plugins": [
+      "flowtype",
+      "prettier"
+    ],
+    "rules": {
+      "consistent-return": "off",
+      "flowtype/define-flow-type": "error",
+      "fp/no-arguments": "off",
+      "fp/no-class": "off",
+      "fp/no-delete": "off",
+      "fp/no-events": "off",
+      "fp/no-get-set": "off",
+      "fp/no-let": "off",
+      "fp/no-loops": "off",
+      "fp/no-mutating-assign": "off",
+      "fp/no-mutating-methods": "off",
+      "fp/no-mutation": "off",
+      "fp/no-nil": "off",
+      "fp/no-proxy": "off",
+      "fp/no-rest-parameters": "off",
+      "fp/no-this": "off",
+      "fp/no-throw": "off",
+      "fp/no-unused-expression": "off",
+      "fp/no-valueof-field": "off",
+      "prefer-destructuring": "off"
+    }
+  },
+  "renovate": {
+    "extends": [
+      "bliss"
+    ]
   }
 }

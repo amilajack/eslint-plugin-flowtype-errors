@@ -1,2 +1,2 @@
 /* eslint-disable */
-module.exports = require('./dist/index');
+module.exports = require('./dist/index').default;

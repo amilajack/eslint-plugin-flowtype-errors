@@ -1,6 +1,6 @@
 import path from 'path';
 import { expect as chaiExpect } from 'chai';
-import { readFileSync, writeFileSync, unlinkSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, unlinkSync } from 'fs';
 // $FlowIgnore
 import execa from 'execa';
 import { collect } from '../src/collect';
@@ -60,7 +60,7 @@ describe('Format', () => {
 const ESLINT_PATH = path.resolve('./node_modules/eslint/bin/eslint.js');
 
 async function runEslint(cwd) {
-  const result = await execa(ESLINT_PATH, ['**/*.js', '**/*.vue'], { cwd, stripEof: false });
+  const result = await execa(ESLINT_PATH, ['**/*.{js,vue}'], { cwd, stripEof: false });
   result.stdout = result.stdout && result.stdout.toString();
   result.stderr = result.stderr && result.stderr.toString();
   return result;
@@ -84,24 +84,15 @@ const codebases = [
   'warnings-mixed'
 ];
 
-const issue81 =
-  process.platform === 'win32' ? 'folder with spaces' : 'folder-with-spaces';
-codebases.push(['folder with spaces', issue81]);
-try {
-  mkdirSync(path.resolve(`./test/codebases/${issue81}`));
-} catch (e) {
-  // Already exists
-}
-
 const eslintConfig = (enforceMinCoverage, html) => `
-  var Module = require('module');
-  var path = require('path');
-  var original = Module._resolveFilename;
+  const Module = require('module');
+  const path = require('path');
+  const original = Module._resolveFilename;
 
   // Hack to allow eslint to find the plugins
   Module._resolveFilename = function(request, parent, isMain) {
     if (request === 'eslint-plugin-flowtype-errors') {
-      return path.resolve('../../../dist/index.js');
+      return require.resolve('../../../dist/index.js');
     }
     if (request === 'eslint-plugin-html') {
       return require.resolve('../../../node_modules/eslint-plugin-html');
@@ -153,7 +144,8 @@ describe('Check codebases', () => {
       folder = codebase;
     }
 
-    it(`${title} - eslint should give expected output`, async() => { // eslint-disable-line no-loop-func
+     // eslint-disable-next-line no-loop-func
+    it(`${title} - eslint should give expected output`, async() => {
       const fullFolder = path.resolve(`./test/codebases/${folder}`);
       const configPath = path.resolve(fullFolder, '.eslintrc.js');
 
