@@ -1,0 +1,24 @@
+jobs:
+	- job: Linux
+	  pool:
+	    vmImage: 'ubuntu-16.04'
+	  strategy:
+	    matrix:
+	      Node10:
+	        NODE_VERSION: '10.x'
+	
+	- job: Windows
+	  pool:
+	    vmImage: 'vs2017-win2016'
+	  strategy:
+	    matrix:
+	      Node10:
+	        NODE_VERSION: '10.x'
+	
+	- job: Mac
+	  pool:
+	    vmImage: 'macOS-10.13'
+	  strategy:
+	    matrix:
+	      Node10:
+	        NODE_VERSION: '10.x'
