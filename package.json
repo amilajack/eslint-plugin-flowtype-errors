@@ -71,7 +71,7 @@
   },
   "peerDependencies": {
     "eslint": ">=4.0.0",
-    "flow-bin": ">=0.69.0"
+    "flow-bin": ">=0.93.0"
   },
   "engines": {
     "node": ">=4.x",
