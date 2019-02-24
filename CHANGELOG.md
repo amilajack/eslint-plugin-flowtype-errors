@@ -1,3 +1,12 @@
+## v4.0.0
+### Fixed
+- Fix Flow `>= v0.71` on Windows
+### Added
+- Integration with Azure Pipelines
+## Updated
+- New config lookup
+- Upgraded babel, flow, eslint, and all other dependencies to latest semver 🎉🎉🎉 (This may introduce breaking changes)
+
 ## v3.6.0
 ## Updated
 - Bumped all deps to latest semver
