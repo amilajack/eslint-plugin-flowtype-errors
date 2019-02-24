@@ -63,7 +63,7 @@
     "regenerator-runtime": "^0.13.1"
   },
   "peerDependencies": {
-    "eslint": ">=4.0.0",
+    "eslint": ">=5.14.1",
     "flow-bin": ">=0.93.0"
   },
   "engines": {
