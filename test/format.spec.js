@@ -92,7 +92,7 @@ const eslintConfig = (enforceMinCoverage, html) => `
   // Hack to allow eslint to find the plugins
   Module._resolveFilename = function(request, parent, isMain) {
     if (request === 'eslint-plugin-flowtype-errors') {
-      return require.resolve('../../../dist/index.js');
+      return require.resolve('../../../');
     }
     if (request === 'eslint-plugin-html') {
       return require.resolve('../../../node_modules/eslint-plugin-html');
