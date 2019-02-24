@@ -64,16 +64,19 @@ Also make sure that your `.flowconfig` is in the root of your project directory
 
 **Step 3. Settings (optional)**
 
-Add this line to the 'settings' section of your `.eslintrc` if your `.flowconfig` file is located in a different folder than the execution path of eslint.
+Add this line to the 'settings' section of your `.eslintrc` to force the Flow server to stop after it finishes checking types.
+
 ```js
 "settings": {
   "flowtype-errors": {
-    "flowDir": "./myDir"
+    "stopOnExit": true
   }
 },
 ```
 
-Run `eslint` and and you're all set!
+**Step 4. Lint**
+
+Run `eslint` and you're all set!
 
 ## Support
 
