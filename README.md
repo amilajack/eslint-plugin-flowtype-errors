@@ -75,6 +75,16 @@ Add this line to the 'settings' section of your `.eslintrc` if your `.flowconfig
 
 Run `eslint` and and you're all set!
 
+## Support
+
+If this project is saving you (or your team) time, please consider supporting it on Patreon 👍 thank you!
+
+<p>
+  <a href="https://www.patreon.com/amilajack">
+    <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
+  </a>
+</p>
+
 ## CI Configuration
 **Flow is supported on all OS's except Windows 32bit. Add [this line](https://github.com/amilajack/eslint-plugin-flowtype-errors/blob/master/appveyor.yml#L12) to appveyor to make tests run properly.**
 
