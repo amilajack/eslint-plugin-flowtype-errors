@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync, unlinkSync } from 'fs';
 import execa from 'execa';
 import { collect } from '../src/collect';
 
-jest.setTimeout(10000);
+jest.setTimeout(process.platform === 'win32' ? 30000 : 10000);
 
 const testFilenames = [
   '1.example.js',

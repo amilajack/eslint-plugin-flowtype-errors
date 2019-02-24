@@ -226,6 +226,14 @@ function spawnFlow(
     return true;
   }
 
+  /**
+   * Workaround for Windows bug: https://github.com/facebook/flow/issues/6834
+   * Starting the Flow server before running `check-contents` prevents Flow from hanging.
+   */
+  if (process.platform === 'win32') {
+    childProcess.spawnSync(getFlowBin(), ['start', root]);
+  }
+
   const child = childProcess.spawnSync(
     getFlowBin(),
     [mode, '--json', `--root=${root}`, filepath, ...extraOptions],
