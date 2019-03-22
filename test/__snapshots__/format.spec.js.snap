@@ -130,7 +130,7 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
 
 ./9.example.js
   8:18  error  Cannot create \`Hello\` element because property \`name\` is missing in props but exists in object type (see ./9.example.import.js:6)                                                                                                                                                flowtype-errors/show-errors
-  8:28  error  Cannot call \`ReactDOM.render\` with \`document.getElementById(...)\` bound to \`container\` because null (see https://github.com/facebook/flow/blob/v0.93.0/lib/dom.js#L783) is incompatible with \`Element\` (see https://github.com/facebook/flow/blob/v0.93.0/lib/react-dom.js#L18)  flowtype-errors/show-errors
+  8:28  error  Cannot call \`ReactDOM.render\` with \`document.getElementById(...)\` bound to \`container\` because null (see https://github.com/facebook/flow/blob/v0.95.1/lib/dom.js#L785) is incompatible with \`Element\` (see https://github.com/facebook/flow/blob/v0.95.1/lib/react-dom.js#L18)  flowtype-errors/show-errors
 
 ✖ 21 problems (21 errors, 0 warnings)
 
@@ -600,7 +600,7 @@ Array [
         "offset": 170,
       },
     },
-    "message": "Cannot call \`ReactDOM.render\` with \`document.getElementById(...)\` bound to \`container\` because null (see https://github.com/facebook/flow/blob/v0.93.0/lib/dom.js#L783) is incompatible with \`Element\` (see https://github.com/facebook/flow/blob/v0.93.0/lib/react-dom.js#L18).",
+    "message": "Cannot call \`ReactDOM.render\` with \`document.getElementById(...)\` bound to \`container\` because null (see https://github.com/facebook/flow/blob/v0.95.1/lib/dom.js#L785) is incompatible with \`Element\` (see https://github.com/facebook/flow/blob/v0.95.1/lib/react-dom.js#L18).",
     "start": 9,
     "type": "default",
   },
