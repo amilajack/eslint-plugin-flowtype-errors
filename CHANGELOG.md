@@ -1,4 +1,8 @@
 ## v4.0.0
+### Added
+- Recommended config 🎉
+
+## v4.0.0
 ### Fixed
 - Fix Flow `>= v0.71` on Windows
 ### Added
