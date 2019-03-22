@@ -33,13 +33,9 @@ npm install --save-dev eslint-plugin-flowtype-errors
 Extend the recommended config:
 ```jsonc
 {
-  "extends": ["plugin:compat/recommended"]
+  "extends": ["plugin:flowtype-errors/recommended"]
 }
 ```
-
-### **3. Lint**
-
-Run `eslint` and you're all set!
 
 ## Support
 

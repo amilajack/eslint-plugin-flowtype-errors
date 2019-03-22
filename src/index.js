@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs';
 // $FlowIgnore
 import findUp from 'find-up';
+import recommended from './config/recommended';
 import {
   type CollectOutputElement,
   FlowSeverity,
@@ -153,6 +154,9 @@ function createFilteredErrorRule(filter: CollectOutputElement => any) {
 }
 
 export default {
+  configs: {
+    recommended
+  },
   rules: {
     'enforce-min-coverage': function enforceMinCoverage(
       context: EslintContext
