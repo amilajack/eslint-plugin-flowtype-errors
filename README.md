@@ -55,3 +55,4 @@ Flow is supported on all OS's except Windows 32bit. Add [this line](https://gith
 
 * [flow-runtime](https://github.com/codemix/flow-runtime)
 * [eslint-plugin-flowtype](https://github.com/gajus/eslint-plugin-flowtype)
+* [eslint-plugin-flowtype-errors-demo](https://github.com/amilajack/eslint-plugin-flowtype-errors-demo)
