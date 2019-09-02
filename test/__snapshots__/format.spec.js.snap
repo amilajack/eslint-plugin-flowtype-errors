@@ -89,6 +89,17 @@ exports[`Check codebases html-support - eslint should give expected output 1`] =
 "
 `;
 
+exports[`Check codebases libdefs - eslint should give expected output 1`] = `
+"
+./example.js
+  4:8   error  Cannot call \`add\` with \`'2'\` bound to \`b\` because string is incompatible with number (see ./flow-typed/libdef.js:1)                                  flowtype-errors/show-errors
+  6:21  error  Cannot assign \`Date.now()\` to \`str\` because number (see https://github.com/facebook/flow/blob/v0.95.1/lib/core.js#L405) is incompatible with string  flowtype-errors/show-errors
+
+✖ 2 problems (2 errors, 0 warnings)
+
+"
+`;
+
 exports[`Check codebases no-flow-pragma - eslint should give expected output 1`] = `""`;
 
 exports[`Check codebases project-1 - eslint should give expected output 1`] = `

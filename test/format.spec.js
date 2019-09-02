@@ -75,6 +75,7 @@ const codebases = [
   'flow-pragma-1',
   'flow-pragma-2',
   'html-support',
+  'libdefs',
   'no-flow-pragma',
   'project-1',
   'run-all',
