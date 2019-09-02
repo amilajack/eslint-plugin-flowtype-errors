@@ -142,7 +142,7 @@ function formatSeePath(
     return '??';
   }
 
-  return loc.type === 'LibFile'
+  return loc.type === 'LibFile' && !loc.source.startsWith(root)
     ? `https://github.com/facebook/flow/blob/v${flowVersion}/lib/${pathModule.basename(
         loc.source
       )}#L${loc.start.line}`
