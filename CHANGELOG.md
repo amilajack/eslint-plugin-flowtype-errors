@@ -1,3 +1,9 @@
+## v4.2.0
+### Added
+- Support for libdefs
+### Updated
+- All dependencies to latest semver
+
 ## v4.1.0
 ### Added
 - Recommended config 🎉
