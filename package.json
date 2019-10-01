@@ -49,7 +49,7 @@
     "cross-spawn": "^6.0.5",
     "eslint": "6.3.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.1.0",
+    "eslint-config-prettier": "^6.3.0",
     "eslint-formatter-pretty": "^2.1.1",
     "eslint-plugin-flowtype": "^4.2.0",
     "eslint-plugin-html": "^6.0.0",
