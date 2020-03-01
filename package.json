@@ -61,8 +61,7 @@
     "flow-bin": "0.119.1",
     "husky": "^4.2.3",
     "jest-cli": "^25.1.0",
-    "prettier": "^1.19.1",
-    "regenerator-runtime": "^0.13.3"
+    "prettier": "^1.19.1"
   },
   "peerDependencies": {
     "eslint": ">=5.16.0",
