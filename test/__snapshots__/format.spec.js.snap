@@ -87,7 +87,7 @@ exports[`Check codebases libdefs - eslint should give expected output 1`] = `
 "
 ./example.js
   4:8   error  Cannot call \`add\` with \`'2'\` bound to \`b\` because string is incompatible with number (see ./flow-typed/libdef.js:1)                                   flowtype-errors/show-errors
-  6:21  error  Cannot assign \`Date.now()\` to \`str\` because number (see https://github.com/facebook/flow/blob/v0.106.3/lib/core.js#L435) is incompatible with string  flowtype-errors/show-errors
+  6:21  error  Cannot assign \`Date.now()\` to \`str\` because number (see https://github.com/facebook/flow/blob/v0.119.1/lib/core.js#L438) is incompatible with string  flowtype-errors/show-errors
 
 ✖ 2 problems (2 errors, 0 warnings)
 "
@@ -107,16 +107,19 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
   12:6   error  Cannot resolve name \`x\`          flowtype-errors/show-errors
 
 ./3.example.js
-   9:10  error  Cannot return \`'undefined'\` because string is incompatible with number (see line 8)                  flowtype-errors/show-errors
-  13:10  error  Cannot return \`some\` because string (see line 12) is incompatible with number (see line 12)          flowtype-errors/show-errors
-  16:19  error  Cannot assign \`'hello world!'\` to \`str\` because string is incompatible with number                   flowtype-errors/show-errors
-  18:7   error  Cannot declare \`who\` (see line 12) because the name is already bound                                 flowtype-errors/show-errors
-  20:5   error  Cannot call \`moo\` because no arguments are expected by function (see line 8)                         flowtype-errors/show-errors
-  20:11  error  Cannot add \`str\` and \`who\` because function (see line 12) is incompatible with number (see line 16)  flowtype-errors/show-errors
+  18:7  error  Parsing error: Identifier 'who' has already been declared
+
+  16 | var str: number = 'hello world!';
+  17 | 
+> 18 | const who = {};
+     |       ^
+  19 | 
+  20 | moo(str + who);
+  21 |
 
 ./4.example.js
-  27:13  error  Cannot create \`Foo\` element because property \`lastName\` is missing in props but exists in \`Props\` (see line 11)  flowtype-errors/show-errors
-  27:27  error  Cannot create \`Foo\` element because string is incompatible with number (see line 7) in property \`firstName\`      flowtype-errors/show-errors
+  27:13  error  Cannot create \`Foo\` element because property \`lastName\` (did you mean \`firstName\`?) is missing in props but exists in \`Props\` (see line 11)  flowtype-errors/show-errors
+  27:27  error  Cannot create \`Foo\` element because string is incompatible with number (see line 7) in property \`firstName\`                                  flowtype-errors/show-errors
 
 ./5.example.js
   8:3  error  Cannot call \`s\` with \`'4'\` bound to \`x\` because string is incompatible with number (see line 4)  flowtype-errors/show-errors
@@ -133,10 +136,10 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
   8:5  error  Cannot call \`foo\` with object literal bound to \`bar\` because property \`baz\` is missing in object literal but exists in object type (see ./6.example.js:4)  flowtype-errors/show-errors
 
 ./9.example.js
-  8:18  error  Cannot create \`Hello\` element because property \`name\` is missing in props but exists in object type (see ./9.example.import.js:6)                                                                                                                                                  flowtype-errors/show-errors
-  8:28  error  Cannot call \`ReactDOM.render\` with \`document.getElementById(...)\` bound to \`container\` because null (see https://github.com/facebook/flow/blob/v0.106.3/lib/dom.js#L806) is incompatible with \`Element\` (see https://github.com/facebook/flow/blob/v0.106.3/lib/react-dom.js#L18)  flowtype-errors/show-errors
+  8:18  error  Cannot create \`Hello\` element because property \`name\` is missing in props but exists in object type (see ./9.example.import.js:6)                                                                                                                                                   flowtype-errors/show-errors
+  8:28  error  Cannot call \`ReactDOM.render\` with \`document.getElementById(...)\` bound to \`container\` because null (see https://github.com/facebook/flow/blob/v0.119.1/lib/dom.js#L1248) is incompatible with \`Element\` (see https://github.com/facebook/flow/blob/v0.119.1/lib/react-dom.js#L18)  flowtype-errors/show-errors
 
-✖ 21 problems (21 errors, 0 warnings)
+✖ 16 problems (16 errors, 0 warnings)
 "
 `;
 
@@ -343,54 +346,36 @@ Array [
     "end": 19,
     "loc": Object {
       "end": Object {
-        "column": 9,
+        "column": 12,
         "line": 19,
-        "offset": 256,
+        "offset": 259,
       },
       "start": Object {
-        "column": 7,
+        "column": 5,
         "line": 19,
-        "offset": 253,
+        "offset": 251,
       },
     },
-    "message": "Cannot declare \`who\` (see line 13) because the name is already bound.",
+    "message": "Cannot call \`moo\` because no arguments are expected by function (see line 9).",
     "start": 19,
     "type": "default",
   },
   Object {
-    "end": 21,
+    "end": 19,
     "loc": Object {
       "end": Object {
-        "column": 13,
-        "line": 21,
-        "offset": 277,
-      },
-      "start": Object {
-        "column": 5,
-        "line": 21,
-        "offset": 268,
-      },
-    },
-    "message": "Cannot call \`moo\` because no arguments are expected by function (see line 9).",
-    "start": 21,
-    "type": "default",
-  },
-  Object {
-    "end": 21,
-    "loc": Object {
-      "end": Object {
-        "column": 13,
-        "line": 21,
-        "offset": 277,
+        "column": 12,
+        "line": 19,
+        "offset": 259,
       },
       "start": Object {
         "column": 11,
-        "line": 21,
-        "offset": 274,
+        "line": 19,
+        "offset": 257,
       },
     },
-    "message": "Cannot add \`str\` and \`who\` because function (see line 13) is incompatible with number (see line 17).",
-    "start": 21,
+    "message": "Cannot add \`str\` and object literal because object literal is incompatible with number (see line 17).",
+    "start": 19,
     "type": "default",
   },
 ]
@@ -412,7 +397,7 @@ Array [
         "offset": 428,
       },
     },
-    "message": "Cannot create \`Foo\` element because property \`lastName\` is missing in props but exists in \`Props\` (see line 12).",
+    "message": "Cannot create \`Foo\` element because property \`lastName\` (did you mean \`firstName\`?) is missing in props but exists in \`Props\` (see line 12).",
     "start": 28,
     "type": "default",
   },
@@ -599,7 +584,7 @@ Array [
         "offset": 170,
       },
     },
-    "message": "Cannot call \`ReactDOM.render\` with \`document.getElementById(...)\` bound to \`container\` because null (see https://github.com/facebook/flow/blob/v0.106.3/lib/dom.js#L806) is incompatible with \`Element\` (see https://github.com/facebook/flow/blob/v0.106.3/lib/react-dom.js#L18).",
+    "message": "Cannot call \`ReactDOM.render\` with \`document.getElementById(...)\` bound to \`container\` because null (see https://github.com/facebook/flow/blob/v0.119.1/lib/dom.js#L1248) is incompatible with \`Element\` (see https://github.com/facebook/flow/blob/v0.119.1/lib/react-dom.js#L18).",
     "start": 9,
     "type": "default",
   },

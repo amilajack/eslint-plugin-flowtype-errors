@@ -16,6 +16,4 @@ export function who(some: string): number {
 
 var str: number = 'hello world!';
 
-const who = {};
-
-moo(str + who);
+moo(str + {});

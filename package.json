@@ -31,35 +31,36 @@
   ],
   "dependencies": {
     "@babel/runtime": "^7.8.4",
+    "core-js": "3",
     "find-up": "^4.1.0",
     "slash": "^3.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.4",
+    "@babel/core": "^7.8.6",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-env": "^7.8.6",
     "@babel/preset-flow": "^7.8.3",
-    "@babel/register": "^7.8.3",
+    "@babel/register": "^7.8.6",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-eslint": "^10.0.3",
-    "babel-jest": "^24.9.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^25.1.0",
     "chai": "^4.2.0",
-    "cross-env": "^5.2.1",
-    "cross-spawn": "^6.0.5",
+    "cross-env": "^7.0.0",
+    "cross-spawn": "^7.0.1",
     "eslint": "6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.10.0",
-    "eslint-formatter-pretty": "^2.1.1",
+    "eslint-formatter-pretty": "^3.0.1",
     "eslint-plugin-flowtype": "^4.6.0",
     "eslint-plugin-html": "^6.0.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-vue": "^5.2.3",
-    "execa": "^2.1.0",
-    "flow-bin": "0.106.3",
-    "husky": "^3.1.0",
-    "jest-cli": "^24.9.0",
+    "eslint-plugin-vue": "^6.2.1",
+    "execa": "^4.0.0",
+    "flow-bin": "0.119.1",
+    "husky": "^4.2.3",
+    "jest-cli": "^25.1.0",
     "prettier": "^1.19.1",
     "regenerator-runtime": "^0.13.3"
   },
@@ -79,7 +80,8 @@
           "targets": {
             "node": 10
           },
-          "useBuiltIns": "usage"
+          "useBuiltIns": "usage",
+          "corejs": 3
         }
       ],
       "@babel/preset-flow"
