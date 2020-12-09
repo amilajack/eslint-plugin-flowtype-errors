@@ -26,6 +26,8 @@ type EslintContext = {
   options: any[],
 };
 
+type ReturnRule = { Program: (node: Object) => void }
+
 type Info = {
   flowDir: string,
   program: Program,
@@ -103,8 +105,8 @@ function errorFlowCouldNotRun(loc) {
   };
 }
 
-function createFilteredErrorRule(filter: (CollectOutputElement) => any) {
-  return function showErrors(context: EslintContext) {
+function createFilteredErrorRule(filter: (CollectOutputElement) => any): (context: EslintContext) => ReturnRule {
+  return function showErrors(context: EslintContext): ReturnRule {
     return {
       Program(node: Object) {
         const source = context.getSourceCode();
@@ -187,7 +189,7 @@ export default {
     recommended,
   },
   rules: {
-    uncovered: function showCoverage(context: EslintContext) {
+    uncovered: function showCoverage(context: EslintContext): ReturnRule {
       return {
         Program(node: Object) {
           const res = getCoverage(context, node);
@@ -213,7 +215,7 @@ export default {
     },
     'enforce-min-coverage': function enforceMinCoverage(
       context: EslintContext
-    ) {
+    ): ReturnRule {
       return {
         Program(node: Object) {
           const res = getCoverage(context, node);
@@ -240,11 +242,11 @@ export default {
         },
       };
     },
-    'show-errors': createFilteredErrorRule(
+    'show-errors': (createFilteredErrorRule(
       ({ level }) => level !== FlowSeverity.Warning
-    ),
-    'show-warnings': createFilteredErrorRule(
+    ) : (context: EslintContext) => ReturnRule),
+    'show-warnings': (createFilteredErrorRule(
       ({ level }) => level === FlowSeverity.Warning
-    ),
+    ) : (context: EslintContext) => ReturnRule),
   },
 };
