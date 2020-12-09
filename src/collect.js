@@ -238,7 +238,13 @@ function spawnFlow(
 
   const child = childProcess.spawnSync(
     getFlowBin(),
-    [mode, '--json', `--root=${root}`, filepath, ...extraOptions],
+    [
+      mode,
+      '--json',
+      `--root=${root}`,
+      mode === 'coverage' ? `--path=${filepath}` : filepath,
+      ...extraOptions,
+    ],
     {
       cwd: root,
       input,
@@ -358,6 +364,10 @@ export function collect(
 type CoverageOutput = {
   coveredCount: number,
   uncoveredCount: number,
+  uncoveredLocs: $ReadOnlyArray<{
+    ...Loc,
+    source: string,
+  }>,
 };
 
 export function coverage(
@@ -380,11 +390,13 @@ export function coverage(
     return {
       coveredCount: 0,
       uncoveredCount: 0,
+      uncoveredLocs: [],
     };
   }
 
   return {
     coveredCount: expressions.covered_count,
     uncoveredCount: expressions.uncovered_count,
+    uncoveredLocs: expressions.uncovered_locs,
   };
 }
