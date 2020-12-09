@@ -17,7 +17,7 @@ type EslintContext = {
   getAllComments: () => { value: string }[],
   getFilename: () => string,
   getSourceCode: () => Object,
-  report: ({ loc: Loc, message: string }) => void,
+  report: ({ loc: {start: Loc, end: Loc}, message: string }) => void,
   settings: ?{
     'flowtype-errors': ?{
       stopOnExit?: any,
@@ -187,7 +187,7 @@ export default {
     recommended,
   },
   rules: {
-    'show-coverage': function showCoverage(context: EslintContext) {
+    uncovered: function showCoverage(context: EslintContext) {
       return {
         Program(node: Object) {
           const res = getCoverage(context, node);
@@ -196,13 +196,16 @@ export default {
           }
 
           res.coverageInfo.uncoveredLocs.forEach((loc) => {
-            const message =
-              loc.end.line === loc.start.line
-                ? `on line ${loc.start.line}`
-                : `from line ${loc.start.line} to line ${loc.end.line}`;
             context.report({
-              loc,
-              message: `Uncovered expression ${message}`,
+              loc: {
+                start: {
+                  line: loc.start.line,
+                  // Flow's and eslint's column reporting don't agree
+                  column: loc.start.column-1,
+                },
+                end: loc.end,
+              },
+              message: `Uncovered expression! Try adding annotations to inform flow of the type.`,
             });
           });
         },
