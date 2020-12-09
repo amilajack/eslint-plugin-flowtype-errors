@@ -168,6 +168,18 @@ exports[`Check codebases run-all-flowdir - eslint should give expected output 1`
 "
 `;
 
+exports[`Check codebases uncovered-example - eslint should give expected output 1`] = `
+"
+./example.js
+   3:7   error  Uncovered expression! Try adding annotations to inform flow of the type  flowtype-errors/uncovered
+   9:1   error  Uncovered expression! Try adding annotations to inform flow of the type  flowtype-errors/uncovered
+  16:26  error  Uncovered expression! Try adding annotations to inform flow of the type  flowtype-errors/uncovered
+  17:14  error  Uncovered expression! Try adding annotations to inform flow of the type  flowtype-errors/uncovered
+
+✖ 4 problems (4 errors, 0 warnings)
+"
+`;
+
 exports[`Check codebases warnings-all - eslint should give expected output 1`] = `
 "
 ./example.js

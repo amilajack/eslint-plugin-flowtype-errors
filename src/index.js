@@ -201,7 +201,7 @@ export default {
                 start: {
                   line: loc.start.line,
                   // Flow's and eslint's column reporting don't agree
-                  column: loc.start.column-1,
+                  column: loc.start.column - 1,
                 },
                 end: loc.end,
               },

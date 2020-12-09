@@ -238,7 +238,13 @@ function spawnFlow(
 
   const child = childProcess.spawnSync(
     getFlowBin(),
-    [mode, '--json', `--root=${root}`, mode === 'coverage' ? `--path=${filepath}` : filepath, ...extraOptions],
+    [
+      mode,
+      '--json',
+      `--root=${root}`,
+      mode === 'coverage' ? `--path=${filepath}` : filepath,
+      ...extraOptions,
+    ],
     {
       cwd: root,
       input,

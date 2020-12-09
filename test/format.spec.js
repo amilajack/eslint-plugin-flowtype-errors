@@ -17,7 +17,7 @@ const testFilenames = [
   '7.example.js',
   '8.example.js',
   '9.example.js',
-  '10.example.js'
+  '10.example.js',
 ];
 
 describe('Format', () => {
@@ -82,10 +82,11 @@ const codebases = [
   'run-all-flowdir',
   'warnings-all',
   'warnings-default',
-  'warnings-mixed'
+  'warnings-mixed',
+  'uncovered-example'
 ];
 
-const eslintConfig = (enforceMinCoverage, html) => `
+const eslintConfig = (enforceMinCoverage, checkUncovered, html) => `
   const Module = require('module');
   const path = require('path');
   const original = Module._resolveFilename;
@@ -119,15 +120,10 @@ const eslintConfig = (enforceMinCoverage, html) => `
     },
     rules: {
       ${enforceMinCoverage
-        ? `
-        'flowtype-errors/show-errors': 2,
-        'flowtype-errors/show-warnings': 1,
-        'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}]
-      `
-        : `
+        ? `'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}],` : ``}
+        ${checkUncovered ? `'flowtype-errors/uncovered': 2,` : ''}
         'flowtype-errors/show-errors': 2,
         'flowtype-errors/show-warnings': 1
-      `}
     }
   };
 `;
@@ -153,7 +149,11 @@ describe('Check codebases', () => {
       // Write config file
       writeFileSync(
         configPath,
-        eslintConfig(folder.match(/^coverage-/) ? 50 : 0, /html-support/.test(folder))
+        eslintConfig(
+          folder.match(/^coverage-/) ? 50 : 0,
+          !!folder.match(/^uncovered-/),
+          /html-support/.test(folder)
+        )
       );
 
       // Spawn a eslint process
