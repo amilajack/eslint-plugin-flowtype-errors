@@ -2,8 +2,8 @@
 /**
  * @flow
  */
-import React from 'react';
+import * as React from 'react'
 
-export default function Hello({ name = 'World' }: { name: string }) {
+export default function Hello({ name = 'World' }: { name: string }): React.Node {
   return <p>Hello, {name}!</p>;
 }
