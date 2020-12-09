@@ -2,17 +2,17 @@
 
 type Pos = {
   line: number,
-  column: number
+  column: number,
 };
 
 export type Loc = {
   start: Pos,
-  end: Pos
+  end: Pos,
 };
 
 export type Program = { text: string, loc: Loc, offset: Pos };
 
-export default function(source: Object, node: Object): ?Program {
+export default function getProgram(source: Object, node: Object): ?Program {
   // Ignore if body is empty.
   if (node.body.length === 0) {
     return;
@@ -31,20 +31,20 @@ export default function(source: Object, node: Object): ?Program {
       node.range[0] < comments0.range[0]
         ? {
             line: body0.loc.start.line,
-            column: body0.loc.start.column
+            column: body0.loc.start.column,
           }
         : {
             line: comments0.loc.start.line,
-            column: comments0.loc.start.column
+            column: comments0.loc.start.column,
           };
     range = [
       Math.min(node.range[0], comments0.range[0]),
-      Math.max(node.range[1], node.comments[node.comments.length - 1].range[1])
+      Math.max(node.range[1], node.comments[node.comments.length - 1].range[1]),
     ];
   } else {
     start = {
       line: body0.loc.start.line,
-      column: body0.loc.start.column
+      column: body0.loc.start.column,
     };
     range = node.range;
   }
@@ -53,11 +53,11 @@ export default function(source: Object, node: Object): ?Program {
     text: source.text.slice(range[0], range[1]),
     loc: {
       start,
-      end: start
+      end: start,
     },
     offset: {
       line: start.line - 1,
-      column: start.column
-    }
+      column: start.column,
+    },
   };
 }

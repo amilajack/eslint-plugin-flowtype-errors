@@ -9,7 +9,7 @@ import {
   type CollectOutputElement,
   FlowSeverity,
   collect,
-  coverage
+  coverage,
 } from './collect';
 import getProgram, { type Program, type Loc } from './get-program';
 
@@ -20,26 +20,26 @@ type EslintContext = {
   report: ({ loc: Loc, message: string }) => void,
   settings: ?{
     'flowtype-errors': ?{
-      stopOnExit?: any
-    }
+      stopOnExit?: any,
+    },
   },
-  options: any[]
+  options: any[],
 };
 
 type Info = {
   flowDir: string,
-  program: Program
+  program: Program,
 };
 
 const DEFAULT_LOC = {
   start: {
     line: 1,
-    column: 0
+    column: 0,
   },
   end: {
     line: 1,
-    column: 0
-  }
+    column: 0,
+  },
 };
 
 function lookupInfo(
@@ -48,14 +48,14 @@ function lookupInfo(
   node: Object
 ): ?Info {
   const flowconfigFile = findUp.sync('.flowconfig', {
-    cwd: path.dirname(context.getFilename())
+    cwd: path.dirname(context.getFilename()),
   });
 
   if (flowconfigFile == null) {
     const program = getProgram(source, node);
     context.report({
       loc: program ? program.loc : DEFAULT_LOC,
-      message: "Could not find '.flowconfig' file"
+      message: "Could not find '.flowconfig' file",
     });
     return null;
   }
@@ -68,14 +68,14 @@ function lookupInfo(
 
   const shouldRun =
     runOnAllFiles ||
-    source.getAllComments().some(comment => /@flow/.test(comment.value));
+    source.getAllComments().some((comment) => /@flow/.test(comment.value));
 
   const program = shouldRun && getProgram(source, node);
 
   if (program) {
     return {
       flowDir,
-      program
+      program,
     };
   }
 
@@ -99,11 +99,11 @@ function errorFlowCouldNotRun(loc) {
   * FLOW_BIN environment variable ${
     process.env.FLOW_BIN ? 'set incorrectly' : 'not set'
   }
-.`
+.`,
   };
 }
 
-function createFilteredErrorRule(filter: CollectOutputElement => any) {
+function createFilteredErrorRule(filter: (CollectOutputElement) => any) {
   return function showErrors(context: EslintContext) {
     return {
       Program(node: Object) {
@@ -141,21 +141,21 @@ function createFilteredErrorRule(filter: CollectOutputElement => any) {
                   start: {
                     ...loc.start,
                     // Flow's column numbers are 1-based, while ESLint's are 0-based.
-                    column: loc.start.column - 1
-                  }
+                    column: loc.start.column - 1,
+                  },
                 }
               : loc,
-            message
+            message,
           });
         });
-      }
+      },
     };
   };
 }
 
 export default {
   configs: {
-    recommended
+    recommended,
   },
   rules: {
     'enforce-min-coverage': function enforceMinCoverage(
@@ -193,17 +193,18 @@ export default {
 
           /* eslint prefer-template: 0 */
           const percentage = Number(
-            Math.round(coveredCount / (coveredCount + uncoveredCount) * 10000) +
-              'e-2'
+            Math.round(
+              (coveredCount / (coveredCount + uncoveredCount)) * 10000
+            ) + 'e-2'
           );
 
           if (percentage < requiredCoverage) {
             context.report({
               loc: program.loc,
-              message: `Expected coverage to be at least ${requiredCoverage}%, but is: ${percentage}%`
+              message: `Expected coverage to be at least ${requiredCoverage}%, but is: ${percentage}%`,
             });
           }
-        }
+        },
       };
     },
     'show-errors': createFilteredErrorRule(
@@ -211,6 +212,6 @@ export default {
     ),
     'show-warnings': createFilteredErrorRule(
       ({ level }) => level === FlowSeverity.Warning
-    )
-  }
+    ),
+  },
 };
