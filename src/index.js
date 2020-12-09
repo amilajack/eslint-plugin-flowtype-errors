@@ -153,43 +153,73 @@ function createFilteredErrorRule(filter: (CollectOutputElement) => any) {
   };
 }
 
+const getCoverage = (context, node) => {
+  const source = context.getSourceCode();
+  const info = lookupInfo(context, source, node);
+
+  if (!info) {
+    return;
+  }
+
+  const { flowDir, program } = info;
+
+  const coverageInfo = coverage(
+    program.text,
+    flowDir,
+    stopOnExit(context),
+    context.getFilename()
+  );
+
+  if (coverageInfo === true) {
+    return;
+  }
+
+  if (coverageInfo === false) {
+    context.report(errorFlowCouldNotRun(program.loc));
+    return;
+  }
+
+  return { program, coverageInfo };
+};
+
 export default {
   configs: {
     recommended,
   },
   rules: {
+    'show-coverage': function showCoverage(context: EslintContext) {
+      return {
+        Program(node: Object) {
+          const res = getCoverage(context, node);
+          if (!res) {
+            return;
+          }
+
+          res.coverageInfo.uncoveredLocs.forEach((loc) => {
+            const message =
+              loc.end.line === loc.start.line
+                ? `on line ${loc.start.line}`
+                : `from line ${loc.start.line} to line ${loc.end.line}`;
+            context.report({
+              loc,
+              message: `Uncovered expression ${message}`,
+            });
+          });
+        },
+      };
+    },
     'enforce-min-coverage': function enforceMinCoverage(
       context: EslintContext
     ) {
       return {
         Program(node: Object) {
-          const source = context.getSourceCode();
-          const info = lookupInfo(context, source, node);
-
-          if (!info) {
-            return;
-          }
-
-          const { flowDir, program } = info;
-
-          const res = coverage(
-            program.text,
-            flowDir,
-            stopOnExit(context),
-            context.getFilename()
-          );
-
-          if (res === true) {
-            return;
-          }
-
-          if (res === false) {
-            context.report(errorFlowCouldNotRun(program.loc));
+          const res = getCoverage(context, node);
+          if (!res) {
             return;
           }
 
           const requiredCoverage = context.options[0];
-          const { coveredCount, uncoveredCount } = res;
+          const { coveredCount, uncoveredCount } = res.coverageInfo;
 
           /* eslint prefer-template: 0 */
           const percentage = Number(
@@ -200,7 +230,7 @@ export default {
 
           if (percentage < requiredCoverage) {
             context.report({
-              loc: program.loc,
+              loc: res.program.loc,
               message: `Expected coverage to be at least ${requiredCoverage}%, but is: ${percentage}%`,
             });
           }
