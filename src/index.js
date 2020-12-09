@@ -17,7 +17,7 @@ type EslintContext = {
   getAllComments: () => { value: string }[],
   getFilename: () => string,
   getSourceCode: () => Object,
-  report: ({ loc: {start: Loc, end: Loc}, message: string }) => void,
+  report: ({ loc: Loc, message: string }) => void,
   settings: ?{
     'flowtype-errors': ?{
       stopOnExit?: any,
