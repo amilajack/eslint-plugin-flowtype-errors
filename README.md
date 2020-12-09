@@ -1,7 +1,7 @@
 eslint-plugin-flowtype-errors
 =============================
 
-[![Build Status](https://dev.azure.com/amilajack/amilajack/_apis/build/status/amilajack.eslint-plugin-flowtype-errors?branchName=master)](https://dev.azure.com/amilajack/amilajack/_build/latest?definitionId=1&branchName=master)
+![Test](https://github.com/amilajack/eslint-plugin-flowtype-errors/workflows/Test/badge.svg)
 [![NPM version](https://badge.fury.io/js/eslint-plugin-flowtype-errors.svg)](http://badge.fury.io/js/eslint-plugin-flowtype-errors)
 [![Dependency Status](https://img.shields.io/david/amilajack/eslint-plugin-flowtype-errors.svg)](https://david-dm.org/amilajack/eslint-plugin-flowtype-errors)
 [![npm](https://img.shields.io/npm/dm/eslint-plugin-flowtype-errors.svg)](https://npm-stat.com/charts.html?package=eslint-plugin-flowtype-errors)
