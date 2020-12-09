@@ -13,8 +13,8 @@ function fomatMessage(description) {
 }
 
 export default function filter(messages) {
-  return messages.map(e => ({
+  return messages.map((e) => ({
     ...e,
-    message: fomatMessage(e.message)
+    message: fomatMessage(e.message),
   }));
 }

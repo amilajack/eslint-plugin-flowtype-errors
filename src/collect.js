@@ -41,23 +41,23 @@ try {
 
 export const FlowSeverity = {
   Error: 'error',
-  Warning: 'warning'
+  Warning: 'warning',
 };
 
 type Pos = {
   line: number,
-  column: number
+  column: number,
 };
 
 type Loc = {
   start: Pos,
-  end: Pos
+  end: Pos,
 };
 
 type FlowPos = {
   line: number,
   column: number,
-  offset: number
+  offset: number,
 };
 
 type FlowLoc = {
@@ -70,7 +70,7 @@ type FlowLoc = {
     | 'JsonFile'
     | 'ResourceFile'
     | 'Builtins'
-    | null
+    | null,
 };
 
 type FlowSimpleMessage =
@@ -82,7 +82,7 @@ opaque type FlowReferenceID = string;
 type FlowReferenceMessage = {
   kind: 'Reference',
   referenceId: FlowReferenceID,
-  message: Array<FlowSimpleMessage>
+  message: Array<FlowSimpleMessage>,
 };
 
 type FlowInlineMessage = FlowSimpleMessage | FlowReferenceMessage;
@@ -90,13 +90,13 @@ type FlowInlineMessage = FlowSimpleMessage | FlowReferenceMessage;
 type FlowUnorderedListMessage = {
   kind: 'UnorderedList',
   message: Array<FlowInlineMessage>,
-  items: Array<FlowMessage> // eslint-disable-line no-use-before-define
+  items: Array<FlowMessage>, // eslint-disable-line no-use-before-define
 };
 
 type FlowMessage = Array<FlowInlineMessage> | FlowUnorderedListMessage;
 
 type FlowReferenceLocs = {
-  [referenceId: FlowReferenceID]: FlowLoc
+  [referenceId: FlowReferenceID]: FlowLoc,
 };
 
 type FlowError = {
@@ -112,7 +112,7 @@ type FlowError = {
   primaryLoc: FlowLoc,
   rootLoc: FlowLoc | null,
   messageMarkup: FlowMessage,
-  referenceLocs: FlowReferenceLocs
+  referenceLocs: FlowReferenceLocs,
 };
 
 type ErrorData = {
@@ -120,7 +120,7 @@ type ErrorData = {
   referenceLocs: FlowReferenceLocs,
   root: string,
   flowVersion: string,
-  lineOffset: number
+  lineOffset: number,
 };
 
 function fatalError(message) {
@@ -128,8 +128,8 @@ function fatalError(message) {
     {
       level: FlowSeverity.Error,
       loc: { start: { line: 1, column: 1 }, end: { line: 1, column: 1 } },
-      message
-    }
+      message,
+    },
   ];
 }
 
@@ -184,7 +184,7 @@ function formatInlineMessageArray(
   errorData: ErrorData
 ): string {
   return messages
-    .map(message => formatInlineMessage(message, errorData))
+    .map((message) => formatInlineMessage(message, errorData))
     .join('');
 }
 
@@ -195,7 +195,9 @@ function formatMessage(message: FlowMessage, errorData: ErrorData): string {
 
   return [
     formatInlineMessageArray(message.message, errorData),
-    ...message.items.map(itemMessage => formatMessage(itemMessage, errorData))
+    ...message.items.map((itemMessage) =>
+      formatMessage(itemMessage, errorData)
+    ),
   ].join(' ');
 }
 
@@ -240,7 +242,7 @@ function spawnFlow(
     {
       cwd: root,
       input,
-      encoding: 'utf-8'
+      encoding: 'utf-8',
     }
   );
 
@@ -267,7 +269,7 @@ function determineRuleType(description) {
 export type CollectOutputElement = {
   level: string,
   loc: Loc,
-  message: string
+  message: string,
 };
 
 type CollectOutput = Array<CollectOutputElement>;
@@ -316,7 +318,7 @@ export function collect(
       referenceLocs: error.referenceLocs,
       root,
       flowVersion: json.flowVersion,
-      lineOffset: programOffset.line
+      lineOffset: programOffset.line,
     });
 
     const newLoc = {
@@ -326,7 +328,7 @@ export function collect(
           loc.start.line === 0
             ? loc.start.column + programOffset.column
             : loc.start.column,
-        offset: loc.start.offset
+        offset: loc.start.offset,
       },
       end: {
         line: loc.end.line + programOffset.line,
@@ -334,8 +336,8 @@ export function collect(
           loc.end.line === 0
             ? loc.end.column + programOffset.column
             : loc.end.column,
-        offset: loc.end.offset
-      }
+        offset: loc.end.offset,
+      },
     };
 
     return {
@@ -346,7 +348,7 @@ export function collect(
       path: loc.source,
       start: newLoc.start.line,
       end: newLoc.end.line,
-      loc: newLoc
+      loc: newLoc,
     };
   });
 
@@ -355,7 +357,7 @@ export function collect(
 
 type CoverageOutput = {
   coveredCount: number,
-  uncoveredCount: number
+  uncoveredCount: number,
 };
 
 export function coverage(
@@ -377,12 +379,12 @@ export function coverage(
   } catch (e) {
     return {
       coveredCount: 0,
-      uncoveredCount: 0
+      uncoveredCount: 0,
     };
   }
 
   return {
     coveredCount: expressions.covered_count,
-    uncoveredCount: expressions.uncovered_count
+    uncoveredCount: expressions.uncovered_count,
   };
 }
