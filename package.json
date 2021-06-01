@@ -36,10 +36,10 @@
     "slash": "^3.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.13.16",
-    "@babel/core": "^7.14.0",
+    "@babel/cli": "^7.14.3",
+    "@babel/core": "^7.14.3",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
-    "@babel/preset-env": "^7.14.0",
+    "@babel/preset-env": "^7.14.4",
     "@babel/preset-flow": "^7.13.13",
     "@babel/register": "^7.13.16",
     "babel-core": "^7.0.0-bridge.0",
