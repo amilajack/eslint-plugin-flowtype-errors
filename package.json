@@ -56,7 +56,7 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-vue": "^7.9.0",
-    "execa": "^5.0.0",
+    "execa": "^5.0.1",
     "flow-bin": "0.139.0",
     "husky": "^4.3.5",
     "jest-cli": "^26.6.3",
