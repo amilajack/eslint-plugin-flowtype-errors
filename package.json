@@ -58,7 +58,7 @@
     "eslint-plugin-vue": "^7.9.0",
     "execa": "^5.0.1",
     "flow-bin": "0.139.0",
-    "husky": "^4.3.5",
+    "husky": "^4.3.8",
     "jest-cli": "^26.6.3",
     "lint-staged": "^10.5.3",
     "prettier": "^2.2.1"
