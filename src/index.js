@@ -224,8 +224,6 @@ export default {
           }
 
           const requiredCoverage = context.options[0];
-          // If flow coverage is >=updateCommentThreshold% greater than allowed, update the eslint comment.
-          const updateCommentThreshold = context.options[1];
           const { coveredCount, uncoveredCount } = res.coverageInfo;
 
           /* eslint prefer-template: 0 */
@@ -240,14 +238,53 @@ export default {
               loc: res.program.loc,
               message: `Expected coverage to be at least ${requiredCoverage}%, but is: ${percentage}%`,
             });
-          } else if (updateCommentThreshold && percentage - requiredCoverage > updateCommentThreshold) {
-            context.report({
-              loc: res.program.loc,
-              message: `Expected coverage comment to be within ${updateCommentThreshold}% of ${requiredCoverage}%, but is: ${percentage}%`,
-            });
           }
         },
       };
+    },
+    'enforce-min-coverage-comments-sync': {
+      meta: {
+        fixable: 'code',
+        create: function enforceMinCoverage(
+          context: EslintContext
+        ): ReturnRule {
+          return {
+            Program(node: Object) {
+              const res = getCoverage(context, node);
+              if (!res) {
+                return;
+              }
+
+              // const eslintCommentNodeSettingMinCoveragePercent = getCommentNode()
+
+              // TODO: get requiredCoverage from eslint directive comment.
+              const requiredCoverage = 50
+              // If flow coverage is >=updateCommentThreshold% greater than allowed, update the eslint comment.
+              const updateCommentThreshold = context.options[0];
+              const { coveredCount, uncoveredCount } = res.coverageInfo;
+
+              /* eslint prefer-template: 0 */
+              const percentage = Number(
+                Math.round(
+                  (coveredCount / (coveredCount + uncoveredCount)) * 10000
+                ) + 'e-2'
+              );
+
+              if (percentage < requiredCoverage) {
+                context.report({
+                  loc: res.program.loc,
+                  message: `Expected coverage to be at least ${requiredCoverage}%, but is: ${percentage}%`,
+                });
+              } else if (updateCommentThreshold && percentage - requiredCoverage > updateCommentThreshold) { // TODO: Only if there's a comment for /* eslint "flowtype-errors/enforce-min-coverage": [2, 50] */
+                context.report({
+                  loc: res.program.loc,
+                  message: `Expected coverage comment to be within ${updateCommentThreshold}% of ${requiredCoverage}%, but is: ${percentage}%`,
+                });
+              }
+            },
+          };
+        }
+      },
     },
     'show-errors': (createFilteredErrorRule(
       ({ level }) => level !== FlowSeverity.Warning

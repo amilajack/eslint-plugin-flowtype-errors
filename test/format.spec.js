@@ -121,7 +121,10 @@ const eslintConfig = (enforceMinCoverage, updateCommentThreshold, checkUncovered
     },
     rules: {
       ${updateCommentThreshold
-        ? `'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}, ${updateCommentThreshold}],`
+        ? [
+          `'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}],`,
+          `'flowtype-errors/enforce-min-coverage-comments-sync': [2, ${updateCommentThreshold}],`,
+        ].join('\n')
         : enforceMinCoverage
           ? `'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}],`
           : ``
