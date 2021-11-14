@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import path from 'path';
 import { expect as chaiExpect } from 'chai';
 import { readFileSync, writeFileSync, unlinkSync } from 'fs';
@@ -86,7 +87,7 @@ const codebases = [
   'uncovered-example'
 ];
 
-const eslintConfig = (enforceMinCoverage, checkUncovered, html) => `
+const eslintConfig = (enforceMinCoverage, updateCommentThreshold, checkUncovered, html) => `
   const Module = require('module');
   const path = require('path');
   const original = Module._resolveFilename;
@@ -119,8 +120,12 @@ const eslintConfig = (enforceMinCoverage, checkUncovered, html) => `
       }
     },
     rules: {
-      ${enforceMinCoverage
-        ? `'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}],` : ``}
+      ${updateCommentThreshold
+        ? `'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}, ${updateCommentThreshold}],`
+        : enforceMinCoverage
+          ? `'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}],`
+          : ``
+        }
         ${checkUncovered ? `'flowtype-errors/uncovered': 2,` : ''}
         'flowtype-errors/show-errors': 2,
         'flowtype-errors/show-warnings': 1
@@ -151,6 +156,7 @@ describe('Check codebases', () => {
         configPath,
         eslintConfig(
           folder.match(/^coverage-/) ? 50 : 0,
+          folder.match(/^coverage-ok/) ? 10 : 0,
           !!folder.match(/^uncovered-/),
           /html-support/.test(folder)
         )

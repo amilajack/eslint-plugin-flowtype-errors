@@ -224,6 +224,8 @@ export default {
           }
 
           const requiredCoverage = context.options[0];
+          // If flow coverage is >=updateCommentThreshold% greater than allowed, update the eslint comment.
+          const updateCommentThreshold = context.options[1];
           const { coveredCount, uncoveredCount } = res.coverageInfo;
 
           /* eslint prefer-template: 0 */
@@ -237,6 +239,11 @@ export default {
             context.report({
               loc: res.program.loc,
               message: `Expected coverage to be at least ${requiredCoverage}%, but is: ${percentage}%`,
+            });
+          } else if (updateCommentThreshold && percentage - requiredCoverage > updateCommentThreshold) {
+            context.report({
+              loc: res.program.loc,
+              message: `Expected coverage comment to be within ${updateCommentThreshold}% of ${requiredCoverage}%, but is: ${percentage}%`,
             });
           }
         },
