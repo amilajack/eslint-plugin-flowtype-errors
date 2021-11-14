@@ -246,7 +246,7 @@ export default {
       meta: {
         fixable: 'code',
       },
-      create: function enforceMinCoverage(
+      create: function enforceMinCoverageCommentsSync(
         context: EslintContext
       ): ReturnRule {
         return {
