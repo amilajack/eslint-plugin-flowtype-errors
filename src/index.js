@@ -155,7 +155,8 @@ function createFilteredErrorRule(filter: (CollectOutputElement) => any): (contex
   };
 }
 
-const MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN = /(\s*eslint\s*['"]flowtype-errors\/enforce-min-coverage['"]\s*:\s*\[\s*(?:2|['"]error['"])\s*,\s*)(\d+)(\]\s*)/
+const MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN =
+  /(\s*eslint\s*['"]flowtype-errors\/enforce-min-coverage['"]\s*:\s*\[\s*(?:2|['"]error['"])\s*,\s*)(\d+)(\]\s*)/
 
 function getMinCoverageDirectiveCommentNodeAndPercent(sourceCode) {
   let commentNode
