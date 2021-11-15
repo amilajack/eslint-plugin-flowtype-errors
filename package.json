@@ -7,13 +7,12 @@
   "homepage": "https://github.com/amilajack/eslint-plugin-flowtype-errors#readme",
   "main": "index.js",
   "scripts": {
-    "flow": "flow",
     "build": "cross-env NODE_ENV=production babel src --out-dir dist",
     "lint": "eslint --cache .",
     "prettier": "prettier --single-quote --write \"./src/*.js\"",
-    "preversion": "yarn build",
-    "spec": "yarn build && jest",
-    "test": "yarn flow && yarn lint && yarn spec"
+    "preversion": "npm run build",
+    "spec": "npm run build && jest",
+    "test": "flow && npm run lint && npm run spec"
   },
   "repository": "https://github.com/amilajack/eslint-plugin-flowtype-errors",
   "jest": {
@@ -137,7 +136,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn test"
+      "pre-commit": "npm test"
     }
   }
 }

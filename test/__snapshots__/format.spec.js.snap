@@ -65,18 +65,18 @@ exports[`Check codebases html-support - eslint should give expected output 1`] =
   5:1  error  Parsing error: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?
 
   3 | </template>
-  4 | 
+  4 |
 > 5 | <script>
     | ^
   6 | // @flow
-  7 | 
+  7 |
   8 | import B from \\"./b.vue\\";
 
 ./b.vue
   5:1  error  Parsing error: Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?
 
   3 | </template>
-  4 | 
+  4 |
 > 5 | <script>
     | ^
   6 | export default {};
@@ -112,13 +112,13 @@ exports[`Check codebases project-1 - eslint should give expected output 1`] = `
   12:6   error  Cannot resolve name \`x\`. [cannot-resolve-name]                                                                                                                                           flowtype-errors/show-errors
 
 ./3.example.js
-  18:7  error  Parsing error: Identifier 'who' has already been declared
+  18:7  error  Parsing error: Identifier 'who' has already been declared.
 
   16 | var str: number = 'hello world!';
-  17 | 
+  17 |
 > 18 | const who = {};
      |       ^
-  19 | 
+  19 |
   20 | moo(str + who);
   21 |
 
