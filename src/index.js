@@ -155,7 +155,7 @@ function createFilteredErrorRule(filter: (CollectOutputElement) => any): (contex
   };
 }
 
-const MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN = /\s*eslint\s*['"]flowtype-errors\/enforce-min-coverage['"]\s*:\s*\[\s*(?:2|['"]error['"])\s*,\s*(\d+)\]\s*/
+const MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN = /(\s*eslint\s*['"]flowtype-errors\/enforce-min-coverage['"]\s*:\s*\[\s*(?:2|['"]error['"])\s*,\s*)(\d+)(\]\s*)/
 
 function getMinCoverageDirectiveCommentNodeAndPercent(sourceCode) {
   let commentNode
@@ -163,9 +163,9 @@ function getMinCoverageDirectiveCommentNodeAndPercent(sourceCode) {
   // eslint-disable-next-line no-restricted-syntax
   for (const comment of sourceCode.getAllComments()) {
     const match = comment.value.match(MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN)
-    if (match && match[1]) {
+    if (match && match[2]) {
       commentNode = comment
-      minPercent = parseInt(match[1], 10)
+      minPercent = parseInt(match[2], 10)
       break
     }
   }
@@ -275,7 +275,8 @@ export default {
 
             const sourceCode = context.getSourceCode()
             const [minCoverageDirectiveCommentNode, requiredCoverage] = getMinCoverageDirectiveCommentNodeAndPercent(sourceCode)
-            if (!minCoverageDirectiveCommentNode || !requiredCoverage) {
+              // console.log('minCoverageDirectiveCommentNode, requiredCoverage!!!', {minCoverageDirectiveCommentNode, requiredCoverage})
+              if (!minCoverageDirectiveCommentNode || !requiredCoverage) {
               return;
             }
 
@@ -296,11 +297,14 @@ export default {
                 message: `Expected coverage to be at least ${requiredCoverage}%, but is: ${percentage}%`,
               });
             } else if (updateCommentThreshold && percentage - requiredCoverage > updateCommentThreshold) { // TODO: Only if there's a comment for /* eslint "flowtype-errors/enforce-min-coverage": [2, 50] */
+              // console.log('reported!!!')
               context.report({
                 loc: res.program.loc,
                 message: `Expected coverage comment to be within ${updateCommentThreshold}% of ${requiredCoverage}%, but is: ${percentage}%`,
                 fix(fixer) {
-                  return fixer.replaceText(minCoverageDirectiveCommentNode, `TODO: Update comment`)
+                  // console.log('minCoverageDirectiveCommentNode.value.replace`)', minCoverageDirectiveCommentNode.value.replace(MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN, 'TODO'))
+                  // return fixer.replaceText(minCoverageDirectiveCommentNode, minCoverageDirectiveCommentNode.value.replace(MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN, `/*$1${Math.ceil(Math.min(percentage, requiredCoverage))}$3*/`))
+                  return fixer.replaceText(minCoverageDirectiveCommentNode, minCoverageDirectiveCommentNode.value.replace(MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN, `/*$1${Math.ceil(percentage)}$3*/`))
                 }
               });
             }

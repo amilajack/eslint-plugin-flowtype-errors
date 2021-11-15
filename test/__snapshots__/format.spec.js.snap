@@ -29,15 +29,7 @@ exports[`Check codebases coverage-fail2 - eslint should give expected output 1`]
 "
 `;
 
-exports[`Check codebases coverage-ok - eslint should give expected output 1`] = `
-"
-./example.js
-  1:1  error  Expected coverage comment to be within 10% of 55%, but is: 100%  flowtype-errors/enforce-min-coverage-comments-sync
-
-✖ 1 problem (1 error, 0 warnings)
-  1 error and 0 warnings potentially fixable with the \`--fix\` option.
-"
-`;
+exports[`Check codebases coverage-ok - eslint should give expected output 1`] = `""`;
 
 exports[`Check codebases coverage-ok2 - eslint should give expected output 1`] = `""`;
 
