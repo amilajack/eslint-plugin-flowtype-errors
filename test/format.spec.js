@@ -155,12 +155,12 @@ describe('Check codebases', () => {
     it(`${title} - eslint should give expected output`, async() => {
       const fullFolder = path.resolve(`./test/codebases/${folder}`);
       const exampleJsFilePath = path.resolve(`./test/codebases/${folder}/example.js`);
-      const exampleJsFixedFilePath = path.resolve(`./test/codebases/${folder}/example.fixed.js`);
+      const exampleJsFixedFilePath = path.resolve(`./test/codebases/${folder}/example.fixed`);
       const hasFix = existsSync(exampleJsFixedFilePath)
       const configPath = path.resolve(fullFolder, '.eslintrc.js');
 
-      const contentsBefore = hasFix && readFileSync(exampleJsFilePath)
-      const contentsExpected = hasFix && readFileSync(exampleJsFixedFilePath)
+      const contentsBefore = hasFix && readFileSync(exampleJsFilePath, 'utf8')
+      const contentsExpected = hasFix && readFileSync(exampleJsFixedFilePath, 'utf8')
 
       // Write config file
       writeFileSync(
@@ -181,7 +181,7 @@ describe('Check codebases', () => {
         'gm'
       ); // Escape regexp
 
-      const contentsAfter = hasFix && readFileSync(exampleJsFilePath)
+      const contentsAfter = hasFix && readFileSync(exampleJsFilePath, 'utf8')
 
       // Revert the file to before it was fixed, since this file is checked into git.
       if (hasFix && contentsBefore !== contentsAfter) writeFileSync(exampleJsFilePath, contentsBefore)
