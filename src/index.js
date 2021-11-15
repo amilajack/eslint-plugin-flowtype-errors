@@ -155,6 +155,23 @@ function createFilteredErrorRule(filter: (CollectOutputElement) => any): (contex
   };
 }
 
+const MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN = /\s*eslint\s*['"]flowtype-errors\/enforce-min-coverage['"]\s*:\s*\[\s*(?:2|['"]error['"])\s*,\s*(\d+)\]\s*/
+
+function getMinCoverageDirectiveCommentNodeAndPercent(sourceCode) {
+  let commentNode
+  let minPercent
+  // eslint-disable-next-line no-restricted-syntax
+  for (const comment of sourceCode.getAllComments()) {
+    const match = comment.value.match(MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN)
+    if (match && match[1]) {
+      commentNode = comment
+      minPercent = parseInt(match[1], 10)
+      break
+    }
+  }
+  return [commentNode, minPercent]
+}
+
 const getCoverage = (context, node) => {
   const source = context.getSourceCode();
   const info = lookupInfo(context, source, node);
@@ -256,10 +273,12 @@ export default {
               return;
             }
 
-            // const eslintCommentNodeSettingMinCoveragePercent = getCommentNode()
+            const sourceCode = context.getSourceCode()
+            const [minCoverageDirectiveCommentNode, requiredCoverage] = getMinCoverageDirectiveCommentNodeAndPercent(sourceCode)
+            if (!minCoverageDirectiveCommentNode || !requiredCoverage) {
+              return;
+            }
 
-            // TODO: get requiredCoverage from eslint directive comment.
-            const requiredCoverage = 50
             // If flow coverage is >=updateCommentThreshold% greater than allowed, update the eslint comment.
             const updateCommentThreshold = context.options[0];
             const { coveredCount, uncoveredCount } = res.coverageInfo;
@@ -280,6 +299,9 @@ export default {
               context.report({
                 loc: res.program.loc,
                 message: `Expected coverage comment to be within ${updateCommentThreshold}% of ${requiredCoverage}%, but is: ${percentage}%`,
+                fix(fixer) {
+                  return fixer.replaceText(minCoverageDirectiveCommentNode, `TODO: Update comment`)
+                }
               });
             }
           },
