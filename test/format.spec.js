@@ -73,6 +73,8 @@ const codebases = [
   'coverage-fail2',
   'coverage-ok',
   'coverage-ok2',
+  'coverage-sync-remove',
+  'coverage-sync-update',
   'flow-pragma-1',
   'flow-pragma-2',
   'html-support',
