@@ -275,13 +275,14 @@ export default {
 
             const sourceCode = context.getSourceCode()
             const [minCoverageDirectiveCommentNode, requiredCoverage] = getMinCoverageDirectiveCommentNodeAndPercent(sourceCode)
-              // console.log('minCoverageDirectiveCommentNode, requiredCoverage!!!', {minCoverageDirectiveCommentNode, requiredCoverage})
               if (!minCoverageDirectiveCommentNode || !requiredCoverage) {
               return;
             }
 
+            // Get global requiredCoverage outside the inline module comment.
+            const enforceMinCoverage = context.options[0];
             // If flow coverage is >=updateCommentThreshold% greater than allowed, update the eslint comment.
-            const updateCommentThreshold = context.options[0];
+            const updateCommentThreshold = context.options[1];
             const { coveredCount, uncoveredCount } = res.coverageInfo;
 
             /* eslint prefer-template: 0 */
@@ -297,13 +298,15 @@ export default {
                 message: `Expected coverage to be at least ${requiredCoverage}%, but is: ${percentage}%`,
               });
             } else if (updateCommentThreshold && percentage - requiredCoverage > updateCommentThreshold) { // TODO: Only if there's a comment for /* eslint "flowtype-errors/enforce-min-coverage": [2, 50] */
-              // console.log('reported!!!')
               context.report({
                 loc: res.program.loc,
                 message: `Expected coverage comment to be within ${updateCommentThreshold}% of ${requiredCoverage}%, but is: ${percentage}%`,
                 fix(fixer) {
-                  // console.log('minCoverageDirectiveCommentNode.value.replace`)', minCoverageDirectiveCommentNode.value.replace(MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN, 'TODO'))
-                  // return fixer.replaceText(minCoverageDirectiveCommentNode, minCoverageDirectiveCommentNode.value.replace(MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN, `/*$1${Math.floor(Math.min(percentage, requiredCoverage))}$3*/`))
+                  if (percentage >= enforceMinCoverage) {
+                    // If coverage >= global required amount, remove comment entirely.
+                    return fixer.replaceText(minCoverageDirectiveCommentNode, '')
+                  }
+
                   return fixer.replaceText(minCoverageDirectiveCommentNode, minCoverageDirectiveCommentNode.value.replace(MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN, `/*$1${Math.floor(percentage)}$3*/`))
                 }
               });

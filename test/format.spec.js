@@ -123,7 +123,7 @@ const eslintConfig = (enforceMinCoverage, updateCommentThreshold, checkUncovered
       ${updateCommentThreshold
         ? [
           `'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}],`,
-          `'flowtype-errors/enforce-min-coverage-comments-sync': [2, ${updateCommentThreshold}],`,
+          `'flowtype-errors/enforce-min-coverage-comments-sync': [2, ${enforceMinCoverage}, ${updateCommentThreshold}],`,
         ].join('\n')
         : enforceMinCoverage
           ? `'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}],`
@@ -159,7 +159,7 @@ describe('Check codebases', () => {
         configPath,
         eslintConfig(
           folder.match(/^coverage-/) ? 50 : 0,
-          folder.match(/^coverage-ok/) ? 10 : 0,
+          folder.match(/^coverage-sync/) ? 10 : 0,
           !!folder.match(/^uncovered-/),
           /html-support/.test(folder)
         )
