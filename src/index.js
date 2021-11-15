@@ -292,12 +292,7 @@ export default {
               ) + 'e-2'
             );
 
-            if (percentage < requiredCoverage) {
-              context.report({
-                loc: res.program.loc,
-                message: `Expected coverage to be at least ${requiredCoverage}%, but is: ${percentage}%`,
-              });
-            } else if (updateCommentThreshold && percentage - requiredCoverage > updateCommentThreshold) { // TODO: Only if there's a comment for /* eslint "flowtype-errors/enforce-min-coverage": [2, 50] */
+            if (percentage - requiredCoverage > updateCommentThreshold) {
               context.report({
                 loc: res.program.loc,
                 message: `Expected coverage comment to be within ${updateCommentThreshold}% of ${requiredCoverage}%, but is: ${percentage}%`,
