@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import path from 'path';
 import { expect as chaiExpect } from 'chai';
-import { readFileSync, writeFileSync, unlinkSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync, unlinkSync } from 'fs';
 // $FlowIgnore
 import execa from 'execa';
 import { collect } from '../src/collect';
@@ -154,7 +154,13 @@ describe('Check codebases', () => {
      // eslint-disable-next-line no-loop-func
     it(`${title} - eslint should give expected output`, async() => {
       const fullFolder = path.resolve(`./test/codebases/${folder}`);
+      const exampleJsFilePath = path.resolve(`./test/codebases/${folder}/example.js`);
+      const exampleJsFixedFilePath = path.resolve(`./test/codebases/${folder}/example.fixed.js`);
+      const hasFix = existsSync(exampleJsFixedFilePath)
       const configPath = path.resolve(fullFolder, '.eslintrc.js');
+
+      const contentsBefore = hasFix && readFileSync(exampleJsFilePath)
+      const contentsExpected = hasFix && readFileSync(exampleJsFixedFilePath)
 
       // Write config file
       writeFileSync(
@@ -175,6 +181,11 @@ describe('Check codebases', () => {
         'gm'
       ); // Escape regexp
 
+      const contentsAfter = hasFix && readFileSync(exampleJsFilePath)
+
+      // Revert the file to before it was fixed, since this file is checked into git.
+      if (hasFix && contentsBefore !== contentsAfter) writeFileSync(exampleJsFilePath, contentsBefore)
+
       // Strip root from filenames
       expect(
         stdout.replace(regexp, match =>
@@ -183,6 +194,10 @@ describe('Check codebases', () => {
       ).toMatchSnapshot();
 
       expect(stderr).toEqual('');
+
+      if (hasFix) {
+        expect(contentsAfter).toEqual(contentsExpected);
+      }
 
       // Clean up
       unlinkSync(configPath);
