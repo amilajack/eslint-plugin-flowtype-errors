@@ -33,6 +33,10 @@ exports[`Check codebases coverage-ok - eslint should give expected output 1`] = 
 
 exports[`Check codebases coverage-ok2 - eslint should give expected output 1`] = `""`;
 
+exports[`Check codebases coverage-sync-remove - eslint should give expected output 1`] = `""`;
+
+exports[`Check codebases coverage-sync-update - eslint should give expected output 1`] = `""`;
+
 exports[`Check codebases flow-pragma-1 - eslint should give expected output 1`] = `
 "
 ./example.js

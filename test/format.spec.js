@@ -1,6 +1,7 @@
+/* eslint-disable no-nested-ternary */
 import path from 'path';
 import { expect as chaiExpect } from 'chai';
-import { readFileSync, writeFileSync, unlinkSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync, unlinkSync } from 'fs';
 // $FlowIgnore
 import execa from 'execa';
 import { collect } from '../src/collect';
@@ -60,7 +61,7 @@ describe('Format', () => {
 const ESLINT_PATH = path.resolve('./node_modules/eslint/bin/eslint.js');
 
 async function runEslint(cwd) {
-  const result = await execa(ESLINT_PATH, ['**/*.{js,vue}'], { cwd, stripEof: false });
+  const result = await execa(ESLINT_PATH, ['**/*.{js,vue}', '--fix'], { cwd, stripEof: false });
   result.stdout = result.stdout && result.stdout.toString();
   result.stderr = result.stderr && result.stderr.toString();
   return result;
@@ -72,6 +73,8 @@ const codebases = [
   'coverage-fail2',
   'coverage-ok',
   'coverage-ok2',
+  'coverage-sync-remove',
+  'coverage-sync-update',
   'flow-pragma-1',
   'flow-pragma-2',
   'html-support',
@@ -86,7 +89,7 @@ const codebases = [
   'uncovered-example'
 ];
 
-const eslintConfig = (enforceMinCoverage, checkUncovered, html) => `
+const eslintConfig = (enforceMinCoverage, updateCommentThreshold, checkUncovered, html) => `
   const Module = require('module');
   const path = require('path');
   const original = Module._resolveFilename;
@@ -119,8 +122,15 @@ const eslintConfig = (enforceMinCoverage, checkUncovered, html) => `
       }
     },
     rules: {
-      ${enforceMinCoverage
-        ? `'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}],` : ``}
+      ${updateCommentThreshold
+        ? [
+          `'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}],`,
+          `'flowtype-errors/enforce-min-coverage-comments-sync': [2, ${enforceMinCoverage}, ${updateCommentThreshold}],`,
+        ].join('\n')
+        : enforceMinCoverage
+          ? `'flowtype-errors/enforce-min-coverage': [2, ${enforceMinCoverage}],`
+          : ``
+        }
         ${checkUncovered ? `'flowtype-errors/uncovered': 2,` : ''}
         'flowtype-errors/show-errors': 2,
         'flowtype-errors/show-warnings': 1
@@ -144,13 +154,20 @@ describe('Check codebases', () => {
      // eslint-disable-next-line no-loop-func
     it(`${title} - eslint should give expected output`, async() => {
       const fullFolder = path.resolve(`./test/codebases/${folder}`);
+      const exampleJsFilePath = path.resolve(`./test/codebases/${folder}/example.js`);
+      const exampleJsFixedFilePath = path.resolve(`./test/codebases/${folder}/example.fixed`);
+      const hasFix = existsSync(exampleJsFixedFilePath)
       const configPath = path.resolve(fullFolder, '.eslintrc.js');
+
+      const contentsBefore = hasFix && readFileSync(exampleJsFilePath, 'utf8')
+      const contentsExpected = hasFix && readFileSync(exampleJsFixedFilePath, 'utf8')
 
       // Write config file
       writeFileSync(
         configPath,
         eslintConfig(
           folder.match(/^coverage-/) ? 50 : 0,
+          folder.match(/^coverage-sync/) ? 10 : 0,
           !!folder.match(/^uncovered-/),
           /html-support/.test(folder)
         )
@@ -164,6 +181,11 @@ describe('Check codebases', () => {
         'gm'
       ); // Escape regexp
 
+      const contentsAfter = hasFix && readFileSync(exampleJsFilePath, 'utf8')
+
+      // Revert the file to before it was fixed, since this file is checked into git.
+      if (hasFix && contentsBefore !== contentsAfter) writeFileSync(exampleJsFilePath, contentsBefore)
+
       // Strip root from filenames
       expect(
         stdout.replace(regexp, match =>
@@ -172,6 +194,10 @@ describe('Check codebases', () => {
       ).toMatchSnapshot();
 
       expect(stderr).toEqual('');
+
+      if (hasFix) {
+        expect(contentsAfter).toEqual(contentsExpected);
+      }
 
       // Clean up
       unlinkSync(configPath);

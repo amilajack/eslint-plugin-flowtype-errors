@@ -155,6 +155,24 @@ function createFilteredErrorRule(filter: (CollectOutputElement) => any): (contex
   };
 }
 
+const MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN =
+  /(\s*eslint\s*['"]flowtype-errors\/enforce-min-coverage['"]\s*:\s*\[\s*(?:2|['"]error['"])\s*,\s*)(\d+)(\]\s*)/
+
+function getMinCoverageDirectiveCommentNodeAndPercent(sourceCode) {
+  let commentNode
+  let minPercent
+  // eslint-disable-next-line no-restricted-syntax
+  for (const comment of sourceCode.getAllComments()) {
+    const match = comment.value.match(MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN)
+    if (match && match[2]) {
+      commentNode = comment
+      minPercent = parseInt(match[2], 10)
+      break
+    }
+  }
+  return [commentNode, minPercent]
+}
+
 const getCoverage = (context, node) => {
   const source = context.getSourceCode();
   const info = lookupInfo(context, source, node);
@@ -241,6 +259,57 @@ export default {
           }
         },
       };
+    },
+    'enforce-min-coverage-comments-sync': {
+      meta: {
+        fixable: 'code',
+      },
+      create: function enforceMinCoverageCommentsSync(
+        context: EslintContext
+      ): ReturnRule {
+        return {
+          Program(node: Object) {
+            const res = getCoverage(context, node);
+            if (!res) {
+              return;
+            }
+
+            const sourceCode = context.getSourceCode()
+            const [minCoverageDirectiveCommentNode, requiredCoverage] = getMinCoverageDirectiveCommentNodeAndPercent(sourceCode)
+              if (!minCoverageDirectiveCommentNode || !requiredCoverage) {
+              return;
+            }
+
+            // Get global requiredCoverage outside the inline module comment.
+            const enforceMinCoverage = context.options[0];
+            // If flow coverage is >=updateCommentThreshold% greater than allowed, update the eslint comment.
+            const updateCommentThreshold = context.options[1];
+            const { coveredCount, uncoveredCount } = res.coverageInfo;
+
+            /* eslint prefer-template: 0 */
+            const percentage = Number(
+              Math.round(
+                (coveredCount / (coveredCount + uncoveredCount)) * 10000
+              ) + 'e-2'
+            );
+
+            if (percentage - requiredCoverage > updateCommentThreshold) {
+              context.report({
+                loc: res.program.loc,
+                message: `Expected coverage comment to be within ${updateCommentThreshold}% of ${requiredCoverage}%, but is: ${percentage}%`,
+                fix(fixer) {
+                  if (percentage >= enforceMinCoverage) {
+                    // If coverage >= global required amount, remove comment entirely.
+                    return fixer.replaceText(minCoverageDirectiveCommentNode, '')
+                  }
+
+                  return fixer.replaceText(minCoverageDirectiveCommentNode, minCoverageDirectiveCommentNode.value.replace(MIN_COVERAGE_DIRECTIVE_COMMENT_PATTERN, `/*$1${Math.floor(percentage)}$3*/`))
+                }
+              });
+            }
+          },
+        };
+      },
     },
     'show-errors': (createFilteredErrorRule(
       ({ level }) => level !== FlowSeverity.Warning
