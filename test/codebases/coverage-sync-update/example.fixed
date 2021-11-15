@@ -1,5 +1,5 @@
 // @flow
-/* eslint "flowtype-errors/enforce-min-coverage": [2, 20] */
+/* eslint "flowtype-errors/enforce-min-coverage": [2, 33] */
 
 let x: number = 100;
 let x2;
